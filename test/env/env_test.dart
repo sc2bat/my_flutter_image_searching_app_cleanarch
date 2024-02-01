@@ -7,4 +7,9 @@ void main() {
     const String pixabayApiKey = Env.pixabayApiKey;
     logger.info(pixabayApiKey);
   });
+
+  test('API URL generator Test', () {
+    const String pixabayApiUrl = Env.pixabayApiUrl;
+    logger.info(pixabayApiUrl);
+  });
 }
