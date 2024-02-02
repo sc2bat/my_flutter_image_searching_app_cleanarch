@@ -12,6 +12,9 @@
 ```
 http: ^1.2.0
 envied: ^0.5.3 // api key manage
+provider: ^6.1.1
+go_router: ^13.1.0
+simple_logger: ^1.9.0+3
 ```
 
 ### 사용 API
