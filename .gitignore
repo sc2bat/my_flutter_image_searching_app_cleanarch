@@ -144,3 +144,6 @@ app.*.map.json
 
 # env
 *.env
+
+# mocks
+*.mocks.dart
