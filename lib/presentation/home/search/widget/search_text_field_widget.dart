@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/logger/simple_logger.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 
 class SearchTextFieldWidget extends StatelessWidget {
   const SearchTextFieldWidget({

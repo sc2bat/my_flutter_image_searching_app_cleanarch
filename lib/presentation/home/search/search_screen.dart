@@ -45,7 +45,8 @@ class _SearchScreenState extends State<SearchScreen> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: SearchTextFieldWidget(
-                searchTextController: _searchTextController),
+              searchTextController: _searchTextController,
+            ),
           ),
           Expanded(
             child: GridView.builder(

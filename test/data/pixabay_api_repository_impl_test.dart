@@ -4,8 +4,8 @@ import 'package:mockito/mockito.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/pixabay_api_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/pixabay.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/env/const_urls.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/logger/simple_logger.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/utils/constants.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 import 'package:http/http.dart' as http;
 
 import 'pixabay_api_repository_impl_test.mocks.dart';
