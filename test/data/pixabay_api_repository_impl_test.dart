@@ -4,7 +4,7 @@ import 'package:mockito/mockito.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/pixabay_api_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/pixabay.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/env/env.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/env/const_urls.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/logger/simple_logger.dart';
 import 'package:http/http.dart' as http;
 
@@ -33,7 +33,7 @@ void main() {
 
     final mockClient = MockClient();
 
-    when(mockClient.get(Uri.parse('${Env.pixabayApiUrl}apple')))
+    when(mockClient.get(Uri.parse('${pixabayApiUrl}apple')))
         .thenAnswer((_) async => http.Response(mockData, 200));
 
     List<Hit> hits = await pixabayApiRepositoryImpl
@@ -41,7 +41,7 @@ void main() {
 
     expect(hits.first.id, 1122537);
 
-    verify(mockClient.get(Uri.parse('${Env.pixabayApiUrl}apple')));
+    verify(mockClient.get(Uri.parse('${pixabayApiUrl}apple')));
   });
 
   test('Mokito pixabay photo data test', () async {
@@ -49,7 +49,7 @@ void main() {
 
     final mockClient = MockClient();
 
-    when(mockClient.get(Uri.parse('${Env.pixabayApiUrl}apple')))
+    when(mockClient.get(Uri.parse('${pixabayApiUrl}apple')))
         .thenAnswer((_) async => http.Response(mockData, 200));
 
     List<Photo> photos = await pixabayApiRepositoryImpl
@@ -57,7 +57,7 @@ void main() {
 
     expect(photos.first.id, 1122537);
 
-    verify(mockClient.get(Uri.parse('${Env.pixabayApiUrl}apple')));
+    verify(mockClient.get(Uri.parse('${pixabayApiUrl}apple')));
   });
 }
 

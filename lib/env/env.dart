@@ -9,10 +9,4 @@ abstract class Env {
   // static const String pixabayApiKey = _Env.pixabayApiKey;
   @EnviedField()
   static const String pixabayApiKey = _Env.pixabayApiKey;
-
-  @EnviedField()
-  static const String pixabayApiUrl = _Env.pixabayApiUrl;
-
-  @EnviedField()
-  static const String sampleImageUrl = _Env.sampleImageUrl;
 }

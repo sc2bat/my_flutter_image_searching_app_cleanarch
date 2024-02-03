@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/env/env.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/env/const_urls.dart';
 
 class SearchImageContainerWidget extends StatelessWidget {
   const SearchImageContainerWidget({
@@ -8,7 +8,6 @@ class SearchImageContainerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const String sampleImageUrl = Env.sampleImageUrl;
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24.0),

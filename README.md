@@ -22,6 +22,7 @@
   build_runner: ^2.4.8
   mockito: ^5.4.4
   json_serializable: ^6.7.1
+  freezed: ^2.4.6
 ```
 
 ### 사용 API
