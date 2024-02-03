@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:my_flutter_image_searching_app_cleanarch/data/repository/pixabay_api_repository.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/repository/pixabay_api_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/pixabay.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/env/const_urls.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/utils/constants.dart';
 import 'package:http/http.dart' as http;
 
 class PixabayApiRepositoryImpl implements PixabayApiRepository {

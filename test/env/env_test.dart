@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/env/const_urls.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/utils/constants.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/env/env.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/logger/simple_logger.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 
 void main() {
   test('API KEY generator Test', () {
