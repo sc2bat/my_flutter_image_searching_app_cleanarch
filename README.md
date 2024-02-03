@@ -10,11 +10,18 @@
 
 ### pakage list
 ```
-http: ^1.2.0
-envied: ^0.5.3 // api key manage
-provider: ^6.1.1
-go_router: ^13.1.0
-simple_logger: ^1.9.0+3
+  http: ^1.2.0
+  envied: ^0.5.3
+  simple_logger: ^1.9.0+3
+  go_router: ^13.1.0
+  provider: ^6.1.1
+  equatable: ^2.0.5
+
+  // dev
+  envied_generator: ^0.5.3
+  build_runner: ^2.4.8
+  mockito: ^5.4.4
+  json_serializable: ^6.7.1
 ```
 
 ### 사용 API
