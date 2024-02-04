@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_state.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_view_model.dart';
+import 'package:provider/provider.dart';
 
 import 'widget/search_image_container_widget.dart';
 import 'widget/search_text_field_widget.dart';
-import 'package:provider/provider.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({
@@ -62,29 +62,26 @@ class _SearchScreenState extends State<SearchScreen> {
               searchTextController: _searchTextController,
             ),
           ),
-          // const Expanded(
-          //   child: Center(
-          //     child: CircularProgressIndicator(),
-          //   ),
-          // ),
           Expanded(
             child: searchState.isLoading
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
-                : GridView.builder(
-                    padding: const EdgeInsets.all(16.0),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 16.0,
-                      mainAxisSpacing: 16.0,
+                : Expanded(
+                    child: GridView.builder(
+                      padding: const EdgeInsets.all(16.0),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 16.0,
+                        mainAxisSpacing: 16.0,
+                      ),
+                      itemCount: searchState.photos.length,
+                      itemBuilder: (context, index) {
+                        return SearchImageContainerWidget(
+                            photo: searchState.photos[index]);
+                      },
                     ),
-                    itemCount: searchState.photos.length,
-                    itemBuilder: (context, index) {
-                      return SearchImageContainerWidget(
-                          photo: searchState.photos[index]);
-                    },
                   ),
           ),
         ],

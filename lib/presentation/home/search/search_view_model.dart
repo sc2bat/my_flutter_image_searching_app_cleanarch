@@ -19,11 +19,14 @@ class SearchViewModel with ChangeNotifier {
 
   Future<void> getPhotos(String query) async {
     _searchState = getSearchState.copyWith(isLoading: true);
+    notifyListeners();
 
+    // await Future.delayed(const Duration(seconds: 2));
     final executeResult = await _photoUseCase.execute(query);
     executeResult.when(
       success: (photoList) {
         _photoList = photoList;
+
         _searchState =
             getSearchState.copyWith(isLoading: false, photos: _photoList);
 

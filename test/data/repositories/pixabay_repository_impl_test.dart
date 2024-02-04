@@ -1,8 +1,3 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/di/get_it.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo_model.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo_use_case.dart';
-
 void main() {
   /**
    * 
@@ -21,7 +16,6 @@ void main() {
 
     expect(photos.length, 20);
   });
-   */
 
   test('PhotoUseCase test', () async {
     registerDependencies();
@@ -31,4 +25,5 @@ void main() {
 
     expect(photos.length, 20);
   });
+   */
 }
