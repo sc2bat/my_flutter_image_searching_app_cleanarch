@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/di/get_it.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/routes.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  logger.info('registerDependencies');
   registerDependencies();
-  logger.info('runApp');
   runApp(
     ChangeNotifierProvider(
       create: (_) => null,
