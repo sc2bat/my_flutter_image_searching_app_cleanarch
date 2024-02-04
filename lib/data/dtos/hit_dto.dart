@@ -1,27 +1,4 @@
-class Pixabay {
-  final int total;
-  final int totalHits;
-  final List<Hit> hits;
-
-  Pixabay({
-    required this.total,
-    required this.totalHits,
-    required this.hits,
-  });
-
-  factory Pixabay.fromJson(Map<String, dynamic> json) {
-    return Pixabay(
-      total: json['total'] ?? 0,
-      totalHits: json['totalHits'] ?? 0,
-      hits: (json['hits'] as List<dynamic>?)
-              ?.map((hitJson) => Hit.fromJson(hitJson as Map<String, dynamic>))
-              .toList() ??
-          [],
-    );
-  }
-}
-
-class Hit {
+class HitDTO {
   final int id;
   final String pageURL;
   final String type;
@@ -46,7 +23,7 @@ class Hit {
   final String user;
   final String userImageURL;
 
-  Hit({
+  HitDTO({
     required this.id,
     required this.pageURL,
     required this.type,
@@ -72,8 +49,8 @@ class Hit {
     required this.userImageURL,
   });
 
-  factory Hit.fromJson(Map<String, dynamic> json) {
-    return Hit(
+  factory HitDTO.fromJson(Map<String, dynamic> json) {
+    return HitDTO(
       id: json['id'] ?? 0,
       pageURL: json['pageURL'] ?? '',
       type: json['type'] ?? '',

@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/dtos/hit_dto.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/pixabay_repository_impl.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/model/pixabay.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 import 'package:http/http.dart' as http;
@@ -15,13 +15,14 @@ void main() {
   test('pixabay data test', () async {
     final pixabayApiRepositoryImpl = PixabayRepositoryImpl();
 
-    List<Hit> hits = await pixabayApiRepositoryImpl.getPixabayImages('apple');
+    List<HitDTO> hits =
+        await pixabayApiRepositoryImpl.getPixabayImages('apple');
 
     // expect(images, MockData['hits']);
 
     // expect(images[0].id, 1122537);
     // expect(images[1].id, 256261);
-    for (Hit hit in hits) {
+    for (HitDTO hit in hits) {
       logger.info(hit.id);
     }
 
@@ -36,7 +37,7 @@ void main() {
     when(mockClient.get(Uri.parse('${pixabayApiUrl}apple')))
         .thenAnswer((_) async => http.Response(mockData, 200));
 
-    List<Hit> hits = await pixabayApiRepositoryImpl
+    List<HitDTO> hits = await pixabayApiRepositoryImpl
         .getPixabayImagesTest('apple', client: mockClient);
 
     expect(hits.first.id, 1122537);
@@ -52,7 +53,7 @@ void main() {
     when(mockClient.get(Uri.parse('${pixabayApiUrl}apple')))
         .thenAnswer((_) async => http.Response(mockData, 200));
 
-    List<Photo> photos = await pixabayApiRepositoryImpl
+    List<PhotoModel> photos = await pixabayApiRepositoryImpl
         .getPixabayPhotosByClient('apple', client: mockClient);
 
     expect(photos.first.id, 1122537);
