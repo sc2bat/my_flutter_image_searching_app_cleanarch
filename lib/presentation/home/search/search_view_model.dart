@@ -1,23 +1,28 @@
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo_model.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/pixabay_repository.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_state.dart';
 
 class SearchViewModel with ChangeNotifier {
-  final PixabayRepository _pixabayApiRepository;
+  final PhotoUseCase _photoUseCase;
 
   SearchViewModel({
-    required PixabayRepository pixabayApiRepository,
-  }) : _pixabayApiRepository = pixabayApiRepository;
+    required PhotoUseCase photoUseCase,
+  }) : _photoUseCase = photoUseCase;
+
+  // state
+  SearchState _searchState = const SearchState();
+  SearchState get getSearchState => _searchState;
 
   List<PhotoModel> _photoList = [];
 
-  UnmodifiableListView<PhotoModel> get getPhotoList =>
-      UnmodifiableListView(_photoList);
+  Future<void> getPhotos(String query) async {
+    _searchState = getSearchState.copyWith(isLoading: true);
 
-  Future<void> getPixabayPhotos(String query) async {
-    _photoList = await _pixabayApiRepository.getPixabayPhotos(query);
+    _photoList = await _photoUseCase.execute(query);
+
+    _searchState =
+        getSearchState.copyWith(isLoading: false, photos: _photoList);
     notifyListeners();
   }
 }
