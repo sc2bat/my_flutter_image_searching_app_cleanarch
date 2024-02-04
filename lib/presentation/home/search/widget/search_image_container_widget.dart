@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo_model.dart';
 
 class SearchImageContainerWidget extends StatelessWidget {
+  final PhotoModel photo;
+
   const SearchImageContainerWidget({
     super.key,
+    required this.photo,
   });
 
   @override
@@ -11,8 +14,8 @@ class SearchImageContainerWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24.0),
-        image: const DecorationImage(
-          image: NetworkImage(sampleImageUrl),
+        image: DecorationImage(
+          image: NetworkImage(photo.previewUrl),
           fit: BoxFit.cover,
         ),
         boxShadow: [

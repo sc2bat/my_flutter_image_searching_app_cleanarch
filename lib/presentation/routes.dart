@@ -1,10 +1,13 @@
 import 'package:go_router/go_router.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/di/get_it.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/history/user_history_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/like/user_like_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/setting/user_settting_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/user_screen.dart';
+import 'package:provider/provider.dart';
 
 final router = GoRouter(
   initialLocation: '/index',
@@ -41,7 +44,10 @@ final router = GoRouter(
         ),
         GoRoute(
           path: 'search',
-          builder: (_, __) => const SearchScreen(),
+          builder: (_, __) => ChangeNotifierProvider(
+            create: (_) => getIt<SearchViewModel>(),
+            child: const SearchScreen(),
+          ),
           routes: [
             GoRoute(
               path: 'window',
