@@ -23,11 +23,11 @@ class _SearchScreenState extends State<SearchScreen> {
     _searchTextController = TextEditingController();
 
     Future.microtask(() {
-      final SearchViewModel searchViewModel = context.read();
+      // final SearchViewModel searchViewModel = context.read();
 
-      _searchTextController.addListener(() {
-        searchViewModel.getPhotos(_searchTextController.text);
-      });
+      // _searchTextController.addListener(() {
+      //   searchViewModel.getPhotos(_searchTextController.text);
+      // });
     });
 
     super.initState();
@@ -62,20 +62,30 @@ class _SearchScreenState extends State<SearchScreen> {
               searchTextController: _searchTextController,
             ),
           ),
+          // const Expanded(
+          //   child: Center(
+          //     child: CircularProgressIndicator(),
+          //   ),
+          // ),
           Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.all(16.0),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16.0,
-                mainAxisSpacing: 16.0,
-              ),
-              itemCount: searchState.photos.length,
-              itemBuilder: (context, index) {
-                return SearchImageContainerWidget(
-                    photo: searchState.photos[index]);
-              },
-            ),
+            child: searchState.isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : GridView.builder(
+                    padding: const EdgeInsets.all(16.0),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 16.0,
+                      mainAxisSpacing: 16.0,
+                    ),
+                    itemCount: searchState.photos.length,
+                    itemBuilder: (context, index) {
+                      return SearchImageContainerWidget(
+                          photo: searchState.photos[index]);
+                    },
+                  ),
           ),
         ],
       ),

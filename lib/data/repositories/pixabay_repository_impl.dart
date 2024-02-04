@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/apis/pixabay_api.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/result.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/dtos/hit_dto.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/pixabay_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo_model.dart';
@@ -87,8 +88,17 @@ class PixabayRepositoryImpl implements PixabayRepository {
   }
 
   @override
-  Future<List<PhotoModel>> getPhotosByPixabaApi(String query) async {
-    final List<PhotoModel> photos = await PixabayApi().getPixabayImages(query);
-    return photos;
+  Future<Result<List<PhotoModel>>> getPhotosByPixabaApi(String query) async {
+    final Result<List<PhotoModel>> getPixabayImagesResult =
+        await PixabayApi().getPixabayImages(query);
+
+    return getPixabayImagesResult.when(
+      success: (photos) {
+        return Result.success(photos);
+      },
+      error: (message) {
+        return Result.error(message);
+      },
+    );
   }
 }

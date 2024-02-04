@@ -1,16 +1,17 @@
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/result.dart';
 
-Future<Response> fetchHttpData(String url) async {
+Future<Result<Response>> fetchHttpData(String url) async {
   try {
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
-      return response;
+      return Result.success(response);
     } else {
-      throw Exception('response statusCode => ${response.statusCode}');
+      return Result.error('response statusCode => ${response.statusCode}');
     }
   } catch (e) {
-    throw Exception('Failed to fetch Data => $e');
+    return Result.error('response statusCode => $e');
   }
 }

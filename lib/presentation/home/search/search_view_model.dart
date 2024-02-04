@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_state.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 
 class SearchViewModel with ChangeNotifier {
   final PhotoUseCase _photoUseCase;
@@ -19,10 +20,18 @@ class SearchViewModel with ChangeNotifier {
   Future<void> getPhotos(String query) async {
     _searchState = getSearchState.copyWith(isLoading: true);
 
-    _photoList = await _photoUseCase.execute(query);
+    final executeResult = await _photoUseCase.execute(query);
+    executeResult.when(
+      success: (photoList) {
+        _photoList = photoList;
+        _searchState =
+            getSearchState.copyWith(isLoading: false, photos: _photoList);
 
-    _searchState =
-        getSearchState.copyWith(isLoading: false, photos: _photoList);
-    notifyListeners();
+        notifyListeners();
+      },
+      error: (message) {
+        logger.info(message);
+      },
+    );
   }
 }
