@@ -25,12 +25,6 @@ class HomeScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                context.push('/home/image');
-              },
-              child: const Text('Image'),
-            ),
-            ElevatedButton(
-              onPressed: () {
                 context.push('/home/user');
               },
               child: const Text('User'),

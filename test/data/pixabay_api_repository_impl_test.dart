@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/data/pixabay_api_repository_impl.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/pixabay_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/pixabay.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/utils/constants.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,7 +13,7 @@ import 'pixabay_api_repository_impl_test.mocks.dart';
 @GenerateMocks([http.Client])
 void main() {
   test('pixabay data test', () async {
-    final pixabayApiRepositoryImpl = PixabayApiRepositoryImpl();
+    final pixabayApiRepositoryImpl = PixabayRepositoryImpl();
 
     List<Hit> hits = await pixabayApiRepositoryImpl.getPixabayImages('apple');
 
@@ -29,7 +29,7 @@ void main() {
   });
 
   test('Mokito pixabay data test', () async {
-    final pixabayApiRepositoryImpl = PixabayApiRepositoryImpl();
+    final pixabayApiRepositoryImpl = PixabayRepositoryImpl();
 
     final mockClient = MockClient();
 
@@ -45,7 +45,7 @@ void main() {
   });
 
   test('Mokito pixabay photo data test', () async {
-    final pixabayApiRepositoryImpl = PixabayApiRepositoryImpl();
+    final pixabayApiRepositoryImpl = PixabayRepositoryImpl();
 
     final mockClient = MockClient();
 

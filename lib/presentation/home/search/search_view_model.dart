@@ -2,13 +2,13 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/repository/pixabay_api_repository.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/pixabay_repository.dart';
 
 class SearchViewModel with ChangeNotifier {
-  final PixabayApiRepository _pixabayApiRepository;
+  final PixabayRepository _pixabayApiRepository;
 
   SearchViewModel({
-    required PixabayApiRepository pixabayApiRepository,
+    required PixabayRepository pixabayApiRepository,
   }) : _pixabayApiRepository = pixabayApiRepository;
 
   List<Photo> _photoList = [];
