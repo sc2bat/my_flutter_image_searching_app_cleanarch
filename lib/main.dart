@@ -3,7 +3,7 @@ import 'package:my_flutter_image_searching_app_cleanarch/di/get_it.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/routes.dart';
 
 void main() {
-  setup();
+  registerDependencies();
   runApp(const MyApp());
 }
 

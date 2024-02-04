@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/utils/constants.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
 
 class SearchImageContainerWidget extends StatelessWidget {
   const SearchImageContainerWidget({

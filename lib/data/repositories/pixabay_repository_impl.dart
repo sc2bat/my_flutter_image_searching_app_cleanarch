@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:my_flutter_image_searching_app_cleanarch/domain/repository/pixabay_api_repository.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/pixabay_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/pixabay.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/utils/constants.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
 import 'package:http/http.dart' as http;
 
-class PixabayApiRepositoryImpl implements PixabayApiRepository {
+class PixabayRepositoryImpl implements PixabayRepository {
   @override
   Future<List<Hit>> getPixabayImages(String query) async {
     final response = await http.get(Uri.parse(
