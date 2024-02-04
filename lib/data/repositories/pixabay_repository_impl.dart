@@ -1,15 +1,17 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/apis/pixabay_api.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/dtos/hit_dto.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/pixabay_repository.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/model/pixabay.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/dtos/pixabay_dto.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
 import 'package:http/http.dart' as http;
 
 class PixabayRepositoryImpl implements PixabayRepository {
   @override
-  Future<List<Hit>> getPixabayImages(String query) async {
+  Future<List<HitDTO>> getPixabayImages(String query) async {
     final response = await http.get(Uri.parse(
       pixabayApiUrl + query,
     ));
@@ -19,7 +21,8 @@ class PixabayRepositoryImpl implements PixabayRepository {
       // Iterable hits = jsonResponse['hits'];
       // return hits.map((e) => Hit.fromJson(e)).toList();
 
-      return Pixabay.fromJson(jsonDecode(response.body) as Map<String, dynamic>)
+      return PixabayDTO.fromJson(
+              jsonDecode(response.body) as Map<String, dynamic>)
           .hits;
     }
 
@@ -27,7 +30,7 @@ class PixabayRepositoryImpl implements PixabayRepository {
   }
 
   @override
-  Future<List<Hit>> getPixabayImagesTest(String query,
+  Future<List<HitDTO>> getPixabayImagesTest(String query,
       {http.Client? client}) async {
     client ??= http.Client();
 
@@ -36,7 +39,8 @@ class PixabayRepositoryImpl implements PixabayRepository {
     ));
 
     if (response.statusCode == 200) {
-      return Pixabay.fromJson(jsonDecode(response.body) as Map<String, dynamic>)
+      return PixabayDTO.fromJson(
+              jsonDecode(response.body) as Map<String, dynamic>)
           .hits;
     }
 
@@ -44,7 +48,7 @@ class PixabayRepositoryImpl implements PixabayRepository {
   }
 
   @override
-  Future<List<Photo>> getPixabayPhotos(String query) async {
+  Future<List<PhotoModel>> getPixabayPhotos(String query) async {
     final response = await http.get(Uri.parse(pixabayApiUrl + query));
 
     if (response.statusCode == 200) {
@@ -52,7 +56,7 @@ class PixabayRepositoryImpl implements PixabayRepository {
 
       if (jsonResponse.containsKey('hits')) {
         return (jsonResponse['hits'] as List<dynamic>)
-            .map((e) => Photo.fromJson(e))
+            .map((e) => PhotoModel.fromJson(e))
             .toList();
       }
     }
@@ -61,7 +65,7 @@ class PixabayRepositoryImpl implements PixabayRepository {
   }
 
   @override
-  Future<List<Photo>> getPixabayPhotosByClient(String query,
+  Future<List<PhotoModel>> getPixabayPhotosByClient(String query,
       {http.Client? client}) async {
     client ??= http.Client();
 
@@ -74,11 +78,17 @@ class PixabayRepositoryImpl implements PixabayRepository {
 
       if (jsonResponse.containsKey('hits')) {
         return (jsonResponse['hits'] as List<dynamic>)
-            .map((e) => Photo.fromJson(e))
+            .map((e) => PhotoModel.fromJson(e))
             .toList();
       }
     }
 
     throw Exception(e);
+  }
+
+  @override
+  Future<List<PhotoModel>> getPhotosByPixabaApi(String query) async {
+    final List<PhotoModel> photos = await PixabayApi().getPixabayImages(query);
+    return photos;
   }
 }

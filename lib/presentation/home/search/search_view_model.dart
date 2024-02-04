@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/pixabay_repository.dart';
 
 class SearchViewModel with ChangeNotifier {
@@ -11,9 +11,9 @@ class SearchViewModel with ChangeNotifier {
     required PixabayRepository pixabayApiRepository,
   }) : _pixabayApiRepository = pixabayApiRepository;
 
-  List<Photo> _photoList = [];
+  List<PhotoModel> _photoList = [];
 
-  UnmodifiableListView<Photo> get getPhotoList =>
+  UnmodifiableListView<PhotoModel> get getPhotoList =>
       UnmodifiableListView(_photoList);
 
   Future<void> getPixabayPhotos(String query) async {

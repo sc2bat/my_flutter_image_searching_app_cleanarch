@@ -1,12 +1,14 @@
 import 'package:http/http.dart' as http;
-import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/model/pixabay.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/dtos/hit_dto.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo_model.dart';
 
 abstract class PixabayRepository {
-  Future<List<Hit>> getPixabayImages(String query);
-  Future<List<Hit>> getPixabayImagesTest(String query, {http.Client? client});
-
-  Future<List<Photo>> getPixabayPhotos(String query);
-  Future<List<Photo>> getPixabayPhotosByClient(String query,
+  Future<List<HitDTO>> getPixabayImages(String query);
+  Future<List<HitDTO>> getPixabayImagesTest(String query,
       {http.Client? client});
+
+  Future<List<PhotoModel>> getPixabayPhotos(String query);
+  Future<List<PhotoModel>> getPixabayPhotosByClient(String query,
+      {http.Client? client});
+  Future<List<PhotoModel>> getPhotosByPixabaApi(String query);
 }
