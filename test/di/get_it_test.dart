@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/di/get_it.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/di/dependency_injection.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/pixabay_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_view_model.dart';

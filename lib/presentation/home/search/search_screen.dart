@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_state.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_view_model.dart';
@@ -18,12 +20,24 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   late final TextEditingController _searchTextController;
 
+  StreamSubscription? _streamSubscription;
+
   @override
   void initState() {
     _searchTextController = TextEditingController();
 
     Future.microtask(() {
-      // final SearchViewModel searchViewModel = context.read();
+      final searchViewModel = context.read<SearchViewModel>();
+
+      _streamSubscription =
+          searchViewModel.getSearchUiEventStreamController.listen((event) {
+        event.when(showSnackBar: (message) {
+          final snackBar = SnackBar(
+            content: Text(message),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        });
+      });
 
       // _searchTextController.addListener(() {
       //   searchViewModel.getPhotos(_searchTextController.text);
@@ -36,6 +50,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void dispose() {
     _searchTextController.dispose();
+    _streamSubscription?.cancel();
     super.dispose();
   }
 

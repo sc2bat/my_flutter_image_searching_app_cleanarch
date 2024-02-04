@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/di/get_it.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/di/dependency_injection.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_view_model.dart';

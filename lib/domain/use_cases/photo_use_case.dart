@@ -2,7 +2,6 @@
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/result.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/pixabay_repository.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 
 class PhotoUseCase {
   final PixabayRepository _pixabayRepository;
