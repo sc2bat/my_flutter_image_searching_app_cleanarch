@@ -141,3 +141,9 @@ app.*.map.json
 # freezed files
 *.freezed.dart
 *.g.dart
+
+# env
+*.env
+
+# mocks
+*.mocks.dart
