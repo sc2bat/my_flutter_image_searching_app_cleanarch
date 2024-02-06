@@ -11,7 +11,7 @@
  : https://github.com/users/sc2bat/projects/3
  
 #### figma Link
- : https://www.figma.com/file/ZgYiqQP96drdGBBDSCToZG/ImageCraft?type=design&node-id=0-1&mode=design&t=IAeTsxBJCCMwaV9Z-0
+ : https://www.figma.com/file/ZgYiqQP96drdGBBDSCToZG/ImageCraft?type=design&node-id=0%3A1&mode=design&t=IAeTsxBJCCMwaV9Z-1
 
 ### pakage list
 ```
