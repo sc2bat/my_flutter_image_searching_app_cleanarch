@@ -6,3 +6,5 @@ const String pixabayApiUrl =
 
 const String sampleImageUrl =
     'https://place-hold.it/300x300/666/fff/000?text=sample&fontsize=40';
+
+const String supabaseUrl = 'https://hcsletkfzvxfzxalrpqt.supabase.co';
