@@ -7,4 +7,7 @@ part 'env.g.dart';
 abstract class Env {
   @EnviedField()
   static const String pixabayApiKey = _Env.pixabayApiKey;
+
+  @EnviedField()
+  static const String supabaseApiKey = _Env.supabaseApiKey;
 }
