@@ -33,8 +33,6 @@ class _SignElevatedButtonWidgetState extends State<SignElevatedButtonWidget> {
         isSigned = false;
       }
     });
-    logger.info('isSigned => $isSigned ');
-    logger.info('email => $userEmail ');
     super.initState();
   }
 

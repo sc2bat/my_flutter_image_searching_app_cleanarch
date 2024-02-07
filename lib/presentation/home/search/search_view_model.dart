@@ -5,6 +5,7 @@ import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo_mode
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_state.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_ui_event.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchViewModel with ChangeNotifier {
   final PhotoUseCase _photoUseCase;
@@ -43,5 +44,38 @@ class SearchViewModel with ChangeNotifier {
         _searchUiEventStreamController.add(SearchUiEvent.showSnackBar(message));
       },
     );
+  }
+
+  Future<List<String>> getSearchHistories() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final List<String>? searchHistories =
+        prefs.getStringList('searchHistories');
+    return searchHistories ?? [];
+  }
+
+  Future<void> addSearchHistories(String keyword) async {
+    List<String> searchHistories = await getSearchHistories();
+
+    Set<String> setSearchHistries = searchHistories.toSet();
+
+    setSearchHistries.add(keyword);
+
+    searchHistories = setSearchHistries.toList();
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('searchHistories', searchHistories);
+  }
+
+  Future<void> removeSearchHistories(String keyword) async {
+    List<String> searchHistories = await getSearchHistories();
+    searchHistories.remove(keyword);
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('searchHistories', searchHistories);
+  }
+
+  Future<void> removeAllSearchHistories(String keyword) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('searchHistories', []);
   }
 }

@@ -3,8 +3,8 @@ import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/const
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/theme.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 
+import '../widget/common/common_text_field_widget.dart';
 import '../widget/common/main_logo_text_widget.dart';
-import '../widget/common/search_text_field_widget.dart';
 import '../widget/common/sign_elevated_button_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(
                 height: 16.0,
               ),
-              SearchTextFieldWidget(
+              CommonTextFieldWidget(
                   serachTextFieldController: _serachTextFieldController),
               const SizedBox(
                 height: 32.0,

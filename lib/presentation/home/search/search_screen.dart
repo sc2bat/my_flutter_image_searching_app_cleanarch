@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/theme.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_state.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_view_model.dart';
 import 'package:provider/provider.dart';
@@ -9,8 +10,10 @@ import 'widget/search_image_container_widget.dart';
 import 'widget/search_text_field_widget.dart';
 
 class SearchScreen extends StatefulWidget {
+  final String searchKeyword;
   const SearchScreen({
     super.key,
+    required this.searchKeyword,
   });
 
   @override
@@ -39,6 +42,10 @@ class _SearchScreenState extends State<SearchScreen> {
         });
       });
 
+      if (widget.searchKeyword.isNotEmpty) {
+        _searchTextController.text = widget.searchKeyword;
+        searchViewModel.getPhotos(widget.searchKeyword);
+      }
       // _searchTextController.addListener(() {
       //   searchViewModel.getPhotos(_searchTextController.text);
       // });
@@ -61,10 +68,19 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
-          'image searching app',
+        title: Text(
+          'ImageCraft',
           style: TextStyle(
-            color: Colors.black,
+            color: baseColor,
+            fontSize: 24.0,
+            fontWeight: FontWeight.bold,
+            shadows: [
+              Shadow(
+                offset: const Offset(2.0, 2.0),
+                blurRadius: 4.0,
+                color: Colors.grey.withOpacity(0.5),
+              ),
+            ],
           ),
         ),
         backgroundColor: Colors.white,
@@ -74,31 +90,32 @@ class _SearchScreenState extends State<SearchScreen> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: SearchTextFieldWidget(
-              searchTextController: _searchTextController,
+              searchViewModel: searchViewModel,
+              searchTextFieldController: _searchTextController,
             ),
           ),
-          Expanded(
-            child: searchState.isLoading
-                ? const Center(
+          searchState.isLoading
+              ? const Expanded(
+                  child: Center(
                     child: CircularProgressIndicator(),
-                  )
-                : Expanded(
-                    child: GridView.builder(
-                      padding: const EdgeInsets.all(16.0),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 16.0,
-                        mainAxisSpacing: 16.0,
-                      ),
-                      itemCount: searchState.photos.length,
-                      itemBuilder: (context, index) {
-                        return SearchImageContainerWidget(
-                            photo: searchState.photos[index]);
-                      },
-                    ),
                   ),
-          ),
+                )
+              : Expanded(
+                  child: GridView.builder(
+                    padding: const EdgeInsets.all(16.0),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 16.0,
+                      mainAxisSpacing: 16.0,
+                    ),
+                    itemCount: searchState.photos.length,
+                    itemBuilder: (context, index) {
+                      return SearchImageContainerWidget(
+                          photo: searchState.photos[index]);
+                    },
+                  ),
+                ),
         ],
       ),
     );

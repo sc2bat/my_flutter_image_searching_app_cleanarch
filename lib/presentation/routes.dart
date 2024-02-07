@@ -14,10 +14,10 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/splash/spl
 import 'package:provider/provider.dart';
 
 final router = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/index',
   routes: [
     GoRoute(
-      path: '/',
+      path: '/index',
       builder: (_, __) => const SplashScreen(),
       routes: const [],
     ),
@@ -59,41 +59,46 @@ final router = GoRouter(
             ),
           ],
         ),
-        GoRoute(
-          path: 'image',
-          builder: (_, __) => const SearchScreen(),
-          routes: [
-            GoRoute(
-              path: 'detail',
-              builder: (_, __) => const SearchScreen(),
-              routes: const [],
-            ),
-            GoRoute(
-              path: 'edit',
-              builder: (_, __) => const SearchScreen(),
-              routes: const [],
-            ),
-          ],
-        ),
+        // GoRoute(
+        //   path: 'image',
+        //   builder: (_, __) => const SearchScreen(),
+        //   routes: [
+        //     GoRoute(
+        //       path: 'detail',
+        //       builder: (_, __) => const SearchScreen(),
+        //       routes: const [],
+        //     ),
+        //     GoRoute(
+        //       path: 'edit',
+        //       builder: (_, __) => const SearchScreen(),
+        //       routes: const [],
+        //     ),
+        //   ],
+        // ),
       ],
     ),
     GoRoute(
       path: '/search',
-      builder: (_, __) => ChangeNotifierProvider(
-        create: (_) => getIt<SearchViewModel>(),
-        child: const SearchScreen(),
-      ),
-      routes: [
-        GoRoute(
-          path: 'window',
-          builder: (_, __) => const SearchScreen(),
-          routes: const [],
-        ),
-        GoRoute(
-          path: 'result',
-          builder: (_, __) => const SearchScreen(),
-          routes: const [],
-        ),
+      builder: (_, state) {
+        final map = state.extra! as Map<String, dynamic>;
+        return ChangeNotifierProvider(
+          create: (_) => getIt<SearchViewModel>(),
+          child: SearchScreen(
+            searchKeyword: map['searchKeyword'] as String,
+          ),
+        );
+      },
+      routes: const [
+        // GoRoute(
+        //   path: 'window',
+        //   builder: (_, __) => const SearchScreen(),
+        //   routes: const [],
+        // ),
+        // GoRoute(
+        //   path: 'result',
+        //   builder: (_, __) => const SearchScreen(),
+        //   routes: const [],
+        // ),
       ],
     ),
   ],
