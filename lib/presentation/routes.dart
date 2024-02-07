@@ -78,7 +78,7 @@ final router = GoRouter(
       ],
     ),
     GoRoute(
-      path: 'search',
+      path: '/search',
       builder: (_, __) => ChangeNotifierProvider(
         create: (_) => getIt<SearchViewModel>(),
         child: const SearchScreen(),
