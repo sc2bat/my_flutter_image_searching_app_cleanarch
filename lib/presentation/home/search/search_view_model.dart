@@ -5,7 +5,6 @@ import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo_mode
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_state.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_ui_event.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 
 class SearchViewModel with ChangeNotifier {
   final PhotoUseCase _photoUseCase;
@@ -41,7 +40,6 @@ class SearchViewModel with ChangeNotifier {
         notifyListeners();
       },
       error: (message) {
-        logger.info(message);
         _searchUiEventStreamController.add(SearchUiEvent.showSnackBar(message));
       },
     );
