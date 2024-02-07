@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:my_flutter_image_searching_app_cleanarch/env/env.dart';
 
 // pixabay api url
@@ -6,3 +8,12 @@ const String pixabayApiUrl =
 
 const String sampleImageUrl =
     'https://place-hold.it/300x300/666/fff/000?text=sample&fontsize=40';
+
+const String supabaseUrl = 'https://hcsletkfzvxfzxalrpqt.supabase.co';
+
+const String TB_DOWNLOAD_HISTORY = 'tb_download_history';
+const String TB_IMAGE_INFO = 'tb_image_info';
+const String TB_LIKE_HISTORY = 'tb_like_history';
+const String TB_SHARE_HISTORY = 'tb_share_history';
+const String TB_USER_ACCOUNT = 'tb_user_account';
+const String TB_USER_COMMENT = 'tb_user_comment';
