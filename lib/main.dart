@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/di/dependency_injection.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/env/env.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_view_model.dart';
@@ -13,7 +12,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Supabase.initialize(
-    url: supabaseUrl,
+    url: Env.supabaseUrl,
     anonKey: Env.supabaseApiKey,
     // authOptions: const FlutterAuthClientOptions(
     //   authFlowType: AuthFlowType.pkce,

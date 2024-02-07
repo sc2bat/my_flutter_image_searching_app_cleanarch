@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/env/env.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/theme.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/widget/common/main_logo_text_widget.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -19,18 +21,20 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   bool _isLoading = false;
   bool _redirecting = false;
+  String buttonString = 'SIGN IN';
   late final TextEditingController _emailTextFieldController;
   late final StreamSubscription<AuthState> _authStateSubscription;
 
   Future<void> _signIn() async {
+    logger.info('start signIn');
     try {
       setState(() {
         _isLoading = true;
+        buttonString = 'Loading';
       });
       await supabase.auth.signInWithOtp(
         email: _emailTextFieldController.text.trim(),
-        emailRedirectTo:
-            kIsWeb ? null : 'io.supabase.flutterquickstart://login-callback/',
+        emailRedirectTo: kIsWeb ? null : supabaseLoginCallback,
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -41,11 +45,13 @@ class _SignInScreenState extends State<SignInScreen> {
         _emailTextFieldController.clear();
       }
     } on AuthException catch (error) {
+      logger.info('AuthException $error');
       SnackBar(
         content: Text(error.message),
         backgroundColor: Theme.of(context).colorScheme.error,
       );
     } catch (error) {
+      logger.info('error $error');
       SnackBar(
         content: const Text('Unexpected error occurred'),
         backgroundColor: Theme.of(context).colorScheme.error,
@@ -53,7 +59,8 @@ class _SignInScreenState extends State<SignInScreen> {
     } finally {
       if (mounted) {
         setState(() {
-          _isLoading = false;
+          // _isLoading = false;
+          buttonString = 'Check Email';
         });
       }
     }
@@ -127,9 +134,9 @@ class _SignInScreenState extends State<SignInScreen> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
-              child: const Text(
-                'SIGN IN',
-                style: TextStyle(
+              child: Text(
+                buttonString,
+                style: const TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
                   color: whiteColor,

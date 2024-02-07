@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
 
 class UserScreen extends StatefulWidget {
@@ -48,6 +49,6 @@ class _UserScreenState extends State<UserScreen> {
 Future<void> test(String inputEmail) async {
   await supabase.auth.signInWithOtp(
     email: inputEmail,
-    emailRedirectTo: kIsWeb ? null : 'io.supabase.flutter://signin-callback/',
+    emailRedirectTo: kIsWeb ? null : supabaseLoginCallback,
   );
 }
