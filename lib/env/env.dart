@@ -10,6 +10,10 @@ abstract class Env {
 
   @EnviedField()
   static const String supabaseApiKey = _Env.supabaseApiKey;
+
+  @EnviedField()
+  static const String supabaseUrl = _Env.supabaseUrl;
+
   @EnviedField()
   static const String testEmail = _Env.testEmail;
 }

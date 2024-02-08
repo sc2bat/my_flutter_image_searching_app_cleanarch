@@ -16,7 +16,7 @@ class SignElevatedButtonWidget extends StatefulWidget {
 }
 
 class _SignElevatedButtonWidgetState extends State<SignElevatedButtonWidget> {
-  late bool isSigned;
+  bool isSigned = false;
   String userEmail = '';
 
   @override
@@ -25,16 +25,14 @@ class _SignElevatedButtonWidgetState extends State<SignElevatedButtonWidget> {
     User? user = session?.user;
     setState(() {
       if (user != null) {
-        isSigned = true;
         if (user.email != null) {
           userEmail = user.email!;
+          isSigned = true;
         }
       } else {
         isSigned = false;
       }
     });
-    logger.info('isSigned => $isSigned ');
-    logger.info('email => $userEmail ');
     super.initState();
   }
 

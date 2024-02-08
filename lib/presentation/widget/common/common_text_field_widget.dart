@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/theme.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 
-class SearchTextFieldWidget extends StatefulWidget {
-  const SearchTextFieldWidget({
+class CommonTextFieldWidget extends StatefulWidget {
+  const CommonTextFieldWidget({
     super.key,
     required TextEditingController serachTextFieldController,
   }) : _serachTextFieldController = serachTextFieldController;
@@ -13,10 +13,10 @@ class SearchTextFieldWidget extends StatefulWidget {
   final TextEditingController _serachTextFieldController;
 
   @override
-  State<SearchTextFieldWidget> createState() => _SearchTextFieldWidgetState();
+  State<CommonTextFieldWidget> createState() => _CommonTextFieldWidgetState();
 }
 
-class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
+class _CommonTextFieldWidgetState extends State<CommonTextFieldWidget> {
   bool _showClearButton = false;
   bool _isTextFieldFocused = false;
   List<String> searchHistories = [
@@ -32,10 +32,24 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
         _showClearButton = widget._serachTextFieldController.text.isNotEmpty;
       });
     });
+    setState(() {
+      _isTextFieldFocused = false;
+    });
     super.initState();
   }
 
-  void searchImage(String searchString) {}
+  void _textFieldValid(String searchKeyword) {
+    if (searchKeyword.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('please enter search Keyword'),
+        ),
+      );
+      return;
+    } else {
+      context.push('/search', extra: {'searchKeyword': searchKeyword});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +58,7 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
         TextField(
           controller: widget._serachTextFieldController,
           onSubmitted: (value) {
-            context.push('/search', extra: {'searchString': value});
+            _textFieldValid(value);
           },
           onTap: () {
             setState(() {
@@ -91,9 +105,7 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
                       ),
                 IconButton(
                   onPressed: () {
-                    context.push('/search', extra: {
-                      'searchString': widget._serachTextFieldController.text
-                    });
+                    _textFieldValid(widget._serachTextFieldController.text);
                   },
                   icon: const Icon(
                     Icons.search,
@@ -139,13 +151,22 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
-                          child: Text(
-                            searchHistories[index],
-                            style: const TextStyle(
-                              fontSize: 18.0,
+                          child: GestureDetector(
+                            onTap: () {
+                              widget._serachTextFieldController.clear();
+                              widget._serachTextFieldController.text =
+                                  searchHistories[index];
+                              _textFieldValid(
+                                  widget._serachTextFieldController.text);
+                            },
+                            child: Text(
+                              searchHistories[index],
+                              style: const TextStyle(
+                                fontSize: 18.0,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
                             ),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
                           ),
                         ),
                         IconButton(

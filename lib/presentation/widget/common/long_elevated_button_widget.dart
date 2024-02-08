@@ -28,7 +28,7 @@ class _LongElevatedButtonWidgetState extends State<LongElevatedButtonWidget> {
         ),
       ),
       child: const Text(
-        'SIGN IN',
+        'long button',
         style: TextStyle(
           fontSize: 16.0,
           fontWeight: FontWeight.bold,

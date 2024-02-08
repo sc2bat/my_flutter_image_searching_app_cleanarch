@@ -6,6 +6,8 @@ part 'search_state.freezed.dart';
 @freezed
 class SearchState with _$SearchState {
   const factory SearchState({
+    @Default('') String searchKeyword,
+    @Default([]) List<String> searchHistories,
     @Default(false) bool isLoading,
     @Default([]) List<PhotoModel> photos,
   }) = _SearchState;

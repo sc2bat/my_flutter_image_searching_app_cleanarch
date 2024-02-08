@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/signout_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_state.dart';
@@ -34,8 +35,7 @@ class SignViewModel extends ChangeNotifier {
     _updateIsLoading();
     await supabase.auth.signInWithOtp(
       email: email.trim(),
-      emailRedirectTo:
-          kIsWeb ? null : 'io.supabase.flutterquickstart://login-callback/',
+      emailRedirectTo: kIsWeb ? null : supabaseLoginCallback,
     );
     // if (mounted) {
     //   ScaffoldMessenger.of(context).showSnackBar(
