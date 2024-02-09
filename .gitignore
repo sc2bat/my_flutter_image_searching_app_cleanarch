@@ -148,3 +148,6 @@ app.*.map.json
 
 # mocks
 *.mocks.dart
+
+# sql
+*.sql
