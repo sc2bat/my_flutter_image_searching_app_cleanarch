@@ -18,3 +18,4 @@ const String TB_LIKE_HISTORY = 'tb_like_history';
 const String TB_SHARE_HISTORY = 'tb_share_history';
 const String TB_USER_ACCOUNT = 'tb_user_account';
 const String TB_USER_COMMENT = 'tb_user_comment';
+const String TB_USER_PROFILE = 'tb_user_profile';

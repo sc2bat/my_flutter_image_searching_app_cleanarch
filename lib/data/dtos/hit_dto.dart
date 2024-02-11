@@ -10,7 +10,6 @@ class HitDTO {
   final int webformatWidth;
   final int webformatHeight;
   final String largeImageURL;
-  final String fullHDURL;
   final String imageURL;
   final int imageWidth;
   final int imageHeight;
@@ -35,7 +34,6 @@ class HitDTO {
     required this.webformatWidth,
     required this.webformatHeight,
     required this.largeImageURL,
-    required this.fullHDURL,
     required this.imageURL,
     required this.imageWidth,
     required this.imageHeight,
@@ -62,7 +60,6 @@ class HitDTO {
       webformatWidth: json['webformatWidth'] ?? 0,
       webformatHeight: json['webformatHeight'] ?? 0,
       largeImageURL: json['largeImageURL'] ?? '',
-      fullHDURL: json['fullHDURL'] ?? '',
       imageURL: json['imageURL'] ?? '',
       imageWidth: json['imageWidth'] ?? 0,
       imageHeight: json['imageHeight'] ?? 0,
