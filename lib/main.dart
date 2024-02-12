@@ -14,12 +14,6 @@ void main() async {
   await Supabase.initialize(
     url: Env.supabaseUrl,
     anonKey: Env.supabaseApiKey,
-    // authOptions: const FlutterAuthClientOptions(
-    //   authFlowType: AuthFlowType.pkce,
-    // ),
-    // realtimeClientOptions: const RealtimeClientOptions(
-    //   logLevel: RealtimeLogLevel.info,
-    // ),
   );
 
   runApp(
@@ -39,7 +33,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       routerConfig: router,
-      title: 'Flutter Demo',
+      title: 'ImageCraft',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,

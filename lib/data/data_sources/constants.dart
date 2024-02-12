@@ -12,6 +12,7 @@ const String sampleImageUrl =
 const String supabaseLoginCallback =
     'io.supabase.flutterquickstart://login-callback/';
 
+// supabase tables
 const String TB_DOWNLOAD_HISTORY = 'tb_download_history';
 const String TB_IMAGE_INFO = 'tb_image_info';
 const String TB_LIKE_HISTORY = 'tb_like_history';
