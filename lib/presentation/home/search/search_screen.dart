@@ -22,6 +22,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   late final TextEditingController _searchTextController;
+  final _focusNode = FocusNode();
 
   StreamSubscription? _streamSubscription;
 
@@ -91,7 +92,8 @@ class _SearchScreenState extends State<SearchScreen> {
             padding: const EdgeInsets.all(16.0),
             child: SearchTextFieldWidget(
               searchViewModel: searchViewModel,
-              searchTextFieldController: _searchTextController,
+              // searchTextFieldController: _searchTextController,
+              // focusNode: _focusNode,
             ),
           ),
           searchState.isLoading
