@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -21,12 +22,14 @@ class _SplashScreenState extends State<SplashScreen> {
       return;
     }
 
-    // final session = supabase.auth.currentSession;
-    // if (session != null) {
-    //   context.go('/home');
-    // } else {
-    //   context.go('/home/user/login');
-    // }
+    final session = supabase.auth.currentSession;
+    if (session != null) {
+      // get user info from supabase
+
+      // get recent search keyword from user_id shared preference
+    } else {
+      // get recent search keyword from guest shared preference
+    }
     context.go('/home');
   }
 

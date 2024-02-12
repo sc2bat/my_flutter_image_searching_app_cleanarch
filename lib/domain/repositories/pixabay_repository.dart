@@ -1,6 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/result.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/data/dtos/hit_dto.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/dtos/photo/hit_dto.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo_model.dart';
 
 abstract class PixabayRepository {

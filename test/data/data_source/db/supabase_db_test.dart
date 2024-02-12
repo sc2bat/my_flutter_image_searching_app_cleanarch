@@ -1,12 +1,103 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/data/dtos/hit_dto.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/data/mappers/image_mapper.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/dtos/photo/hit_dto.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/mappers/photo_mapper.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/pixabay_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/image_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/env/env.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() {
+  test('supabase counting test', () async {
+    final supabase = SupabaseClient(Env.supabaseUrl, Env.supabaseApiKey);
+    final response = await supabase
+        .from(TB_IMAGE_INFO)
+        .select('*')
+        .eq('is_deleted', false)
+        .count();
+
+    final data = response.data;
+    final int cnt = response.count;
+
+    // logger.info(data);
+
+    // expect(cnt, 0);
+    expect(cnt, 64);
+  });
+
+  test('supabase select eq test', () async {
+    int selectCount = 30;
+
+    final supabase = SupabaseClient(Env.supabaseUrl, Env.supabaseApiKey);
+    final dataList = await supabase
+        .from(TB_IMAGE_INFO)
+        .select('*')
+        .limit(selectCount)
+        .order('image_id');
+
+    List<ImageModel> imageList =
+        dataList.map((e) => ImageModel.fromJson(e)).toList();
+
+    for (final image in imageList) {
+      logger.info(image.imageId);
+    }
+
+    expect(dataList.length, selectCount);
+
+    expect(imageList.length, selectCount);
+  });
+  test('supabsae select image one test 002', () async {
+    final supabase = SupabaseClient(Env.supabaseUrl, Env.supabaseApiKey);
+    final data = await supabase
+        .from(TB_IMAGE_INFO)
+        .select()
+        .eq('image_id', 4493420)
+        .single();
+
+    ImageModel image = ImageModel.fromJson(data);
+
+    expect(image.imageId, 4493420);
+  });
+
+  test('supabsae select image one', () async {
+    final supabase = SupabaseClient(Env.supabaseUrl, Env.supabaseApiKey);
+    final data =
+        await supabase.from(TB_IMAGE_INFO).select().eq('image_id', 4493420);
+
+    logger.info(data);
+    logger.info((data[0]["image_id"]).runtimeType);
+
+    List<ImageModel> imageList =
+        data.map((e) => ImageModel.fromJson(e)).toList();
+
+    ImageModel image = imageList[0];
+
+    logger.info(image.imageId);
+
+    expect(image.imageId, 4493420);
+  });
+
+  test('pixaApi => supabase test 001', () async {
+    final pixabayApiRepositoryImpl = PixabayRepositoryImpl();
+    List<HitDTO> hitList =
+        await pixabayApiRepositoryImpl.getPixabayImages('orange');
+
+    List<PhotoModel> photoList =
+        hitList.map((e) => PhotoMapper.fromDTO(e)).toList();
+    final jsonPhotoList = photoList.map((e) => e.toJson()).toList();
+
+    final supabase = SupabaseClient(
+      Env.supabaseUrl,
+      Env.supabaseApiKey,
+    );
+
+    final response = await supabase
+        .from(TB_IMAGE_INFO)
+        .upsert(jsonPhotoList, onConflict: 'image_id');
+  });
+
   // group('Supabase CRUD Tests', () {
   //   late SupabaseClient client;
 
@@ -32,17 +123,17 @@ void main() {
 
     List<HitDTO> hitList = mockDataList.map((e) => HitDTO.fromJson(e)).toList();
     logger.info(hitList.length);
-    List<ImageModel> imageList =
-        hitList.map((e) => ImageMapper.fromDTO(e)).toList();
-    final jsonImageList = imageList.map((e) => e.toJson()).toList();
-    logger.info(jsonImageList[0]);
+    // List<ImageModel> imageList =
+    //     hitList.map((e) => ImageMapper.fromDTO(e)).toList();
+    // final jsonImageList = imageList.map((e) => e.toJson()).toList();
+    // logger.info(jsonImageList[0]);
 
-    final response =
-        await supabase.from('tb_image_info_duplicate').insert(jsonImageList);
+    // final response =
+    //     await supabase.from('tb_image_info_duplicate').insert(jsonImageList);
 
-    for (ImageModel image in imageList) {
-      logger.info(image);
-    }
+    // for (ImageModel image in imageList) {
+    //   logger.info(image);
+    // }
   });
 }
 

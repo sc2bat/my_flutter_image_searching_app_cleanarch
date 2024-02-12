@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/data/dtos/hit_dto.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/dtos/photo/hit_dto.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/pixabay_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
@@ -56,7 +56,7 @@ void main() {
     List<PhotoModel> photos = await pixabayApiRepositoryImpl
         .getPixabayPhotosByClient('apple', client: mockClient);
 
-    expect(photos.first.id, 1122537);
+    expect(photos.first.imageId, 1122537);
 
     verify(mockClient.get(Uri.parse('${pixabayApiUrl}apple')));
   });

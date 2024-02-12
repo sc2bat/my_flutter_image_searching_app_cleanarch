@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/pixabay_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/pixabay_repository.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo/photo_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/signout_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_view_model.dart';

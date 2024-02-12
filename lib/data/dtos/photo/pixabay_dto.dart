@@ -1,4 +1,4 @@
-import 'package:my_flutter_image_searching_app_cleanarch/data/dtos/hit_dto.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/dtos/photo/hit_dto.dart';
 
 class PixabayDTO {
   final int total;

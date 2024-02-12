@@ -33,7 +33,7 @@ class SearchImageContainerWidget extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24.0),
           image: DecorationImage(
-            image: NetworkImage(photo.previewUrl),
+            image: NetworkImage(photo.previewUrl ?? ''),
             fit: BoxFit.cover,
           ),
           boxShadow: [
