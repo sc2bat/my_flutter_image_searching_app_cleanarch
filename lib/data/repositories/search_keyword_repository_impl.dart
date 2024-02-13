@@ -37,9 +37,11 @@ class SearchKeywordRepositoryImpl implements SearchKeywordRepository {
       List<String> searchHistories =
           prefs.getStringList('searchHistories') ?? [];
 
-      searchHistories.remove(keyword);
+      if (searchHistories.contains(keyword)) {
+        searchHistories.remove(keyword);
+      }
 
-      await prefs.setStringList('searchHistories', searchHistories);
+      prefs.setStringList('searchHistories', searchHistories);
 
       return const Result.success(null);
     } catch (e) {
@@ -63,8 +65,9 @@ class SearchKeywordRepositoryImpl implements SearchKeywordRepository {
   Future<Result<List<String>>> getKeywordList() async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
-      List<String>? searchHistories = prefs.getStringList('searchHistories');
-      return Result.success(searchHistories ?? []);
+      List<String>? searchHistories =
+          prefs.getStringList('searchHistories') ?? [];
+      return Result.success(searchHistories);
     } catch (e) {
       return Result.error(e.toString());
     }

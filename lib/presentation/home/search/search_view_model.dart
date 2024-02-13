@@ -67,20 +67,15 @@ class SearchViewModel with ChangeNotifier {
         _searchUiEventStreamController.add(SearchUiEvent.showSnackBar(message));
       },
     );
-
-    // final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    // final List<String>? searchHistories =
-    //     prefs.getStringList('searchHistories');
-    // return searchHistories ?? [];
   }
 
   Future<void> addSearchHistories(String keyword) async {
-    logger.info(keyword);
     final result = await _searchUseCase.addSearchKeyword(keyword);
+    getSearchHistories();
     result.when(
       success: (_) {
-        getSearchHistories();
+        _searchUiEventStreamController
+            .add(SearchUiEvent.showSnackBar('remove $keyword'));
       },
       error: (message) {
         _searchUiEventStreamController.add(SearchUiEvent.showSnackBar(message));

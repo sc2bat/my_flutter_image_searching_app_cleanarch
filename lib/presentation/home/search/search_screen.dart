@@ -28,8 +28,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   void initState() {
-    _searchTextController = TextEditingController();
-
     Future.microtask(() {
       final searchViewModel = context.read<SearchViewModel>();
 
@@ -44,12 +42,8 @@ class _SearchScreenState extends State<SearchScreen> {
       });
 
       if (widget.searchKeyword.isNotEmpty) {
-        _searchTextController.text = widget.searchKeyword;
         searchViewModel.getPhotos(widget.searchKeyword);
       }
-      // _searchTextController.addListener(() {
-      //   searchViewModel.getPhotos(_searchTextController.text);
-      // });
     });
 
     super.initState();
@@ -57,7 +51,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   void dispose() {
-    _searchTextController.dispose();
     _streamSubscription?.cancel();
     super.dispose();
   }
@@ -89,11 +82,9 @@ class _SearchScreenState extends State<SearchScreen> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: SearchTextFieldWidget(
               searchViewModel: searchViewModel,
-              // searchTextFieldController: _searchTextController,
-              // focusNode: _focusNode,
             ),
           ),
           searchState.isLoading
