@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/theme.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_state.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_view_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/widget/search_text_field_widget.dart';
 import 'package:provider/provider.dart';
 
 import 'widget/search_image_container_widget.dart';
-import 'widget/search_text_field_widget.dart';
 
 class SearchScreen extends StatefulWidget {
   final String searchKeyword;
@@ -22,7 +22,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   late final TextEditingController _searchTextController;
-  final _focusNode = FocusNode();
+  // final _focusNode = FocusNode();
 
   StreamSubscription? _streamSubscription;
 
@@ -42,9 +42,13 @@ class _SearchScreenState extends State<SearchScreen> {
       });
 
       if (widget.searchKeyword.isNotEmpty) {
+        _searchTextController.text = widget.searchKeyword;
         searchViewModel.getPhotos(widget.searchKeyword);
+        searchViewModel.addSearchHistories(widget.searchKeyword);
       }
     });
+
+    _searchTextController = TextEditingController();
 
     super.initState();
   }
@@ -52,6 +56,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void dispose() {
     _streamSubscription?.cancel();
+    _searchTextController.dispose();
     super.dispose();
   }
 
@@ -84,6 +89,7 @@ class _SearchScreenState extends State<SearchScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: SearchTextFieldWidget(
+              searchTextController: _searchTextController,
               searchViewModel: searchViewModel,
             ),
           ),

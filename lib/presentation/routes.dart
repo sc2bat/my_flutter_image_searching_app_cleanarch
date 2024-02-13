@@ -3,11 +3,13 @@ import 'package:my_flutter_image_searching_app_cleanarch/di/dependency_injection
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_view_model.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/history/user_history_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/comment/user_account_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/download/user_download_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/like/user_like_screen.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/setting/user_settting_screen.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/user_account_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_profile_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/share/user_share_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/user_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/view/user_view_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_in_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/splash/splash_screen.dart';
@@ -38,8 +40,18 @@ final router = GoRouter(
           builder: (_, __) => const UserScreen(),
           routes: [
             GoRoute(
-              path: 'account',
-              builder: (_, __) => const UserAccountScreen(),
+              path: 'comment',
+              builder: (_, __) => const UserCommentScreen(),
+              routes: const [],
+            ),
+            GoRoute(
+              path: 'download',
+              builder: (_, __) => const UserDownloadScreen(),
+              routes: const [],
+            ),
+            GoRoute(
+              path: 'profile',
+              builder: (_, __) => const UserProfileScreen(),
               routes: const [],
             ),
             GoRoute(
@@ -48,13 +60,13 @@ final router = GoRouter(
               routes: const [],
             ),
             GoRoute(
-              path: 'history',
-              builder: (_, __) => const UserHistoryScreen(),
+              path: 'share',
+              builder: (_, __) => const UserShareScreen(),
               routes: const [],
             ),
             GoRoute(
-              path: 'setting',
-              builder: (_, __) => const UserSettingScreen(),
+              path: 'view',
+              builder: (_, __) => const UserViewScreen(),
               routes: const [],
             ),
           ],

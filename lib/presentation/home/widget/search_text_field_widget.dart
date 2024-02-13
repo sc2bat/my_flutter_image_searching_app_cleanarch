@@ -5,9 +5,11 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/searc
 class SearchTextFieldWidget extends StatefulWidget {
   const SearchTextFieldWidget({
     super.key,
+    required this.searchTextController,
     required this.searchViewModel,
   });
 
+  final TextEditingController searchTextController;
   final SearchViewModel searchViewModel;
 
   @override
@@ -15,7 +17,6 @@ class SearchTextFieldWidget extends StatefulWidget {
 }
 
 class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
-  final _serachTextFieldController = TextEditingController();
   OverlayEntry? _overlayEntry;
 
   @override
@@ -27,7 +28,6 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
   @override
   void dispose() {
     _overlayEntry?.remove();
-    _serachTextFieldController.dispose();
     super.dispose();
   }
 
@@ -92,16 +92,15 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
                                       Expanded(
                                         child: GestureDetector(
                                           onTap: () {
-                                            _serachTextFieldController.clear();
-                                            _serachTextFieldController.text =
+                                            widget.searchTextController.clear();
+                                            widget.searchTextController.text =
                                                 searchHistories[reversedIndex];
                                             widget.searchViewModel
-                                                .addSearchHistories(
-                                                    _serachTextFieldController
-                                                        .text);
+                                                .addSearchHistories(widget
+                                                    .searchTextController.text);
                                             widget.searchViewModel.getPhotos(
-                                                _serachTextFieldController
-                                                    .text);
+                                                widget
+                                                    .searchTextController.text);
                                             _removeOverlay();
                                           },
                                           child: Text(
@@ -120,13 +119,13 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
                                               .removeSearchHistories(
                                                   searchHistories[
                                                       reversedIndex]);
-                                          _removeOverlay();
-                                          _createOverlay(
-                                              context,
-                                              widget
-                                                  .searchViewModel
-                                                  .getSearchState
-                                                  .searchHistories);
+                                          // _removeOverlay();
+                                          // _createOverlay(
+                                          //     context,
+                                          //     widget
+                                          //         .searchViewModel
+                                          //         .getSearchState
+                                          //         .searchHistories);
                                         },
                                         icon: const Icon(
                                           Icons.clear,
@@ -210,7 +209,7 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
       child: Column(
         children: [
           TextField(
-            controller: _serachTextFieldController,
+            controller: widget.searchTextController,
             onTap: () {},
             onSubmitted: (value) {
               if (_textFieldValid(value)) {
@@ -241,9 +240,12 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Visibility(
-                    visible: _serachTextFieldController.text.isNotEmpty,
+                    visible: widget.searchTextController.text.isNotEmpty,
                     child: IconButton(
-                      onPressed: _serachTextFieldController.clear,
+                      onPressed: () {
+                        widget.searchTextController.clear();
+                        widget.searchViewModel.notifyListeners();
+                      },
                       icon: const Icon(
                         Icons.clear,
                       ),
@@ -251,13 +253,13 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
                   ),
                   IconButton(
                     onPressed: () {
-                      if (_textFieldValid(_serachTextFieldController.text)) {
+                      if (_textFieldValid(widget.searchTextController.text)) {
                         _removeOverlay();
                         widget.searchViewModel.addSearchHistories(
-                            _serachTextFieldController.text);
+                            widget.searchTextController.text);
 
                         widget.searchViewModel
-                            .getPhotos(_serachTextFieldController.text);
+                            .getPhotos(widget.searchTextController.text);
                       }
                     },
                     icon: const Icon(

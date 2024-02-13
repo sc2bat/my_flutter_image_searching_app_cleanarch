@@ -3,14 +3,14 @@ import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/const
 import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class UserAccountScreen extends StatefulWidget {
-  const UserAccountScreen({super.key});
+class UserShareScreen extends StatefulWidget {
+  const UserShareScreen({super.key});
 
   @override
-  State<UserAccountScreen> createState() => _UserAccountScreenState();
+  State<UserShareScreen> createState() => _UserShareScreenState();
 }
 
-class _UserAccountScreenState extends State<UserAccountScreen> {
+class _UserShareScreenState extends State<UserShareScreen> {
   late final TextEditingController _userNameTextFieldController;
 
   bool _isLoading = false;
@@ -35,7 +35,7 @@ class _UserAccountScreenState extends State<UserAccountScreen> {
     try {
       final userId = supabase.auth.currentUser!.id;
       final data = await supabase
-          .from(TB_USER_ACCOUNT)
+          .from(TB_USER_PROFILE)
           .select()
           .eq('userId', userId)
           .single();

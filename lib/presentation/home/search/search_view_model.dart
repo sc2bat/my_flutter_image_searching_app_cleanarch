@@ -61,21 +61,19 @@ class SearchViewModel with ChangeNotifier {
         _searchState =
             getSearchState.copyWith(searchHistories: _searchKeywordHistories);
         logger.info(searchKeywordHistories.length);
-        notifyListeners();
       },
       error: (message) {
         _searchUiEventStreamController.add(SearchUiEvent.showSnackBar(message));
       },
     );
+    notifyListeners();
   }
 
   Future<void> addSearchHistories(String keyword) async {
     final result = await _searchUseCase.addSearchKeyword(keyword);
-    getSearchHistories();
     result.when(
       success: (_) {
-        _searchUiEventStreamController
-            .add(SearchUiEvent.showSnackBar('remove $keyword'));
+        getSearchHistories();
       },
       error: (message) {
         _searchUiEventStreamController.add(SearchUiEvent.showSnackBar(message));
@@ -85,9 +83,12 @@ class SearchViewModel with ChangeNotifier {
 
   Future<void> removeSearchHistories(String keyword) async {
     final result = await _searchUseCase.dropSearchKeyword(keyword);
+    notifyListeners();
     result.when(
       success: (_) {
         getSearchHistories();
+        _searchUiEventStreamController
+            .add(SearchUiEvent.showSnackBar('remove $keyword'));
       },
       error: (message) {
         _searchUiEventStreamController.add(SearchUiEvent.showSnackBar(message));
