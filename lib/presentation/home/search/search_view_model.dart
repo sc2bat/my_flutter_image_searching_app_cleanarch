@@ -3,27 +3,33 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo/photo_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/saerch/search_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_state.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_ui_event.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 
 class SearchViewModel with ChangeNotifier {
   final PhotoUseCase _photoUseCase;
+  final SearchUseCase _searchUseCase;
 
   SearchViewModel({
     required PhotoUseCase photoUseCase,
-  }) : _photoUseCase = photoUseCase;
+    required SearchUseCase searchUseCase,
+  })  : _photoUseCase = photoUseCase,
+        _searchUseCase = searchUseCase;
 
   // state
   SearchState _searchState = const SearchState();
   SearchState get getSearchState => _searchState;
 
+  // list
+  List<PhotoModel> _photoList = [];
+  List<String> _searchKeywordHistories = [];
+
   // ui event
   final _searchUiEventStreamController = StreamController<SearchUiEvent>();
   Stream<SearchUiEvent> get getSearchUiEventStreamController =>
       _searchUiEventStreamController.stream;
-
-  List<PhotoModel> _photoList = [];
 
   Future<void> getPhotos(String query) async {
     _searchState = getSearchState.copyWith(isLoading: true);
@@ -46,36 +52,59 @@ class SearchViewModel with ChangeNotifier {
     );
   }
 
-  Future<List<String>> getSearchHistories() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final List<String>? searchHistories =
-        prefs.getStringList('searchHistories');
-    return searchHistories ?? [];
+  Future<void> getSearchHistories() async {
+    final result = await _searchUseCase.getSearchKeywordList();
+    result.when(
+      success: (searchKeywordHistories) {
+        _searchKeywordHistories = searchKeywordHistories;
+
+        _searchState =
+            getSearchState.copyWith(searchHistories: _searchKeywordHistories);
+        logger.info(searchKeywordHistories.length);
+      },
+      error: (message) {
+        _searchUiEventStreamController.add(SearchUiEvent.showSnackBar(message));
+      },
+    );
+    notifyListeners();
   }
 
   Future<void> addSearchHistories(String keyword) async {
-    List<String> searchHistories = await getSearchHistories();
-
-    Set<String> setSearchHistries = searchHistories.toSet();
-
-    setSearchHistries.add(keyword);
-
-    searchHistories = setSearchHistries.toList();
-
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList('searchHistories', searchHistories);
+    final result = await _searchUseCase.addSearchKeyword(keyword);
+    result.when(
+      success: (_) {
+        getSearchHistories();
+      },
+      error: (message) {
+        _searchUiEventStreamController.add(SearchUiEvent.showSnackBar(message));
+      },
+    );
   }
 
   Future<void> removeSearchHistories(String keyword) async {
-    List<String> searchHistories = await getSearchHistories();
-    searchHistories.remove(keyword);
-
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList('searchHistories', searchHistories);
+    final result = await _searchUseCase.dropSearchKeyword(keyword);
+    notifyListeners();
+    result.when(
+      success: (_) {
+        getSearchHistories();
+        _searchUiEventStreamController
+            .add(SearchUiEvent.showSnackBar('remove $keyword'));
+      },
+      error: (message) {
+        _searchUiEventStreamController.add(SearchUiEvent.showSnackBar(message));
+      },
+    );
   }
 
-  Future<void> removeAllSearchHistories(String keyword) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList('searchHistories', []);
+  Future<void> removeAllSearchHistories() async {
+    final result = await _searchUseCase.dropAllSearchKeyword();
+    result.when(
+      success: (_) {
+        getSearchHistories();
+      },
+      error: (message) {
+        _searchUiEventStreamController.add(SearchUiEvent.showSnackBar(message));
+      },
+    );
   }
 }

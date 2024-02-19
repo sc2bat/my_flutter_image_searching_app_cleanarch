@@ -34,6 +34,7 @@ void main() {
     final dataList = await supabase
         .from(TB_IMAGE_INFO)
         .select('*')
+        .eq('is_deleted', false)
         .limit(selectCount)
         .order('image_id');
 

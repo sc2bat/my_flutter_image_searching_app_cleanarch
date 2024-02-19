@@ -1,32 +1,35 @@
-import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/result.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 
 class SupabaseDB {
-  Future<void> supabaseSelect() async {
-    final data = await supabase.from(TB_USER_PROFILE).select();
-    logger.info(data);
-  }
+  Future<Result<dynamic>> fetchData({
+    required String tableName,
+    String? selectColumn,
+    List<Map<String, dynamic>>? conditionList,
+    String? orderColumn,
+    required bool singleOption,
+  }) async {
+    try {
+      var data = supabase.from(tableName).select(selectColumn ?? '*');
 
-  Future<void> supabaseSingleSelect() async {
-    final data = await supabase.from(TB_USER_PROFILE).select().single();
-    logger.info(data);
-  }
+      if (conditionList != null) {
+        for (final condition in conditionList) {
+          String conditionKey = condition.entries.map((e) => e.key).first;
+          String conditionValue = condition.entries.map((e) => e.value).first;
+          data = data..eq(conditionKey, conditionValue);
+        }
+      }
 
-  Future<void> supabaseSingleSelectWithCondition(
-      String tableName, Map<String, dynamic> conditionJson) async {
-    final data =
-        await supabase.from(tableName).select().eq('test', 11).single();
-    logger.info(data);
-  }
+      if (orderColumn != null) {
+        data = data..order(orderColumn);
+      }
+      if (singleOption) {
+        data = data..single();
+      }
 
-  Future<void> supabaseSingleSelectWithConditionWithOrder(
-      Map<String, dynamic> inputJson) async {
-    final data = await supabase
-        .from(inputJson["tableName"])
-        .select()
-        .eq(inputJson["conditionColumn"], inputJson["conditionValue"])
-        .order(inputJson["orderColumn"]);
-    logger.info(data);
+      return Result.success(data);
+    } catch (e) {
+      return Result.error(e.toString());
+    }
   }
 }
