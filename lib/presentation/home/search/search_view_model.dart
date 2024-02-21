@@ -38,13 +38,28 @@ class SearchViewModel with ChangeNotifier {
     // await Future.delayed(const Duration(seconds: 2));
     final executeResult = await _photoUseCase.execute(query);
     executeResult.when(
-      success: (photoList) {
+      success: (photoList) async {
         _photoList = photoList;
 
         _searchState =
             getSearchState.copyWith(isLoading: false, photos: _photoList);
 
         notifyListeners();
+
+        logger.info('photoList[0].imageId ${photoList[0].imageId}');
+
+        final saveResult =
+            await _photoUseCase.save(photoList.map((e) => e.toJson()).toList());
+        saveResult.when(
+          success: (_) {
+            _searchUiEventStreamController
+                .add(const SearchUiEvent.showSnackBar('save success'));
+          },
+          error: (message) {
+            _searchUiEventStreamController
+                .add(SearchUiEvent.showSnackBar(message));
+          },
+        );
       },
       error: (message) {
         _searchUiEventStreamController.add(SearchUiEvent.showSnackBar(message));

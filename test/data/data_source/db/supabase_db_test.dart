@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/dtos/photo/hit_dto.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/mappers/photo_mapper.dart';
@@ -83,7 +84,7 @@ void main() {
   test('pixaApi => supabase test 001', () async {
     final pixabayApiRepositoryImpl = PixabayRepositoryImpl();
     List<HitDTO> hitList =
-        await pixabayApiRepositoryImpl.getPixabayImages('orange');
+        await pixabayApiRepositoryImpl.getPixabayImages('sing');
 
     List<PhotoModel> photoList =
         hitList.map((e) => PhotoMapper.fromDTO(e)).toList();
