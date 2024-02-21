@@ -1,8 +1,10 @@
 import 'package:get_it/get_it.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/pixabay_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/search_keyword_repository_impl.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/pixabay_repository.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/image_repository_impl.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/pixabay/pixabay_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/serach_keyword_repository.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/image_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo/photo_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/saerch/search_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/signout_use_case.dart';
@@ -22,6 +24,9 @@ void registerDependencies() {
     )
     ..registerSingleton<SearchKeywordRepository>(
       SearchKeywordRepositoryImpl(),
+    )
+    ..registerSingleton<ImageRepository>(
+      ImageRepositoryImpl(),
     );
 
   // use cases
@@ -34,6 +39,7 @@ void registerDependencies() {
     ..registerSingleton<PhotoUseCase>(
       PhotoUseCase(
         pixabayRepository: getIt<PixabayRepository>(),
+        imageRepository: getIt<ImageRepository>(),
       ),
     )
     // search
