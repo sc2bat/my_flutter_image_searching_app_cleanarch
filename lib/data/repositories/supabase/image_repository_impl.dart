@@ -18,4 +18,17 @@ class ImageRepositoryImpl implements ImageRepository {
       throw Exception('savePhotosToSupabase Exception $e');
     }
   }
+
+  @override
+  Future<Result<void>> topSearchesFromSupabase(
+      List<Map<String, dynamic>> jsonPhotos) async {
+    try {
+      await supabase
+          .rpc('get_tag_counts');
+      return const Result.success(null);
+    } catch (e) {
+      logger.info('topSearchesFromSupabase error $e');
+      throw Exception('topSearchesFromSupabase Exception $e');
+    }
+  }
 }
