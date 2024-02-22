@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/di/dependency_injection.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/env/env.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/routes.dart';
-import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
@@ -17,10 +15,7 @@ void main() async {
   );
 
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => HomeViewModel(),
-      child: const MyApp(),
-    ),
+    const MyApp(),
   );
 }
 

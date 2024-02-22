@@ -11,6 +11,27 @@ import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dar
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() {
+  test('supabase select popular', () async {
+    final supabase = SupabaseClient(Env.supabaseUrl, Env.supabaseApiKey);
+    final List<Map<String, dynamic>> data =
+        await supabase.rpc('get_popular_image_count');
+
+    logger.info(data);
+
+    // expect(cnt, 0);
+    expect(data.length, 10);
+  });
+
+  test('supabase select get_tag_counts', () async {
+    final supabase = SupabaseClient(Env.supabaseUrl, Env.supabaseApiKey);
+    final List<dynamic> data = await supabase.rpc('get_tag_counts');
+
+    logger.info(data);
+
+    // expect(cnt, 0);
+    // expect(data.length, 10);
+  });
+
   test('supabase counting test', () async {
     final supabase = SupabaseClient(Env.supabaseUrl, Env.supabaseApiKey);
     final response = await supabase

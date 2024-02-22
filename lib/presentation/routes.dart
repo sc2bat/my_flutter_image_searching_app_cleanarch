@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/di/dependency_injection.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/comment/user_account_screen.dart';
@@ -33,7 +34,10 @@ final router = GoRouter(
     ),
     GoRoute(
       path: '/home',
-      builder: (_, __) => const HomeScreen(),
+      builder: (_, __) => ChangeNotifierProvider(
+        create: (_) => getIt<HomeViewModel>(),
+        child: const HomeScreen(),
+      ),
       routes: [
         GoRoute(
           path: 'user',
