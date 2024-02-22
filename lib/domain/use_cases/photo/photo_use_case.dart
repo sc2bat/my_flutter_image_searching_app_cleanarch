@@ -38,4 +38,17 @@ class PhotoUseCase {
       },
     );
   }
+
+  Future<Result<PhotoModel>> fetchOne(int imageId) async {
+    final fetchOnePhotoResult =
+        await _imageRepository.getSinglePhotoFromSupabase(imageId);
+    return fetchOnePhotoResult.when(
+      success: (data) {
+        return Result.success(data);
+      },
+      error: (message) {
+        return Result.error(message);
+      },
+    );
+  }
 }

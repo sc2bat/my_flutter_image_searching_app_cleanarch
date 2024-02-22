@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/theme.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_state.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_view_model.dart';
@@ -138,6 +138,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () {
                           logger.info(
                               'popular on tap ${homeState.populars[index]['image_id']}');
+                          context.push(
+                            '/detail',
+                            extra: {
+                              'imageId': homeState.populars[index]['image_id'],
+                            },
+                          );
                         },
                         onDoubleTap: () {
                           logger.info(
