@@ -3,11 +3,14 @@ import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/pixab
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/search_keyword_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/image_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/like_repository_impl.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/tag_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/pixabay/pixabay_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/serach_keyword_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/image_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/like_repository.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/tag_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/home/popular_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/home/topsearch_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo/photo_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/saerch/search_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/signout_use_case.dart';
@@ -33,6 +36,9 @@ void registerDependencies() {
     )
     ..registerSingleton<LikeRepository>(
       LikeRepositoryImpl(),
+    )
+    ..registerSingleton<TagRepository>(
+      TagRepositoryImpl(),
     );
 
   // use cases
@@ -59,6 +65,12 @@ void registerDependencies() {
       PopularUserCase(
         likeRepository: getIt<LikeRepository>(),
       ),
+    )
+    // topsearch
+    ..registerSingleton<TopsearchUseCase>(
+      TopsearchUseCase(
+        tagRepository: getIt<TagRepository>(),
+      ),
     );
 
   // view models
@@ -67,6 +79,7 @@ void registerDependencies() {
     ..registerFactory<HomeViewModel>(
       () => HomeViewModel(
         popularUserCase: getIt<PopularUserCase>(),
+        topsearchUseCase: getIt<TopsearchUseCase>(),
       ),
     )
     // sign view model

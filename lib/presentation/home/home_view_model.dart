@@ -4,11 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/home/popular_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_state.dart';
 
+import '../../domain/use_cases/home/topsearch_use_case.dart';
+
 class HomeViewModel with ChangeNotifier {
   final PopularUserCase _popularUserCase;
+  final TopsearchUseCase _topsearchUseCase;
+
   HomeViewModel({
     required PopularUserCase popularUserCase,
-  }) : _popularUserCase = popularUserCase;
+    required TopsearchUseCase topsearchUseCase,
+  }) : _popularUserCase = popularUserCase,
+  _topsearchUseCase = topsearchUseCase;
 
   HomeState _homeState = const HomeState();
 
@@ -16,6 +22,7 @@ class HomeViewModel with ChangeNotifier {
 
   Future<void> init() async {
     getPopulars();
+    getToptags();
   }
 
   Future<void> getPopulars() async {
@@ -34,7 +41,27 @@ class HomeViewModel with ChangeNotifier {
     );
 
     _homeState = homeState.copyWith(
-        isLoading: true, topSearchKeywords: [], populars: popularList);
+        isLoading: true, populars: popularList);
+    notifyListeners();
+  }
+
+  Future<void> getToptags() async {
+    _homeState = homeState.copyWith(isLoading: true);
+    notifyListeners();
+
+    List<Map<String, dynamic>> topTagsList = [];
+
+    final topTagsResult = await _topsearchUseCase.fetch();
+
+    topTagsResult.when(
+      success: (data) {
+        topTagsList = data;
+      },
+      error: (_) {},
+    );
+
+    _homeState = homeState.copyWith(
+        isLoading: true, topTags: topTagsList);
     notifyListeners();
   }
 }

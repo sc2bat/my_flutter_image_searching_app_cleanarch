@@ -6,7 +6,7 @@ part 'home_state.freezed.dart';
 class HomeState with _$HomeState {
   const factory HomeState({
     @Default(false) bool isLoading,
-    @Default([]) List<String> topSearchKeywords,
+    @Default([]) List<Map<String, dynamic>> topTags,
     @Default([]) List<Map<String, dynamic>> populars,
   }) = _HomeState;
 }
