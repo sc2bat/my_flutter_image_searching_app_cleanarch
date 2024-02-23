@@ -14,6 +14,7 @@ import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/home/t
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo/photo_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/saerch/search_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/signout_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detail/detail_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_view_model.dart';
@@ -93,6 +94,11 @@ void registerDependencies() {
       () => SearchViewModel(
         photoUseCase: getIt<PhotoUseCase>(),
         searchUseCase: getIt<SearchUseCase>(),
+      ),
+    )
+    ..registerFactory<DetailViewModel>(
+      () => DetailViewModel(
+        photoUseCase: getIt<PhotoUseCase>(),
       ),
     );
 }

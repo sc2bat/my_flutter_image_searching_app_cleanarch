@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 
@@ -15,7 +16,13 @@ class SearchImageContainerWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // go datail page
-        logger.info('tap');
+        // logger.info('tap');
+        context.push(
+          '/detail',
+          extra: {
+            'imageId': photo.imageId,
+          },
+        );
       },
       onDoubleTap: () {
         // like

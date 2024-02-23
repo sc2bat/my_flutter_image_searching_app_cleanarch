@@ -1,5 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/di/dependency_injection.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detail/detail_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detail/detail_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_screen.dart';
@@ -14,6 +16,7 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_in_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/splash/splash_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 import 'package:provider/provider.dart';
 
 final router = GoRouter(
@@ -104,18 +107,20 @@ final router = GoRouter(
           ),
         );
       },
-      routes: const [
-        // GoRoute(
-        //   path: 'window',
-        //   builder: (_, __) => const SearchScreen(),
-        //   routes: const [],
-        // ),
-        // GoRoute(
-        //   path: 'result',
-        //   builder: (_, __) => const SearchScreen(),
-        //   routes: const [],
-        // ),
-      ],
+      routes: const [],
+    ),
+    GoRoute(
+      path: '/detail',
+      builder: (_, state) {
+        final map = state.extra! as Map<String, dynamic>;
+        return ChangeNotifierProvider(
+          create: (_) => getIt<DetailViewModel>(),
+          child: DetailScreen(
+            imageId: map['imageId'],
+          ),
+        );
+      },
+      routes: const [],
     ),
   ],
 );
