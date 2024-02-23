@@ -20,15 +20,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late final TextEditingController _serachTextFieldController;
 
-  List<String> topSearches = [
-    'apple',
-    'orange',
-    'fire',
-    'water',
-    'flower',
-    'shoe',
-    'cloth'
-  ];
   @override
   void initState() {
     Future.microtask(() {
@@ -89,12 +80,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: List.generate(
-                    topSearches.length,
+                    homeState.topTags.length,
                     (index) => Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
                         onPressed: () {
-                          logger.info('button press ${topSearches[index]}');
+                          logger.info('button press ${homeState.topTags[index]}');
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: baseColor,
@@ -103,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         child: Text(
-                          topSearches[index],
+                          '${homeState.topTags[index]['tag']}',
                           style: const TextStyle(
                             fontSize: 16.0,
                             color: whiteColor,
