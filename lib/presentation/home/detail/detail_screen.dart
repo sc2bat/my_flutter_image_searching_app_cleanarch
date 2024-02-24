@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/functions.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/theme.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detail/detail_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/widget/common/sign_elevated_button_widget.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 import 'package:provider/provider.dart';
 
 class DetailScreen extends StatefulWidget {
@@ -37,8 +39,11 @@ class _DetailScreenState extends State<DetailScreen> {
         1, // userId
         widget.imageId,
       );
+      logger.info(detailViewModel.tagList);
     });
+
     _commentTextEditingController = TextEditingController();
+
     super.initState();
   }
 
@@ -84,23 +89,262 @@ class _DetailScreenState extends State<DetailScreen> {
         ],
         backgroundColor: Colors.white,
       ),
-      body: Container(
-        child: Column(
-          children: [
-            Image.network(
-              photoModel.webformatUrl != null
-                  ? photoModel.webformatUrl!
-                  : noneImageUrl,
+      body: detailState.isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  Image.network(
+                    photoModel.webformatUrl != null
+                        ? photoModel.webformatUrl!
+                        : dumpLoadingImage(width: 640, height: 400),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.0),
+                            color: baseColor,
+                          ),
+                          child: Row(
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  logger.info('press favorite button');
+                                },
+                                icon: Icon(
+                                  detailState.isLiked != null &&
+                                          detailState.isLiked!.isDeleted
+                                      ? Icons.favorite
+                                      : Icons.favorite_border_rounded,
+                                  color: whiteColor,
+                                  size: 32.0,
+                                ),
+                              ),
+                              const Text(
+                                '300',
+                                style: TextStyle(
+                                  color: whiteColor,
+                                  fontSize: 20.0,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.0),
+                            color: baseColor,
+                          ),
+                          child: IconButton(
+                            onPressed: () {
+                              logger.info('press favorite button');
+                            },
+                            icon: const Icon(
+                              Icons.chat_bubble_outline_outlined,
+                              color: whiteColor,
+                              size: 32.0,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 32.0,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.0),
+                            color: baseColor,
+                          ),
+                          child: IconButton(
+                            onPressed: () {
+                              logger.info('press download button');
+                            },
+                            icon: const Icon(
+                              Icons.image_outlined,
+                              color: whiteColor,
+                              size: 32.0,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.0),
+                            color: baseColor,
+                          ),
+                          child: IconButton(
+                            onPressed: () {
+                              logger.info('press share button');
+                            },
+                            icon: const Icon(
+                              Icons.share,
+                              color: whiteColor,
+                              size: 32.0,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.0),
+                            color: baseColor,
+                          ),
+                          child: IconButton(
+                            onPressed: () {
+                              logger.info('press info button');
+                            },
+                            icon: const Icon(
+                              Icons.info_outline_rounded,
+                              color: whiteColor,
+                              size: 32.0,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const Icon(
+                          Icons.label_outline_rounded,
+                          size: 24.0,
+                          color: baseColor,
+                        ),
+                        const SizedBox(width: 8.0),
+                        Expanded(
+                          child: Text(
+                            '${photoModel.tags}',
+                            softWrap: true,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text(
+                            'Comment 30',
+                            style: TextStyle(
+                              fontSize: 32.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(50.0),
+                                  child: Image.network(
+                                    sampleUserProfileUrl,
+                                    width: 48.0,
+                                    height: 48.0,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {},
+                                  child: const Text(
+                                    'Add Comment',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height * 0.4,
+                      ),
+                      child: ListView.builder(
+                        itemCount: 20,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            constraints: BoxConstraints(
+                              minHeight:
+                                  MediaQuery.of(context).size.height * 0.1,
+                            ),
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(50.0),
+                                    child: Image.network(
+                                      sampleUserProfileUrl,
+                                      width: 48.0,
+                                      height: 48.0,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'username$index',
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          IconButton(
+                                            onPressed: () {},
+                                            icon: const Icon(
+                                              Icons.more_horiz_outlined,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const Text(
+                                        'ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ',
+                                        softWrap: true,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      child: const Text('qwera'),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            Text(photoModel.tags != null ? photoModel.tags! : 'none'),
-            detailState.isLiked != null
-                ? Icon(detailState.isLiked!.isDeleted
-                    ? Icons.favorite
-                    : Icons.favorite_border)
-                : Container(),
-          ],
-        ),
-      ),
     );
   }
 }

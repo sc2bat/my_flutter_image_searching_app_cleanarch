@@ -15,8 +15,6 @@ class SearchImageContainerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // go datail page
-        // logger.info('tap');
         context.push(
           '/detail',
           extra: {
@@ -27,14 +25,6 @@ class SearchImageContainerWidget extends StatelessWidget {
       onDoubleTap: () {
         // like
         logger.info('double tap');
-      },
-      onLongPress: () {
-        logger.info('long press');
-        // share
-
-        // edit
-
-        // download
       },
       child: Container(
         decoration: BoxDecoration(

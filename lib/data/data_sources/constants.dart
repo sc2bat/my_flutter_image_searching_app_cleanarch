@@ -9,6 +9,9 @@ const String pixabayApiByQuery =
 const String pixabayApiById =
     'https://pixabay.com/api/?key=${Env.pixabayApiKey}&image_type=photo&id=';
 
+const String sampleUserProfileUrl =
+    'https://place-hold.it/60x60/666/fff/000?text=user&fontsize=24';
+
 const String sampleImageUrl =
     'https://place-hold.it/300x300/666/fff/000?text=sample&fontsize=40';
 

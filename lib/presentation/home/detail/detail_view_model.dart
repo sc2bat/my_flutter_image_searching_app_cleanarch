@@ -23,6 +23,9 @@ class DetailViewModel with ChangeNotifier {
   DetailState _detailState = const DetailState();
   DetailState get detailState => _detailState;
 
+  List<String> _tagList = [];
+  List<String> get tagList => _tagList;
+
   Future<void> init(int userId, int imageId) async {
     _detailState = detailState.copyWith(isLoading: true);
     notifyListeners();
@@ -44,6 +47,8 @@ class DetailViewModel with ChangeNotifier {
       );
     }
 
+    tagListSplit();
+
     notifyListeners();
   }
 
@@ -59,6 +64,14 @@ class DetailViewModel with ChangeNotifier {
         throw Exception(e);
       },
     );
+  }
+
+  void tagListSplit() async {
+    if (detailState.photo != null) {
+      String tags = detailState.photo!.tags!;
+      _tagList = tags.split(',').map((e) => e.trim()).toList();
+    }
+    notifyListeners();
   }
 
   // view use case

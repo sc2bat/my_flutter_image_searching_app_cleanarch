@@ -128,18 +128,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
                         onTap: () {
-                          logger.info(
-                              'popular on tap ${homeState.populars[index]['image_id']}');
                           context.push(
                             '/detail',
                             extra: {
                               'imageId': homeState.populars[index]['image_id'],
                             },
                           );
-                        },
-                        onDoubleTap: () {
-                          logger.info(
-                              'popular double tap ${homeState.populars[index]['image_id']}');
                         },
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(16.0),
