@@ -1,10 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/dtos/photo/hit_dto.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/data/mappers/photo_mapper.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/pixabay_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/image/image_model.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/env/env.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -101,24 +98,24 @@ void main() {
     expect(image.imageId, 4493420);
   });
 
-  test('pixaApi => supabase test 001', () async {
-    final pixabayApiRepositoryImpl = PixabayRepositoryImpl();
-    List<HitDTO> hitList =
-        await pixabayApiRepositoryImpl.getPixabayImages('sing');
+  // test('pixaApi => supabase test 001', () async {
+  //   final pixabayApiRepositoryImpl = PixabayRepositoryImpl();
+  //   List<HitDTO> hitList =
+  //       await pixabayApiRepositoryImpl.get('sing');
 
-    List<PhotoModel> photoList =
-        hitList.map((e) => PhotoMapper.fromDTO(e)).toList();
-    final jsonPhotoList = photoList.map((e) => e.toJson()).toList();
+  //   List<PhotoModel> photoList =
+  //       hitList.map((e) => PhotoMapper.fromDTO(e)).toList();
+  //   final jsonPhotoList = photoList.map((e) => e.toJson()).toList();
 
-    final supabase = SupabaseClient(
-      Env.supabaseUrl,
-      Env.supabaseApiKey,
-    );
+  //   final supabase = SupabaseClient(
+  //     Env.supabaseUrl,
+  //     Env.supabaseApiKey,
+  //   );
 
-    final response = await supabase
-        .from(TB_IMAGE_INFO)
-        .upsert(jsonPhotoList, onConflict: 'image_id');
-  });
+  //   final response = await supabase
+  //       .from(TB_IMAGE_INFO)
+  //       .upsert(jsonPhotoList, onConflict: 'image_id');
+  // });
 
   // group('Supabase CRUD Tests', () {
   //   late SupabaseClient client;

@@ -8,8 +8,9 @@ import 'package:my_flutter_image_searching_app_cleanarch/data/mappers/photo_mapp
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
 
 class PixabayApi {
-  Future<Result<List<PhotoModel>>> getPixabayImages(String query) async {
-    final Result pixabayApiResult = await fetchHttpData(pixabayApiUrl + query);
+  Future<Result<List<PhotoModel>>> getPixabayImageList(String query) async {
+    final Result pixabayApiResult =
+        await fetchHttpData(pixabayApiByQuery + query);
 
     return pixabayApiResult.when(
       success: (response) {
@@ -24,6 +25,27 @@ class PixabayApi {
           return Result.success(resultPhotos);
         }
 
+        return const Result.error('Key "hits" is not contain ');
+      },
+      error: (message) {
+        return Result.error(message);
+      },
+    );
+  }
+
+  Future<Result<PhotoModel>> getPixabayImage(int imageId) async {
+    final Result pixabayApiResult =
+        await fetchHttpData('$pixabayApiById$imageId');
+
+    return pixabayApiResult.when(
+      success: (response) {
+        final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse.containsKey('hits')) {
+          PhotoModel photoModel = PhotoMapper.fromDTO(
+              HitDTO.fromJson((jsonResponse['hits'] as List<dynamic>)[0]));
+          return Result.success(photoModel);
+        }
         return const Result.error('Key "hits" is not contain ');
       },
       error: (message) {

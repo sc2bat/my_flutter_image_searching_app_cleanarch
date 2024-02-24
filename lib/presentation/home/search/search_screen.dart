@@ -5,6 +5,7 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/the
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_state.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/widget/search_text_field_widget.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/widget/common/sign_elevated_button_widget.dart';
 import 'package:provider/provider.dart';
 
 import 'widget/search_image_container_widget.dart';
@@ -82,6 +83,12 @@ class _SearchScreenState extends State<SearchScreen> {
             ],
           ),
         ),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            child: SignElevatedButtonWidget(),
+          ),
+        ],
         backgroundColor: Colors.white,
       ),
       body: Column(

@@ -15,7 +15,7 @@ class PhotoUseCase {
 
   Future<Result<List<PhotoModel>>> execute(String query) async {
     final getPhotosResult =
-        await _pixabayRepository.getPhotosByPixabaApi(query);
+        await _pixabayRepository.getPhotoListByPixabaApi(query);
     return getPhotosResult.when(
       success: (photos) {
         return Result.success(photos);
@@ -41,7 +41,7 @@ class PhotoUseCase {
 
   Future<Result<PhotoModel>> fetchOne(int imageId) async {
     final fetchOnePhotoResult =
-        await _imageRepository.getSinglePhotoFromSupabase(imageId);
+        await _pixabayRepository.getPhotoByPixabaApi(imageId);
     return fetchOnePhotoResult.when(
       success: (data) {
         return Result.success(data);
