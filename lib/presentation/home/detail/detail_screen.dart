@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detail/detail_view_model.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 import 'package:provider/provider.dart';
 
 class DetailScreen extends StatefulWidget {
@@ -24,7 +23,10 @@ class _DetailScreenState extends State<DetailScreen> {
   void initState() {
     Future.microtask(() {
       final detailViewModel = context.read<DetailViewModel>();
-      detailViewModel.init(widget.imageId);
+      detailViewModel.init(
+        1, // userId
+        widget.imageId,
+      );
     });
     _commentTextEditingController = TextEditingController();
     super.initState();
@@ -57,6 +59,11 @@ class _DetailScreenState extends State<DetailScreen> {
                   : noneImageUrl,
             ),
             Text(photoModel.tags != null ? photoModel.tags! : 'none'),
+            detailState.isLiked != null
+                ? Icon(detailState.isLiked!.isDeleted
+                    ? Icons.favorite
+                    : Icons.favorite_border)
+                : Container(),
           ],
         ),
       ),

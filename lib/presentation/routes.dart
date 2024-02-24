@@ -16,7 +16,6 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_in_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/splash/splash_screen.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 import 'package:provider/provider.dart';
 
 final router = GoRouter(
@@ -78,22 +77,6 @@ final router = GoRouter(
             ),
           ],
         ),
-        // GoRoute(
-        //   path: 'image',
-        //   builder: (_, __) => const SearchScreen(),
-        //   routes: [
-        //     GoRoute(
-        //       path: 'detail',
-        //       builder: (_, __) => const SearchScreen(),
-        //       routes: const [],
-        //     ),
-        //     GoRoute(
-        //       path: 'edit',
-        //       builder: (_, __) => const SearchScreen(),
-        //       routes: const [],
-        //     ),
-        //   ],
-        // ),
       ],
     ),
     GoRoute(

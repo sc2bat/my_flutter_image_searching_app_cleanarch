@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:http/http.dart' as http;
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/apis/pixabay_api.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/result.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/dtos/photo/hit_dto.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/dtos/photo/pixabay_dto.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/pixabay/pixabay_repository.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo_model.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
-import 'package:http/http.dart' as http;
 
 class PixabayRepositoryImpl implements PixabayRepository {
   @override

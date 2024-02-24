@@ -5,7 +5,7 @@ import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/http.
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/result.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/dtos/photo/hit_dto.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/mappers/photo_mapper.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
 
 class PixabayApi {
   Future<Result<List<PhotoModel>>> getPixabayImages(String query) async {

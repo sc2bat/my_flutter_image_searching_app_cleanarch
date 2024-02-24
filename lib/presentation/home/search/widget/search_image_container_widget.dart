@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 
 class SearchImageContainerWidget extends StatelessWidget {
