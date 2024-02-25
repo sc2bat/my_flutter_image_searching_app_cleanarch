@@ -1,8 +1,11 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/like/like_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/home/popular_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/like/like_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo/photo_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
@@ -12,18 +15,21 @@ import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dar
 class DetailViewModel with ChangeNotifier {
   final PhotoUseCase _photoUseCase;
   final LikeUseCase _likeUseCase;
+  final PopularUserCase _popularUserCase;
 
   DetailViewModel({
     required PhotoUseCase photoUseCase,
     required LikeUseCase likeUseCase,
+    required PopularUserCase popularUserCase,
   })  : _photoUseCase = photoUseCase,
-        _likeUseCase = likeUseCase;
+        _likeUseCase = likeUseCase,
+        _popularUserCase = popularUserCase;
 
   // state
-  DetailState _detailState = const DetailState();
+  DetailState _detailState = DetailState();
   DetailState get detailState => _detailState;
 
-  List<String> _tagList = [];
+  final List<String> _tagList = [];
   List<String> get tagList => _tagList;
 
   Future<void> init(int userId, int imageId) async {
@@ -32,22 +38,24 @@ class DetailViewModel with ChangeNotifier {
 
     PhotoModel photoData = await getPhotoData(imageId);
 
+    final recommandImageList = await getRecommandImageList(imageId);
+
     final session = supabase.auth.currentSession;
     if (session != null) {
       LikeModel isLiked = await getIsLiked(userId, imageId);
       _detailState = detailState.copyWith(
         isLoading: false,
-        photo: photoData,
-        isLiked: isLiked,
+        photoModel: photoData,
+        likeModel: isLiked,
+        recommandImageList: recommandImageList,
       );
     } else {
       _detailState = detailState.copyWith(
         isLoading: false,
-        photo: photoData,
+        photoModel: photoData,
+        recommandImageList: recommandImageList,
       );
     }
-
-    tagListSplit();
 
     notifyListeners();
   }
@@ -64,14 +72,6 @@ class DetailViewModel with ChangeNotifier {
         throw Exception(e);
       },
     );
-  }
-
-  void tagListSplit() async {
-    if (detailState.photo != null) {
-      String tags = detailState.photo!.tags!;
-      _tagList = tags.split(',').map((e) => e.trim()).toList();
-    }
-    notifyListeners();
   }
 
   // view use case
@@ -105,5 +105,28 @@ class DetailViewModel with ChangeNotifier {
         return null;
       },
     );
+  }
+
+  // recommand image
+  Future<List<Map<String, dynamic>>> getRecommandImageList(int imageId) async {
+    List<Map<String, dynamic>> imageList = [];
+
+    final popularsResult = await _popularUserCase.fetch();
+
+    popularsResult.when(
+      success: (dataList) {
+        for (var data in dataList) {
+          if (data['image_id'] != imageId) {
+            imageList.add(data);
+          }
+          if (imageList.length > 6) {
+            break;
+          }
+        }
+        return imageList;
+      },
+      error: (_) {},
+    );
+    return imageList;
   }
 }

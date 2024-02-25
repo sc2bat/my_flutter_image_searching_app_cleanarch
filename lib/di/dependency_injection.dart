@@ -107,6 +107,7 @@ void registerDependencies() {
       () => DetailViewModel(
         photoUseCase: getIt<PhotoUseCase>(),
         likeUseCase: getIt<LikeUseCase>(),
+        popularUserCase: getIt<PopularUserCase>(),
       ),
     );
 }
