@@ -39,10 +39,10 @@ class _DownloadBoxWidgetState extends State<DownloadBoxWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              ModalTitleWidget(title: 'DOWNLOAD'.toUpperCase()),
+              ModalTitleWidget(title: 'resolution'.toUpperCase()),
               ListTile(
                 title: Text(
-                  'preview ${widget.photoModel.previewWidth} x ${widget.photoModel.previewHeight}',
+                  '${widget.photoModel.previewWidth} x ${widget.photoModel.previewHeight}',
                   style: TextStyle(
                     color: weakBlack,
                     fontWeight: FontWeight.bold,
@@ -69,7 +69,7 @@ class _DownloadBoxWidgetState extends State<DownloadBoxWidget> {
               ),
               ListTile(
                 title: Text(
-                  'webformat ${widget.photoModel.webformatWidth} x ${widget.photoModel.webformatHeight}',
+                  '${widget.photoModel.webformatWidth} x ${widget.photoModel.webformatHeight}',
                   style: TextStyle(
                     color: weakBlack,
                     fontWeight: FontWeight.bold,
@@ -96,7 +96,7 @@ class _DownloadBoxWidgetState extends State<DownloadBoxWidget> {
               ),
               ListTile(
                 title: Text(
-                  'large ${widget.photoModel.imageWidth} x ${widget.photoModel.imageHeight}',
+                  '${widget.photoModel.imageWidth} x ${widget.photoModel.imageHeight}',
                   style: TextStyle(
                     color: weakBlack,
                     fontWeight: FontWeight.bold,
