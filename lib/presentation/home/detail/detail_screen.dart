@@ -407,8 +407,19 @@ class _DetailScreenState extends State<DetailScreen> {
                               Expanded(
                                 child: ElevatedButton(
                                   onPressed: () {},
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: baseColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(24.0),
+                                    ),
+                                  ),
                                   child: const Text(
                                     'Add Comment',
+                                    style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: whiteColor,
+                                    ),
                                   ),
                                 ),
                               ),

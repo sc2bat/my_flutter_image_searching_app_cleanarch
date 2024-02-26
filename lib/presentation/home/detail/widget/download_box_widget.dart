@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/enums.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/theme.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
-
-enum ImageSize {
-  preview,
-  webformat,
-  large,
-}
 
 class DownloadBoxWidget extends StatefulWidget {
   final PhotoModel photoModel;
@@ -128,18 +123,29 @@ class _DownloadBoxWidgetState extends State<DownloadBoxWidget> {
               ElevatedButton(
                 onPressed: () {
                   logger.info(imageSize);
+                  String downlaodImageUrl = '';
                   switch (imageSize) {
                     case ImageSize.preview:
                       logger.info(widget.photoModel.previewUrl);
+                      downlaodImageUrl = widget.photoModel.previewUrl ?? '';
                       break;
                     case ImageSize.webformat:
                       logger.info(widget.photoModel.webformatUrl);
+                      downlaodImageUrl = widget.photoModel.webformatUrl ?? '';
                       break;
                     case ImageSize.large:
                       logger.info(widget.photoModel.largeImageUrl);
+                      downlaodImageUrl = widget.photoModel.largeImageUrl ?? '';
                       break;
                     default:
+                      downlaodImageUrl = '';
                       break;
+                  }
+                  if (downlaodImageUrl != '') {
+                    logger.info('download~');
+                    Navigator.of(context).pop();
+                  } else {
+                    logger.info('IMAGE SIZE IN NULL');
                   }
                 },
                 style: ElevatedButton.styleFrom(
