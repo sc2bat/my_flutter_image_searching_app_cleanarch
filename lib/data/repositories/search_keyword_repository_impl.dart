@@ -1,5 +1,5 @@
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/result.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/serach_keyword_repository.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/search_keyword_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchKeywordRepositoryImpl implements SearchKeywordRepository {

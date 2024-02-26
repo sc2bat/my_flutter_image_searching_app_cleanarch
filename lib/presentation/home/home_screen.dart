@@ -18,7 +18,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late final TextEditingController _serachTextFieldController;
+  late final TextEditingController _searchTextFieldController;
 
   @override
   void initState() {
@@ -27,13 +27,13 @@ class _HomeScreenState extends State<HomeScreen> {
       homeViewModel.init();
     });
 
-    _serachTextFieldController = TextEditingController();
+    _searchTextFieldController = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
-    _serachTextFieldController.dispose();
+    _searchTextFieldController.dispose();
     super.dispose();
   }
 
@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 16.0,
               ),
               CommonTextFieldWidget(
-                  serachTextFieldController: _serachTextFieldController),
+                  searchTextFieldController: _searchTextFieldController),
               const SizedBox(
                 height: 32.0,
               ),
@@ -85,7 +85,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
                         onPressed: () {
-                          logger.info('button press topTags[index] ${homeState.topTags[index]}');
+                          logger.info(
+                              'button press topTags[index] ${homeState.topTags[index]}');
                           context.push(
                             '/search',
                             extra: {
