@@ -45,7 +45,6 @@ class _DetailScreenState extends State<DetailScreen> {
         userId, // userId
         widget.imageId,
       );
-      logger.info(detailViewModel.tagList);
     });
 
     _commentTextEditingController = TextEditingController();
@@ -62,11 +61,11 @@ class _DetailScreenState extends State<DetailScreen> {
 
   void _scrollToPosition(num imageHeight) {
     double itemExtent = imageHeight * 1.0;
-    logger.info(imageHeight);
+    // logger.info(imageHeight);
     _detailScreenScrollerController.animateTo(
-      itemExtent, // 스크롤 위치 계산
-      duration: const Duration(milliseconds: 500), // 스크롤 애니메이션 지속 시간
-      curve: Curves.easeInOut, // 애니메이션 곡선
+      itemExtent,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
     );
   }
 
@@ -93,9 +92,6 @@ class _DetailScreenState extends State<DetailScreen> {
               createdAt: DateTime(2024, 01, Random().nextInt(31) + 1,
                   Random().nextInt(24), 30, Random().nextInt(60)),
             ));
-
-    logger.info(commentList[0].createdAt);
-    logger.info(commentList[0].createdAt.toString());
 
     if (detailState.photoModel != null) {
       photoModel = detailState.photoModel!;
@@ -137,10 +133,15 @@ class _DetailScreenState extends State<DetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.network(
-                    photoModel.webformatUrl != null
-                        ? photoModel.webformatUrl!
-                        : dumpLoadingImage(width: 640, height: 400),
+                  Container(
+                    constraints: const BoxConstraints(
+                      minHeight: 240.0,
+                    ),
+                    child: Image.network(
+                      photoModel.webformatUrl != null
+                          ? photoModel.webformatUrl!
+                          : dumpLoadingImage(width: 640, height: 400),
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -199,8 +200,11 @@ class _DetailScreenState extends State<DetailScreen> {
                                             .width *
                                         detailState
                                             .photoModel!.webformatHeight! /
-                                        detailState.photoModel!.webformatWidth!;
-                                    _scrollToPosition(imageHeight);
+                                        detailState.photoModel!.webformatWidth!
+                                      ..round();
+                                    _scrollToPosition(imageHeight >= 240.0
+                                        ? imageHeight
+                                        : 240.0);
                                   }
                                 },
                                 icon: const Icon(
@@ -450,20 +454,23 @@ class _DetailScreenState extends State<DetailScreen> {
                   for (var recommand in detailState.recommandImageList)
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.3,
-                        child: GestureDetector(
-                          onTap: () {
-                            context.push(
-                              '/detail',
-                              extra: {
-                                'imageId': recommand['image_id'],
-                              },
-                            );
-                          },
-                          child: Image.network(
-                            recommand['preview_url'],
-                            fit: BoxFit.cover,
+                      child: Center(
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height * 0.3,
+                          child: GestureDetector(
+                            onTap: () {
+                              context.push(
+                                '/detail',
+                                extra: {
+                                  'imageId': recommand['image_id'],
+                                },
+                              );
+                            },
+                            child: Image.network(
+                              recommand['preview_url'],
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
