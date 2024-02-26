@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/comment/comment_model.dart';
@@ -12,6 +14,10 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detai
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/widget/common/sign_elevated_button_widget.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 import 'package:provider/provider.dart';
+
+import 'widget/download_box_widget.dart';
+import 'widget/info_box_widget.dart';
+import 'widget/share_box_widget.dart';
 
 class DetailScreen extends StatefulWidget {
   final int imageId;
@@ -30,9 +36,12 @@ class _DetailScreenState extends State<DetailScreen> {
 
   final session = supabase.auth.currentSession;
 
+  StreamSubscription? _streamSubscription;
+
   final ScrollController _detailScreenScrollerController = ScrollController();
 
   int userId = 1;
+
   @override
   void initState() {
     Future.microtask(() {
@@ -40,7 +49,21 @@ class _DetailScreenState extends State<DetailScreen> {
       //   userId = int.parse(session!.user.id);
       //   logger.info(userId);
       // }
+
       final detailViewModel = context.read<DetailViewModel>();
+
+      _streamSubscription =
+          detailViewModel.getDetailUiEventStreamController.listen((event) {
+        event.when(showToast: (message) {
+          Fluttertoast.showToast(
+            msg: message,
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: weakBlack,
+            textColor: whiteColor,
+          );
+        });
+      });
       detailViewModel.init(
         userId, // userId
         widget.imageId,
@@ -54,6 +77,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   void dispose() {
+    _streamSubscription?.cancel();
     _detailScreenScrollerController.dispose();
     _commentTextEditingController.dispose();
     super.dispose();
@@ -234,6 +258,21 @@ class _DetailScreenState extends State<DetailScreen> {
                           child: IconButton(
                             onPressed: () {
                               logger.info('press download button');
+                              if (detailState.photoModel != null) {
+                                showModalBottomSheet<void>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return DownloadBoxWidget(
+                                      photoModel: detailState.photoModel!,
+                                      downloadFunction: (downloadImageUrl) =>
+                                          detailViewModel.downloadFunction(
+                                              downloadImageUrl),
+                                    );
+                                  },
+                                );
+                              } else {
+                                _showErrorDialog(context);
+                              }
                             },
                             icon: const Icon(
                               Icons.image_outlined,
@@ -250,6 +289,24 @@ class _DetailScreenState extends State<DetailScreen> {
                           child: IconButton(
                             onPressed: () {
                               logger.info('press share button');
+                              if (detailState.photoModel != null) {
+                                showModalBottomSheet<void>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    String pageUrl =
+                                        detailState.photoModel?.pageUrl ??
+                                            'ERROR';
+                                    return ShareBoxWidget(
+                                      pageUrl: pageUrl,
+                                      shareFunction: (message) =>
+                                          detailViewModel
+                                              .shareFunction(message),
+                                    );
+                                  },
+                                );
+                              } else {
+                                _showErrorDialog(context);
+                              }
                             },
                             icon: const Icon(
                               Icons.share,
@@ -266,6 +323,21 @@ class _DetailScreenState extends State<DetailScreen> {
                           child: IconButton(
                             onPressed: () {
                               logger.info('press info button');
+                              if (detailState.photoModel != null) {
+                                showModalBottomSheet<void>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return InfoBoxWidget(
+                                      photoModel: detailState.photoModel!,
+                                      viewCount: 394,
+                                      downlaodCount: 55,
+                                      shareCount: 33,
+                                    );
+                                  },
+                                );
+                              } else {
+                                _showErrorDialog(context);
+                              }
                             },
                             icon: const Icon(
                               Icons.info_outline_rounded,
@@ -331,8 +403,19 @@ class _DetailScreenState extends State<DetailScreen> {
                               Expanded(
                                 child: ElevatedButton(
                                   onPressed: () {},
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: baseColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(24.0),
+                                    ),
+                                  ),
                                   child: const Text(
                                     'Add Comment',
+                                    style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: whiteColor,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -478,6 +561,31 @@ class _DetailScreenState extends State<DetailScreen> {
                 ],
               ),
             ),
+    );
+  }
+
+  Future<void> _showErrorDialog(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: const Text(
+            'Please ask administrator',
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Confirm'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
