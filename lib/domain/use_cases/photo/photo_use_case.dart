@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/result.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/pixabay/pixabay_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/image_repository.dart';
 
@@ -15,7 +15,7 @@ class PhotoUseCase {
 
   Future<Result<List<PhotoModel>>> execute(String query) async {
     final getPhotosResult =
-        await _pixabayRepository.getPhotosByPixabaApi(query);
+        await _pixabayRepository.getPhotoListByPixabaApi(query);
     return getPhotosResult.when(
       success: (photos) {
         return Result.success(photos);
@@ -41,7 +41,7 @@ class PhotoUseCase {
 
   Future<Result<PhotoModel>> fetchOne(int imageId) async {
     final fetchOnePhotoResult =
-        await _imageRepository.getSinglePhotoFromSupabase(imageId);
+        await _pixabayRepository.getPhotoByPixabaApi(imageId);
     return fetchOnePhotoResult.when(
       success: (data) {
         return Result.success(data);

@@ -1,5 +1,5 @@
 import 'package:my_flutter_image_searching_app_cleanarch/data/dtos/photo/hit_dto.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
 
 class PhotoMapper {
   static PhotoModel fromDTO(HitDTO hitDTO) {

@@ -11,6 +11,7 @@ import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/sup
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/tag_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/home/popular_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/home/topsearch_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/like/like_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo/photo_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/saerch/search_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/signout_use_case.dart';
@@ -72,6 +73,12 @@ void registerDependencies() {
       TopsearchUseCase(
         tagRepository: getIt<TagRepository>(),
       ),
+    )
+    // like
+    ..registerSingleton<LikeUseCase>(
+      LikeUseCase(
+        likeRepository: getIt<LikeRepository>(),
+      ),
     );
 
   // view models
@@ -99,6 +106,8 @@ void registerDependencies() {
     ..registerFactory<DetailViewModel>(
       () => DetailViewModel(
         photoUseCase: getIt<PhotoUseCase>(),
+        likeUseCase: getIt<LikeUseCase>(),
+        popularUserCase: getIt<PopularUserCase>(),
       ),
     );
 }
