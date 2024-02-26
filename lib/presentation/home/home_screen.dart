@@ -85,7 +85,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
                         onPressed: () {
-                          logger.info('button press ${homeState.topTags[index]}');
+                          logger.info('button press topTags[index] ${homeState.topTags[index]}');
+                          context.push(
+                            '/search',
+                            extra: {
+                              'searchKeyword': homeState.topTags[index]['tag'],
+                            },
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: baseColor,
