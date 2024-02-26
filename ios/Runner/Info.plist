@@ -57,5 +57,12 @@
         </array>
       </dict>
     </array>
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+    </dict>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>Our app needs permission to save photos to your gallery</string>
   </dict>
 </plist>
