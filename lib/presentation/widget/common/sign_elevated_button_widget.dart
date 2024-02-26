@@ -46,22 +46,28 @@ class _SignElevatedButtonWidgetState extends State<SignElevatedButtonWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () => isSigned ? signOut() : context.push('/signIn'),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: baseColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-      ),
-      child: Text(
-        isSigned ? 'signOut' : 'signIn',
-        style: const TextStyle(
-          fontSize: 16.0,
-          fontWeight: FontWeight.bold,
-          color: whiteColor,
-        ),
-      ),
-    );
+    return isSigned
+        ? ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: baseColor,
+            ),
+            onPressed: () => context.push('/home/user'),
+            child: const Icon(
+              Icons.person,
+              color: whiteColor,
+            ))
+        : ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: baseColor,
+            ),
+            onPressed: () => signOut(),
+            child: const Text(
+              'SignIn',
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                color: whiteColor,
+              ),
+            ));
   }
 }
