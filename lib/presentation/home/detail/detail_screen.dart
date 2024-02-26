@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/comment/comment_model.dart';
@@ -34,9 +36,12 @@ class _DetailScreenState extends State<DetailScreen> {
 
   final session = supabase.auth.currentSession;
 
+  StreamSubscription? _streamSubscription;
+
   final ScrollController _detailScreenScrollerController = ScrollController();
 
   int userId = 1;
+
   @override
   void initState() {
     Future.microtask(() {
@@ -44,7 +49,21 @@ class _DetailScreenState extends State<DetailScreen> {
       //   userId = int.parse(session!.user.id);
       //   logger.info(userId);
       // }
+
       final detailViewModel = context.read<DetailViewModel>();
+
+      _streamSubscription =
+          detailViewModel.getDetailUiEventStreamController.listen((event) {
+        event.when(showToast: (message) {
+          Fluttertoast.showToast(
+            msg: message,
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: weakBlack,
+            textColor: whiteColor,
+          );
+        });
+      });
       detailViewModel.init(
         userId, // userId
         widget.imageId,
@@ -58,6 +77,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   void dispose() {
+    _streamSubscription?.cancel();
     _detailScreenScrollerController.dispose();
     _commentTextEditingController.dispose();
     super.dispose();
@@ -72,30 +92,6 @@ class _DetailScreenState extends State<DetailScreen> {
       curve: Curves.easeInOut,
     );
   }
-
-  // Widget showDialog(){
-  //   return showModalBottomSheet<void>(
-  //           context: context,
-  //           builder: (BuildContext context) {
-  //             return SizedBox(
-  //               height: 200,
-  //               child: Center(
-  //                 child: Column(
-  //                   mainAxisAlignment: MainAxisAlignment.center,
-  //                   mainAxisSize: MainAxisSize.min,
-  //                   children: <Widget>[
-  //                     const Text('Modal BottomSheet'),
-  //                     ElevatedButton(
-  //                       child: const Text('Close BottomSheet'),
-  //                       onPressed: () => Navigator.pop(context),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //             );
-  //           },
-  //         );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -267,7 +263,11 @@ class _DetailScreenState extends State<DetailScreen> {
                                   context: context,
                                   builder: (BuildContext context) {
                                     return DownloadBoxWidget(
-                                        photoModel: detailState.photoModel!);
+                                      photoModel: detailState.photoModel!,
+                                      downloadFunction: (downloadImageUrl) =>
+                                          detailViewModel.downloadFunction(
+                                              downloadImageUrl),
+                                    );
                                   },
                                 );
                               } else {
@@ -296,7 +296,12 @@ class _DetailScreenState extends State<DetailScreen> {
                                     String pageUrl =
                                         detailState.photoModel?.pageUrl ??
                                             'ERROR';
-                                    return ShareBoxWidget(pageUrl: pageUrl);
+                                    return ShareBoxWidget(
+                                      pageUrl: pageUrl,
+                                      shareFunction: (message) =>
+                                          detailViewModel
+                                              .shareFunction(message),
+                                    );
                                   },
                                 );
                               } else {

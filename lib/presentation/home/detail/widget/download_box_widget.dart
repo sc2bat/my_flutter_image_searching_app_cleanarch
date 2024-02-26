@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/enums.dart';
@@ -7,10 +8,12 @@ import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dar
 
 class DownloadBoxWidget extends StatefulWidget {
   final PhotoModel photoModel;
+  final Function(String) downloadFunction;
   const DownloadBoxWidget({
-    super.key,
+    Key? key,
     required this.photoModel,
-  });
+    required this.downloadFunction,
+  }) : super(key: key);
 
   @override
   State<DownloadBoxWidget> createState() => _DownloadBoxWidgetState();
@@ -145,6 +148,7 @@ class _DownloadBoxWidgetState extends State<DownloadBoxWidget> {
                   } else {
                     logger.info('IMAGE SIZE IN NULL');
                   }
+                  widget.downloadFunction(downlaodImageUrl);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: baseColor,

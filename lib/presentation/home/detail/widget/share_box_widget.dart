@@ -9,9 +9,11 @@ class ShareBoxWidget extends StatelessWidget {
   const ShareBoxWidget({
     super.key,
     required this.pageUrl,
+    required this.shareFunction,
   });
 
   final String pageUrl;
+  final Function(String message) shareFunction;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +57,11 @@ class ShareBoxWidget extends StatelessWidget {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      _copyToClipboard(pageUrl);
+                      // _copyToClipboard(pageUrl);
+                      Clipboard.setData(ClipboardData(text: pageUrl)).then((_) {
+                        const message = 'Image url copied successfully!';
+                        shareFunction(message);
+                      });
 
                       Navigator.pop(context);
                     },
@@ -82,8 +88,9 @@ class ShareBoxWidget extends StatelessWidget {
 
 void _copyToClipboard(String pageUrl) {
   Clipboard.setData(ClipboardData(text: pageUrl)).then((_) {
+    const message = 'Image url copied successfully!';
     Fluttertoast.showToast(
-      msg: 'copy share pageUrl',
+      msg: message,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       backgroundColor: weakBlack,
