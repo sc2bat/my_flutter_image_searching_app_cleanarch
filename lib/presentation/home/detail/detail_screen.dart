@@ -14,6 +14,8 @@ import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dar
 import 'package:provider/provider.dart';
 
 import 'widget/download_box_widget.dart';
+import 'widget/info_box_widget.dart';
+import 'widget/share_box_widget.dart';
 
 class DetailScreen extends StatefulWidget {
   final int imageId;
@@ -291,25 +293,10 @@ class _DetailScreenState extends State<DetailScreen> {
                                 showModalBottomSheet<void>(
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return SizedBox(
-                                      height: 200,
-                                      child: Center(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: <Widget>[
-                                            const Text('Modal BottomSheet'),
-                                            ElevatedButton(
-                                              child: const Text(
-                                                  'Close BottomSheet'),
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
+                                    String pageUrl =
+                                        detailState.photoModel?.pageUrl ??
+                                            'ERROR';
+                                    return ShareBoxWidget(pageUrl: pageUrl);
                                   },
                                 );
                               } else {
@@ -335,8 +322,12 @@ class _DetailScreenState extends State<DetailScreen> {
                                 showModalBottomSheet<void>(
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return DownloadBoxWidget(
-                                        photoModel: detailState.photoModel!);
+                                    return InfoBoxWidget(
+                                      photoModel: detailState.photoModel!,
+                                      viewCount: 394,
+                                      downlaodCount: 55,
+                                      shareCount: 33,
+                                    );
                                   },
                                 );
                               } else {

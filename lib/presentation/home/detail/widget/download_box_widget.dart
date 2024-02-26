@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/enums.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/theme.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detail/widget/modal_title_widget.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 
 class DownloadBoxWidget extends StatefulWidget {
@@ -27,11 +28,7 @@ class _DownloadBoxWidgetState extends State<DownloadBoxWidget> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 320.0,
-      // constraints: BoxConstraints(
-      //     minHeight: 200.0,
-      //     maxHeight: MediaQuery.of(context).size.height * 0.6,
-      // ),
+      height: 360.0,
       child: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -39,6 +36,7 @@ class _DownloadBoxWidgetState extends State<DownloadBoxWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
+              ModalTitleWidget(title: 'DOWNLOAD'.toUpperCase()),
               ListTile(
                 title: Text(
                   'preview ${widget.photoModel.previewWidth} x ${widget.photoModel.previewHeight}',
