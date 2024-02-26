@@ -275,9 +275,9 @@ class _DetailScreenState extends State<DetailScreen> {
                               }
                             },
                             icon: const Icon(
-                              Icons.image_outlined,
+                              Icons.download,
                               color: whiteColor,
-                              size: 24.0,
+                              size: 32.0,
                             ),
                           ),
                         ),
@@ -342,7 +342,7 @@ class _DetailScreenState extends State<DetailScreen> {
                             icon: const Icon(
                               Icons.info_outline_rounded,
                               color: whiteColor,
-                              size: 24.0,
+                              size: 32.0,
                             ),
                           ),
                         ),
