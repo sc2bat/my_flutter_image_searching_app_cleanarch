@@ -13,6 +13,8 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/widget/com
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 import 'package:provider/provider.dart';
 
+import 'widget/download_box_widget.dart';
+
 class DetailScreen extends StatefulWidget {
   final int imageId;
   const DetailScreen({
@@ -68,6 +70,30 @@ class _DetailScreenState extends State<DetailScreen> {
       curve: Curves.easeInOut,
     );
   }
+
+  // Widget showDialog(){
+  //   return showModalBottomSheet<void>(
+  //           context: context,
+  //           builder: (BuildContext context) {
+  //             return SizedBox(
+  //               height: 200,
+  //               child: Center(
+  //                 child: Column(
+  //                   mainAxisAlignment: MainAxisAlignment.center,
+  //                   mainAxisSize: MainAxisSize.min,
+  //                   children: <Widget>[
+  //                     const Text('Modal BottomSheet'),
+  //                     ElevatedButton(
+  //                       child: const Text('Close BottomSheet'),
+  //                       onPressed: () => Navigator.pop(context),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //             );
+  //           },
+  //         );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -234,6 +260,17 @@ class _DetailScreenState extends State<DetailScreen> {
                           child: IconButton(
                             onPressed: () {
                               logger.info('press download button');
+                              if (detailState.photoModel != null) {
+                                showModalBottomSheet<void>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return DownloadBoxWidget(
+                                        photoModel: detailState.photoModel!);
+                                  },
+                                );
+                              } else {
+                                _showErrorDialog(context);
+                              }
                             },
                             icon: const Icon(
                               Icons.image_outlined,
@@ -250,6 +287,34 @@ class _DetailScreenState extends State<DetailScreen> {
                           child: IconButton(
                             onPressed: () {
                               logger.info('press share button');
+                              if (detailState.photoModel != null) {
+                                showModalBottomSheet<void>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return SizedBox(
+                                      height: 200,
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            const Text('Modal BottomSheet'),
+                                            ElevatedButton(
+                                              child: const Text(
+                                                  'Close BottomSheet'),
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              } else {
+                                _showErrorDialog(context);
+                              }
                             },
                             icon: const Icon(
                               Icons.share,
@@ -266,6 +331,17 @@ class _DetailScreenState extends State<DetailScreen> {
                           child: IconButton(
                             onPressed: () {
                               logger.info('press info button');
+                              if (detailState.photoModel != null) {
+                                showModalBottomSheet<void>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return DownloadBoxWidget(
+                                        photoModel: detailState.photoModel!);
+                                  },
+                                );
+                              } else {
+                                _showErrorDialog(context);
+                              }
                             },
                             icon: const Icon(
                               Icons.info_outline_rounded,
@@ -478,6 +554,31 @@ class _DetailScreenState extends State<DetailScreen> {
                 ],
               ),
             ),
+    );
+  }
+
+  Future<void> _showErrorDialog(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: const Text(
+            'Please ask administrator',
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Confirm'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
