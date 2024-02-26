@@ -6,10 +6,10 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/the
 class CommonTextFieldWidget extends StatefulWidget {
   const CommonTextFieldWidget({
     super.key,
-    required TextEditingController serachTextFieldController,
-  }) : _serachTextFieldController = serachTextFieldController;
+    required TextEditingController searchTextFieldController,
+  }) : _searchTextFieldController = searchTextFieldController;
 
-  final TextEditingController _serachTextFieldController;
+  final TextEditingController _searchTextFieldController;
 
   @override
   State<CommonTextFieldWidget> createState() => _CommonTextFieldWidgetState();
@@ -19,9 +19,9 @@ class _CommonTextFieldWidgetState extends State<CommonTextFieldWidget> {
   bool _showClearButton = false;
   @override
   void initState() {
-    widget._serachTextFieldController.addListener(() {
+    widget._searchTextFieldController.addListener(() {
       setState(() {
-        _showClearButton = widget._serachTextFieldController.text.isNotEmpty;
+        _showClearButton = widget._searchTextFieldController.text.isNotEmpty;
       });
     });
     super.initState();
@@ -45,7 +45,7 @@ class _CommonTextFieldWidgetState extends State<CommonTextFieldWidget> {
     return Column(
       children: [
         TextField(
-          controller: widget._serachTextFieldController,
+          controller: widget._searchTextFieldController,
           onSubmitted: (value) {
             _textFieldValid(value);
           },
@@ -72,9 +72,9 @@ class _CommonTextFieldWidgetState extends State<CommonTextFieldWidget> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Visibility(
-                  visible: widget._serachTextFieldController.text.isNotEmpty,
+                  visible: widget._searchTextFieldController.text.isNotEmpty,
                   child: IconButton(
-                    onPressed: widget._serachTextFieldController.clear,
+                    onPressed: widget._searchTextFieldController.clear,
                     icon: const Icon(
                       Icons.clear,
                     ),
@@ -83,7 +83,7 @@ class _CommonTextFieldWidgetState extends State<CommonTextFieldWidget> {
                 // _showClearButton
                 //     ? IconButton(
                 //         onPressed: () {
-                //           widget._serachTextFieldController.clear();
+                //           widget._searchTextFieldController.clear();
                 //         },
                 //         icon: const Icon(
                 //           Icons.clear,
@@ -94,7 +94,7 @@ class _CommonTextFieldWidgetState extends State<CommonTextFieldWidget> {
                 //       ),
                 IconButton(
                   onPressed: () {
-                    _textFieldValid(widget._serachTextFieldController.text);
+                    _textFieldValid(widget._searchTextFieldController.text);
                   },
                   icon: const Icon(
                     Icons.search,
