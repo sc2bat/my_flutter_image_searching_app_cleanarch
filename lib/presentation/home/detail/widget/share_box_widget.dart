@@ -57,7 +57,6 @@ class ShareBoxWidget extends StatelessWidget {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      // _copyToClipboard(pageUrl);
                       Clipboard.setData(ClipboardData(text: pageUrl)).then((_) {
                         const message = 'Image url copied successfully!';
                         shareFunction(message);
@@ -86,15 +85,3 @@ class ShareBoxWidget extends StatelessWidget {
   }
 }
 
-void _copyToClipboard(String pageUrl) {
-  Clipboard.setData(ClipboardData(text: pageUrl)).then((_) {
-    const message = 'Image url copied successfully!';
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: weakBlack,
-      textColor: whiteColor,
-    );
-  });
-}
