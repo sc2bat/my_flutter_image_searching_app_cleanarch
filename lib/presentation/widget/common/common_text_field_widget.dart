@@ -51,7 +51,7 @@ class _CommonTextFieldWidgetState extends State<CommonTextFieldWidget> {
           },
           onTap: () {},
           decoration: InputDecoration(
-            hintText: 'image search',
+            hintText: 'Search image',
             focusColor: baseColor,
             suffixIconColor: weakBlack,
             enabledBorder: OutlineInputBorder(

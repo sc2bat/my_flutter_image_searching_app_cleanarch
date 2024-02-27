@@ -38,7 +38,7 @@ class _SignElevatedButtonWidgetState extends State<SignElevatedButtonWidget> {
 
   Future<void> signOut() async {
     await supabase.auth.signOut();
-    logger.info('logout');
+    logger.info('sign_widget_logout');
     setState(() {
       isSigned = false;
     });
@@ -60,7 +60,8 @@ class _SignElevatedButtonWidgetState extends State<SignElevatedButtonWidget> {
             style: ElevatedButton.styleFrom(
               backgroundColor: baseColor,
             ),
-            onPressed: () => signOut(),
+            onPressed: () => //context.push('/home/user'),
+         context.push('/signIn'),
             child: const Text(
               'SignIn',
               style: TextStyle(

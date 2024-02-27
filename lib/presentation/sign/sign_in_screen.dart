@@ -77,7 +77,7 @@ class _SignInScreenState extends State<SignInScreen> {
       }
     });
     _emailTextFieldController = TextEditingController();
-    _emailTextFieldController.text = Env.testEmail;
+    // _emailTextFieldController.text = Env.testEmail;
     super.initState();
   }
 
@@ -103,7 +103,7 @@ class _SignInScreenState extends State<SignInScreen> {
             TextField(
               controller: _emailTextFieldController,
               decoration: InputDecoration(
-                hintText: 'Email Address',
+                hintText: 'Enter your email address for verification',
                 focusColor: baseColor,
                 suffixIconColor: weakBlack,
                 enabledBorder: OutlineInputBorder(

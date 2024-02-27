@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../data/data_sources/constants.dart';
 import '../../common/theme.dart';
 
 class UserScreen extends StatefulWidget {
@@ -14,6 +16,58 @@ class UserScreen extends StatefulWidget {
 
 class _UserScreenState extends State<UserScreen> {
   bool isSigned = false;
+
+  late TextEditingController _userNameTextFieldController =
+      TextEditingController();
+  bool _isLoading = false;
+  String _userName = '';
+  String _userEmail = '';
+
+  @override
+  void initState() {
+    _userNameTextFieldController = TextEditingController();
+    _getUserAccount();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _userNameTextFieldController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _getUserAccount() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final userId = supabase.auth.currentUser!.id;
+      final data = await supabase
+          .from(TB_USER_PROFILE)
+          .select()
+          .eq('userId', userId)
+          .single();
+      _userName = data['user_name'] ?? 'none';
+      _userEmail = data['email'] ?? '';
+    } on PostgrestException catch (error) {
+      SnackBar(
+        content: Text(error.message),
+        backgroundColor: Theme.of(context).colorScheme.error,
+      );
+    } catch (error) {
+      SnackBar(
+        content: const Text('getUserAccount error'),
+        backgroundColor: Theme.of(context).colorScheme.error,
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
 
   final List<ActivityItem> _activityItems = [
     ActivityItem(
@@ -31,23 +85,23 @@ class _UserScreenState extends State<UserScreen> {
       count: 5,
     ),
     ActivityItem(
-        icon: Icons.download,
-        title: 'Downloaded',
-        count: 3,
+      icon: Icons.download,
+      title: 'Downloaded',
+      count: 3,
     ),
     ActivityItem(
-        icon: Icons.share,
-        title: 'Shared',
-        count: 2,
+      icon: Icons.share,
+      title: 'Shared',
+      count: 2,
     ),
   ];
 
   Future<void> signOut() async {
     await supabase.auth.signOut();
-    logger.info('logout');
+    logger.info('user_screen_logout');
     setState(() {
       isSigned = false;
-      context.push('/home/user/login');
+      context.push('/home');
     });
   }
 
@@ -83,10 +137,10 @@ class _UserScreenState extends State<UserScreen> {
                 color: baseColor,
               ),
               title: Text(
-                'User Name',
+                _userName,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              subtitle: const Text('user.email@example.com'),
+              subtitle: Text(_userEmail),
             ),
             const Divider(),
             Padding(

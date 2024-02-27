@@ -219,7 +219,7 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
               }
             },
             decoration: InputDecoration(
-              hintText: 'image search',
+              hintText: 'Search image',
               focusColor: baseColor,
               suffixIconColor: weakBlack,
               enabledBorder: OutlineInputBorder(
