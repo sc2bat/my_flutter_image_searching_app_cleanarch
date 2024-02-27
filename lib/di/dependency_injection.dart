@@ -1,14 +1,14 @@
 import 'package:get_it/get_it.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/photo/photo_repository_impl.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/pixabay_repository_impl.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/search_keyword_repository_impl.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/pixabay/pixabay_repository_impl.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/search/search_keyword_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/image_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/like_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/sign_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/tag_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/photo/photo_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/pixabay/pixabay_repository.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/search_keyword_repository.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/search/search_keyword_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/image_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/like_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/sign_repository.dart';

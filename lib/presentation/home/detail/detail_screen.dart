@@ -182,11 +182,16 @@ class _DetailScreenState extends State<DetailScreen> {
                               IconButton(
                                 onPressed: () {
                                   logger.info('press favorite button');
+                                  if (session != null) {
+                                    detailViewModel.updateLike();
+                                  } else {
+                                    logger.info('login 해주세요');
+                                  }
                                   // detailViewModel.
                                 },
                                 icon: Icon(
                                   detailState.likeModel != null &&
-                                          detailState.likeModel!.isDeleted
+                                          detailState.likeModel!.isLiked
                                       ? Icons.favorite
                                       : Icons.favorite_border_rounded,
                                   color: whiteColor,

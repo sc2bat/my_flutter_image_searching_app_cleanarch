@@ -48,13 +48,20 @@ class LikeRepositoryImpl implements LikeRepository {
   }
 
   @override
-  Future<Result<void>> handleLike(Map<String, dynamic> jsonLike) async {
+  Future<Result<Map<String, dynamic>>> handleLike(
+      Map<String, dynamic> jsonData) async {
     try {
-      await supabase.from(TB_LIKE_HISTORY).upsert(
-            jsonLike,
-            onConflict: 'like_id',
-          );
-      return const Result.success(null);
+      final result = await supabase
+          .from(TB_LIKE_HISTORY)
+          .update({
+            'is_liked': !jsonData['is_liked'],
+          })
+          .eq('like_user_id', jsonData['like_user_id'])
+          .eq('like_image_id', jsonData['like_image_id'])
+          .eq('like_id', jsonData['like_id'])
+          .select()
+          .single();
+      return Result.success(result);
     } catch (e) {
       return Result.error('$e');
     }

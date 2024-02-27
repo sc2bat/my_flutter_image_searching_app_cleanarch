@@ -5,7 +5,7 @@ import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/const
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/http.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/result.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/dtos/photo/hit_dto.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/data/mappers/photo_mapper.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/mappers/photo/photo_mapper.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 

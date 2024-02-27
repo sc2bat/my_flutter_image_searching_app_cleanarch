@@ -1,6 +1,7 @@
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/result.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/like/like_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/like_repository.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 
 class LikeUseCase {
   final LikeRepository _likeRepository;
@@ -16,10 +17,15 @@ class LikeUseCase {
     );
   }
 
-  Future<Result<void>> handleLike(LikeModel likeModel) async {
-    final result = await _likeRepository.handleLike(likeModel.toJson());
+  Future<Result<LikeModel>> handleLike(LikeModel likeModel) async {
+    final jsonData = likeModel.toJson();
+
+    logger.info('LikeUseCase handleLike');
+    logger.info(jsonData);
+
+    final result = await _likeRepository.handleLike(jsonData);
     return result.when(
-      success: (_) => const Result.success(null),
+      success: (data) => Result.success(LikeModel.fromJson(data)),
       error: (message) => Result.error(message),
     );
   }

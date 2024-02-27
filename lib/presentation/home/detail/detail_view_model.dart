@@ -46,6 +46,9 @@ class DetailViewModel with ChangeNotifier {
   final List<String> _tagList = [];
   List<String> get tagList => _tagList;
 
+  final int _userId = 0;
+  int get getUserId => _userId;
+
   // ui event
   final _detailUiEventStreamController = StreamController<DetailUiEvent>();
   Stream<DetailUiEvent> get getDetailUiEventStreamController =>
@@ -61,6 +64,8 @@ class DetailViewModel with ChangeNotifier {
 
     final session = supabase.auth.currentSession;
     if (session != null) {
+      // _userId = await getUserIdBySupabase(session.user.id);
+
       LikeModel isLiked = await getIsLiked(userId, imageId);
       _detailState = detailState.copyWith(
         isLoading: false,
@@ -127,6 +132,24 @@ class DetailViewModel with ChangeNotifier {
         throw Exception(e);
       },
     );
+  }
+
+  Future<void> updateLike() async {
+    if (_detailState.likeModel != null) {
+      final result = await _likeUseCase.handleLike(_detailState.likeModel!);
+
+      result.when(
+          success: (data) {
+            _detailState = detailState.copyWith(likeModel: data);
+            notifyListeners();
+            String toastMessage = data.isLiked ? '좋아요' : '좋아요 취소';
+            _detailUiEventStreamController
+                .add(DetailUiEvent.showToast(toastMessage));
+          },
+          error: (error) => _detailUiEventStreamController
+              .add(DetailUiEvent.showToast(error)));
+    }
+    notifyListeners();
   }
 
   Future<void> updateIsLiked(LikeModel likeModel) async {
