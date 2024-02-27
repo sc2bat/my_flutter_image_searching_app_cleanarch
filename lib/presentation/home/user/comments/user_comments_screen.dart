@@ -3,14 +3,14 @@ import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/const
 import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class UserShareScreen extends StatefulWidget {
-  const UserShareScreen({super.key});
+class UserCommentsScreen extends StatefulWidget {
+  const UserCommentsScreen({super.key});
 
   @override
-  State<UserShareScreen> createState() => _UserShareScreenState();
+  State<UserCommentsScreen> createState() => _UserCommentScreenState();
 }
 
-class _UserShareScreenState extends State<UserShareScreen> {
+class _UserCommentScreenState extends State<UserCommentsScreen> {
   late final TextEditingController _userNameTextFieldController;
 
   bool _isLoading = false;
@@ -65,7 +65,7 @@ class _UserShareScreenState extends State<UserShareScreen> {
     return Scaffold(
       appBar: AppBar(),
       body: const Center(
-        child: Text('account screen'),
+        child: Text('comments screen'),
       ),
     );
   }

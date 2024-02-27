@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class UserLikeScreen extends StatelessWidget {
-  const UserLikeScreen({super.key});
+class UserHistoryScreen extends StatelessWidget {
+  const UserHistoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
       body: const Center(
-        child: Text('sample'),
+        child: Text('history'),
       ),
     );
   }

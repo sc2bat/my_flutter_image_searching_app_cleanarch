@@ -6,13 +6,13 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_view_model.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/comment/user_account_screen.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/download/user_download_screen.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/like/user_like_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/comments/user_comments_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/downloaded/user_downloaded_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/likes/user_likes_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_profile_screen.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/share/user_share_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/shared/user_shared_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/user_screen.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/view/user_view_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/history/user_history_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_in_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/splash/splash_screen.dart';
@@ -46,33 +46,33 @@ final router = GoRouter(
           builder: (_, __) => const UserScreen(),
           routes: [
             GoRoute(
-              path: 'comment',
-              builder: (_, __) => const UserCommentScreen(),
-              routes: const [],
-            ),
-            GoRoute(
-              path: 'download',
-              builder: (_, __) => const UserDownloadScreen(),
-              routes: const [],
-            ),
-            GoRoute(
               path: 'profile',
               builder: (_, __) => const UserProfileScreen(),
               routes: const [],
             ),
             GoRoute(
-              path: 'like',
-              builder: (_, __) => const UserLikeScreen(),
+              path: 'history',
+              builder: (_, __) => const UserHistoryScreen(),
               routes: const [],
             ),
             GoRoute(
-              path: 'share',
-              builder: (_, __) => const UserShareScreen(),
+              path: 'likes',
+              builder: (_, __) => const UserLikesScreen(),
               routes: const [],
             ),
             GoRoute(
-              path: 'view',
-              builder: (_, __) => const UserViewScreen(),
+              path: 'comments',
+              builder: (_, __) => const UserCommentsScreen(),
+              routes: const [],
+            ),
+            GoRoute(
+              path: 'downloaded',
+              builder: (_, __) => const UserDownloadedScreen(),
+              routes: const [],
+            ),
+            GoRoute(
+              path: 'shared',
+              builder: (_, __) => const UserSharedScreen(),
               routes: const [],
             ),
           ],

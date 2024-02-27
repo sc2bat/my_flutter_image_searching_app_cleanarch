@@ -53,7 +53,7 @@ class _SignElevatedButtonWidgetState extends State<SignElevatedButtonWidget> {
             ),
             onPressed: () => context.push('/home/user'),
             child: const Icon(
-              Icons.person,
+              Icons.account_circle,
               color: whiteColor,
             ))
         : ElevatedButton(
