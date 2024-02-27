@@ -111,83 +111,94 @@ class _UserScreenState extends State<UserScreen> {
       appBar: AppBar(
         title: const Text('ImageCraft'),
       ),
-      body: SingleChildScrollView(
+      body: Container(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            ListTile(
-              onTap: () => context.push('/home/user/profile'),
-              leading: const Icon(
-                Icons.account_circle,
-                size: 48.0,
-                color: baseColor,
-              ),
-              title: Text(
-                _userName,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              subtitle: Text(_userEmail),
-            ),
-            const Divider(),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'My Activity',
+            Column(
+              children: [
+                ListTile(
+                  onTap: () => context.push('/home/user/profile'),
+                  leading: const Icon(
+                    Icons.account_circle,
+                    size: 48.0,
+                    color: baseColor,
+                  ),
+                  title: Text(
+                    _userName,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
-                  const SizedBox(height: 16.0),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: _activityItems.length,
-                    itemBuilder: (context, index) {
-                      final activityItem = _activityItems[index];
-                      return ListTile(
-                        leading: Icon(activityItem.icon),
-                        title: Text(activityItem.title),
-                        trailing: activityItem.count != null
-                            ? Text(activityItem.count.toString())
-                            : const Icon(Icons.arrow_forward_ios),
-                        onTap: () {
-                          switch (activityItem.title) {
-                            case 'History':
-                              context.push('/home/user/history');
-                              break;
-                            case 'Likes':
-                              context.push('/home/user/likes');
-                              break;
-                            case 'Comments':
-                              context.push('/home/user/comments');
-                              break;
-                            case 'Downloaded':
-                              context.push('/home/user/downloaded');
-                              break;
-                            case 'Shared':
-                              context.push('/home/user/shared');
-                              break;
-                          }
-                        },
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 248.0),
-                ],
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: TextButton(
-                onPressed: () => signOut(),
-                child: Text(
-                  'Sign Out',
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                    decoration: TextDecoration.underline,
+                  subtitle: Text(_userEmail),
+                ),
+                const Divider(),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'My Activity',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const SizedBox(height: 16.0),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: _activityItems.length,
+                          itemBuilder: (context, index) {
+                            final activityItem = _activityItems[index];
+                            return ListTile(
+                              leading: Icon(activityItem.icon),
+                              title: Text(activityItem.title),
+                              trailing: activityItem.count != null
+                                  ? Text(activityItem.count.toString())
+                                  : const Icon(Icons.arrow_forward_ios),
+                              onTap: () {
+                                switch (activityItem.title) {
+                                  case 'History':
+                                    context.push('/home/user/history');
+                                    break;
+                                  case 'Likes':
+                                    context.push('/home/user/likes');
+                                    break;
+                                  case 'Comments':
+                                    context.push('/home/user/comments');
+                                    break;
+                                  case 'Downloaded':
+                                    context.push('/home/user/downloaded');
+                                    break;
+                                  case 'Shared':
+                                    context.push('/home/user/shared');
+                                    break;
+                                }
+                              },
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            )
+              ],
+            ),
+            Column(
+              children: [
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: TextButton(
+                    onPressed: () => signOut(),
+                    child: Text(
+                      'Sign Out',
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                            decoration: TextDecoration.underline,
+                          ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.08),
+              ],
+            ),
           ],
         ),
       ),
