@@ -85,7 +85,6 @@ class _DetailScreenState extends State<DetailScreen> {
 
   void _scrollToPosition(num imageHeight) {
     double itemExtent = imageHeight * 1.0;
-    // logger.info(imageHeight);
     _detailScreenScrollerController.animateTo(
       itemExtent,
       duration: const Duration(milliseconds: 500),
@@ -183,6 +182,7 @@ class _DetailScreenState extends State<DetailScreen> {
                               IconButton(
                                 onPressed: () {
                                   logger.info('press favorite button');
+                                  // detailViewModel.
                                 },
                                 icon: Icon(
                                   detailState.likeModel != null &&

@@ -1,14 +1,13 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/env/env.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/theme.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/widget/common/main_logo_text_widget.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -19,63 +18,50 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  bool _isLoading = false;
-  bool _redirecting = false;
-  String buttonString = 'SIGN IN';
+  // bool _isLoading = false;
+  // final bool _redirecting = false;
+  // String buttonString = 'SIGN IN';
   late final TextEditingController _emailTextFieldController;
   late final StreamSubscription<AuthState> _authStateSubscription;
 
-  Future<void> _signIn() async {
-    logger.info('start signIn');
-    try {
-      setState(() {
-        _isLoading = true;
-        buttonString = 'Loading';
-      });
-      await supabase.auth.signInWithOtp(
-        email: _emailTextFieldController.text.trim(),
-        emailRedirectTo: kIsWeb ? null : supabaseLoginCallback,
-      );
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Check your email for a signIn link!'),
-          ),
-        );
-        _emailTextFieldController.clear();
-      }
-    } on AuthException catch (error) {
-      logger.info('AuthException $error');
-      SnackBar(
-        content: Text(error.message),
-        backgroundColor: Theme.of(context).colorScheme.error,
-      );
-    } catch (error) {
-      logger.info('error $error');
-      SnackBar(
-        content: const Text('Unexpected error occurred'),
-        backgroundColor: Theme.of(context).colorScheme.error,
-      );
-    } finally {
-      if (mounted) {
-        setState(() {
-          // _isLoading = false;
-          buttonString = 'Check Email';
-        });
-      }
-    }
-  }
+  StreamSubscription? _streamSubscription;
 
   @override
   void initState() {
-    _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
-      if (_redirecting) return;
-      final session = data.session;
-      if (session != null) {
-        _redirecting = true;
-        context.go('/home');
-      }
+    Future.microtask(() {
+      final signViewModel = context.read<SignViewModel>();
+
+      _streamSubscription =
+          signViewModel.signInUiEventStreamController.listen((event) {
+        event.when(
+          showSnackBar: (message) {
+            final snackBar = SnackBar(
+              content: Text(message),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          },
+        );
+      });
+
+      _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
+        if (signViewModel.signState.redirecting) return;
+        final session = data.session;
+        if (session != null) {
+          signViewModel.updateRedirecting();
+          // _redirecting = true;
+          context.go('/home');
+        }
+      });
     });
+
+    // _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
+    //   if (_redirecting) return;
+    //   final session = data.session;
+    //   if (session != null) {
+    //     _redirecting = true;
+    //     context.go('/home');
+    //   }
+    // });
     _emailTextFieldController = TextEditingController();
     _emailTextFieldController.text = Env.testEmail;
     super.initState();
@@ -83,6 +69,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   void dispose() {
+    _streamSubscription?.cancel();
     _authStateSubscription.cancel();
     _emailTextFieldController.dispose();
     super.dispose();
@@ -90,6 +77,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final SignViewModel signViewModel = context.watch();
     return Scaffold(
       appBar: AppBar(),
       body: Container(
@@ -102,6 +90,9 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
             TextField(
               controller: _emailTextFieldController,
+              onChanged: (value) {
+                signViewModel.changeTextField();
+              },
               decoration: InputDecoration(
                 hintText: 'Email Address',
                 focusColor: baseColor,
@@ -127,7 +118,18 @@ class _SignInScreenState extends State<SignInScreen> {
               height: 32.0,
             ),
             ElevatedButton(
-              onPressed: _isLoading ? null : _signIn,
+              onPressed: () async {
+                if (!signViewModel.signState.isLoading) {
+                  final email = _emailTextFieldController.text.trim();
+                  _emailTextFieldController.text = email;
+                  if (signViewModel.emailValidator(email)) {
+                    final result = await signViewModel.signIn(email);
+                    if (result && mounted) {
+                      signViewModel.isMounted();
+                    }
+                  }
+                }
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: baseColor,
                 shape: RoundedRectangleBorder(
@@ -135,7 +137,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
               ),
               child: Text(
-                buttonString,
+                signViewModel.signState.buttonString,
                 style: const TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,

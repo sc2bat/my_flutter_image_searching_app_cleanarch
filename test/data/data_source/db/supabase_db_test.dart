@@ -10,7 +10,7 @@ void main() {
   test('supabase select popular', () async {
     final supabase = SupabaseClient(Env.supabaseUrl, Env.supabaseApiKey);
     final List<Map<String, dynamic>> data =
-        await supabase.rpc('get_popular_image_count');
+        await supabase.rpc(FUNC_GET_POPULAR_IMAGE_COUNT);
 
     logger.info(data);
 

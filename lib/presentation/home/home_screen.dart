@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/theme.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_state.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_view_model.dart';
@@ -8,7 +9,6 @@ import 'package:provider/provider.dart';
 
 import '../widget/common/common_text_field_widget.dart';
 import '../widget/common/main_logo_text_widget.dart';
-import '../widget/common/sign_elevated_button_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -44,10 +44,38 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        actions: const [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: SignElevatedButtonWidget(),
+        actions: [
+          // const Padding(
+          //   padding: EdgeInsets.symmetric(horizontal: 8.0),
+          //   child: SignElevatedButtonWidget(),
+          // ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: baseColor,
+            ),
+            onPressed: () => context.push('/signIn'),
+            child: const Text(
+              'SignIn',
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                color: whiteColor,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: baseColor,
+            ),
+            onPressed: () async => await supabase.auth.signOut(),
+            child: const Text(
+              'SignOut',
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                color: whiteColor,
+              ),
+            ),
           ),
         ],
       ),

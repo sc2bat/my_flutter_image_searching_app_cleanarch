@@ -10,23 +10,31 @@ import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/downlo
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/home/popular_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/like/like_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo/photo_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/sign_in_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/sign_out_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detail/detail_state.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detail/detail_ui_event.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 
 class DetailViewModel with ChangeNotifier {
+  final SignInUseCase _signInUseCase;
+  final SignOutUseCase _signoutUseCase;
   final PhotoUseCase _photoUseCase;
   final LikeUseCase _likeUseCase;
   final PopularUserCase _popularUserCase;
   final ImageDownloadUseCase _imageDownloadUseCase;
 
   DetailViewModel({
+    required SignInUseCase signInUseCase,
+    required SignOutUseCase signOutUseCase,
     required PhotoUseCase photoUseCase,
     required LikeUseCase likeUseCase,
     required PopularUserCase popularUserCase,
     required ImageDownloadUseCase imageDownloadUseCase,
-  })  : _photoUseCase = photoUseCase,
+  })  : _signInUseCase = signInUseCase,
+        _signoutUseCase = signOutUseCase,
+        _photoUseCase = photoUseCase,
         _likeUseCase = likeUseCase,
         _popularUserCase = popularUserCase,
         _imageDownloadUseCase = imageDownloadUseCase;

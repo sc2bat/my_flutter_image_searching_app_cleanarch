@@ -4,12 +4,14 @@ import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/pixab
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/search_keyword_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/image_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/like_repository_impl.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/sign_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/tag_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/photo/photo_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/pixabay/pixabay_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/search_keyword_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/image_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/like_repository.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/sign_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/tag_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/download/image_download_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/home/popular_use_case.dart';
@@ -17,7 +19,8 @@ import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/home/t
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/like/like_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo/photo_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/search/search_use_case.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/signout_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/sign_in_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/sign_out_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detail/detail_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_view_model.dart';
@@ -30,6 +33,9 @@ void registerDependencies() {
   // sign repository
   // photo repository
   getIt
+    ..registerSingleton<SignRepository>(
+      SignRepositoryImpl(),
+    )
     ..registerSingleton<PixabayRepository>(
       PixabayRepositoryImpl(),
     )
@@ -52,8 +58,15 @@ void registerDependencies() {
   // use cases
   // sign use case
   getIt
-    ..registerSingleton<SignoutUseCase>(
-      SignoutUseCase(),
+    ..registerSingleton<SignInUseCase>(
+      SignInUseCase(
+        signRepository: getIt<SignRepository>(),
+      ),
+    )
+    ..registerSingleton<SignOutUseCase>(
+      SignOutUseCase(
+        signRepository: getIt<SignRepository>(),
+      ),
     )
     // photo
     ..registerSingleton<PhotoUseCase>(
@@ -100,23 +113,30 @@ void registerDependencies() {
       () => HomeViewModel(
         popularUserCase: getIt<PopularUserCase>(),
         topsearchUseCase: getIt<TopsearchUseCase>(),
+        signInUseCase: getIt<SignInUseCase>(),
+        signOutUseCase: getIt<SignOutUseCase>(),
       ),
     )
     // sign view model
     ..registerFactory<SignViewModel>(
       () => SignViewModel(
-        signoutUseCase: getIt<SignoutUseCase>(),
+        signInUseCase: getIt<SignInUseCase>(),
+        signOutUseCase: getIt<SignOutUseCase>(),
       ),
     )
     // search view model
     ..registerFactory<SearchViewModel>(
       () => SearchViewModel(
+        signInUseCase: getIt<SignInUseCase>(),
+        signOutUseCase: getIt<SignOutUseCase>(),
         photoUseCase: getIt<PhotoUseCase>(),
         searchUseCase: getIt<SearchUseCase>(),
       ),
     )
     ..registerFactory<DetailViewModel>(
       () => DetailViewModel(
+        signInUseCase: getIt<SignInUseCase>(),
+        signOutUseCase: getIt<SignOutUseCase>(),
         photoUseCase: getIt<PhotoUseCase>(),
         likeUseCase: getIt<LikeUseCase>(),
         popularUserCase: getIt<PopularUserCase>(),

@@ -29,3 +29,7 @@ const String TB_LIKE_HISTORY = 'tb_like_history';
 const String TB_SHARE_HISTORY = 'tb_share_history';
 const String TB_USER_COMMENT = 'tb_user_comment';
 const String TB_USER_PROFILE = 'tb_user_profile';
+
+// supabase function
+const String FUNC_GET_POPULAR_IMAGE_COUNT = 'get_popular_image_count';
+const String FUNC_GET_TAG_COUNT = 'get_tag_counts';

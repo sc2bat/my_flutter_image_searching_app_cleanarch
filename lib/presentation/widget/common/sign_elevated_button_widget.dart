@@ -55,19 +55,21 @@ class _SignElevatedButtonWidgetState extends State<SignElevatedButtonWidget> {
             child: const Icon(
               Icons.person,
               color: whiteColor,
-            ))
+            ),
+          )
         : ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: baseColor,
             ),
             onPressed: () => signOut(),
             child: const Text(
-              'SignIn',
+              'SignOut',
               style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
                 color: whiteColor,
               ),
-            ));
+            ),
+          );
   }
 }
