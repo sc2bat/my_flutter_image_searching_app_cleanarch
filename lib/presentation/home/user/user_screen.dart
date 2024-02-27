@@ -46,7 +46,7 @@ class _UserScreenState extends State<UserScreen> {
       final data = await supabase
           .from(TB_USER_PROFILE)
           .select()
-          .eq('userId', userId)
+          .eq('user_Id', userId)
           .single();
       _userName = data['user_name'] ?? 'none';
       _userEmail = data['email'] ?? '';
@@ -77,22 +77,18 @@ class _UserScreenState extends State<UserScreen> {
     ActivityItem(
       icon: Icons.favorite,
       title: 'Likes',
-      count: 10,
     ),
     ActivityItem(
       icon: Icons.comment,
       title: 'Comments',
-      count: 5,
     ),
     ActivityItem(
       icon: Icons.download,
       title: 'Downloaded',
-      count: 3,
     ),
     ActivityItem(
       icon: Icons.share,
       title: 'Shared',
-      count: 2,
     ),
   ];
 
@@ -110,21 +106,6 @@ class _UserScreenState extends State<UserScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('ImageCraft'),
-        actions: [
-          ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: baseColor,
-              ),
-              onPressed: () => signOut(),
-              child: const Text(
-                'SignOut',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                  color: whiteColor,
-                ),
-              )),
-        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -186,9 +167,23 @@ class _UserScreenState extends State<UserScreen> {
                       );
                     },
                   ),
+                  const SizedBox(height: 248.0),
                 ],
               ),
             ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: TextButton(
+                onPressed: () => signOut(),
+                child: Text(
+                  'Sign Out',
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),
