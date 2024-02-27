@@ -50,6 +50,7 @@ dependencies:
   fluttertoast: ^8.2.4
   uuid: ^4.3.3
   flutter_file_dialog: ^3.0.2
+  email_validator: ^2.1.17
 
 dev_dependencies:
   flutter_test:

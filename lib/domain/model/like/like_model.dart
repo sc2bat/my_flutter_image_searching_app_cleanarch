@@ -9,9 +9,9 @@ part 'like_model.g.dart';
 class LikeModel with _$LikeModel {
   factory LikeModel({
     @JsonKey(name: 'like_id') required int likeId,
-    @JsonKey(name: 'like_user_id') required int userId,
-    @JsonKey(name: 'like_image_id') required int imageId,
-    @JsonKey(name: 'created_at') DateTime? createdAt,
+    @JsonKey(name: 'like_user_id') required int likeUserId,
+    @JsonKey(name: 'like_image_id') required int likeImageId,
+    @JsonKey(name: 'is_liked') required bool isLiked,
     @JsonKey(name: 'is_deleted') required bool isDeleted,
   }) = _LikeModel;
 

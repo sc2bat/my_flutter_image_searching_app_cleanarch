@@ -55,7 +55,8 @@ class _SignElevatedButtonWidgetState extends State<SignElevatedButtonWidget> {
             child: const Icon(
               Icons.account_circle,
               color: whiteColor,
-            ))
+            ),
+          )
         : ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: baseColor,
@@ -63,12 +64,13 @@ class _SignElevatedButtonWidgetState extends State<SignElevatedButtonWidget> {
             onPressed: () => //context.push('/home/user'),
          context.push('/signIn'),
             child: const Text(
-              'SignIn',
+              'SignOut',
               style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
                 color: whiteColor,
               ),
-            ));
+            ),
+          );
   }
 }

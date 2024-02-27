@@ -4,18 +4,26 @@ import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo/photo_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/search/search_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/sign_in_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/sign_out_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_state.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_ui_event.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 
 class SearchViewModel with ChangeNotifier {
+  final SignInUseCase _signInUseCase;
+  final SignOutUseCase _signOutUseCase;
   final PhotoUseCase _photoUseCase;
   final SearchUseCase _searchUseCase;
 
   SearchViewModel({
+    required SignInUseCase signInUseCase,
+    required SignOutUseCase signOutUseCase,
     required PhotoUseCase photoUseCase,
     required SearchUseCase searchUseCase,
-  })  : _photoUseCase = photoUseCase,
+  })  : _signInUseCase = signInUseCase,
+        _signOutUseCase = signOutUseCase,
+        _photoUseCase = photoUseCase,
         _searchUseCase = searchUseCase;
 
   // state
