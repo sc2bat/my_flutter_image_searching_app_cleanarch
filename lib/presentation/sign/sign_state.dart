@@ -9,6 +9,6 @@ class SignState with _$SignState {
     @Default('') String userUuid,
     @Default(false) bool isLoading,
     @Default(false) bool redirecting,
-    @Default('SING IN') String buttonString,
+    @Default('SIGN IN') String buttonString,
   }) = _SignState;
 }

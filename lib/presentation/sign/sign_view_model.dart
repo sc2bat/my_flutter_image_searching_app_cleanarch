@@ -69,7 +69,7 @@ class SignViewModel extends ChangeNotifier {
 
   void changeTextField() {
     _updateIsLoading(false);
-    _updateButtonString('SING IN');
+    _updateButtonString('SIGN IN');
   }
 
   Future<bool> signIn(String email) async {
