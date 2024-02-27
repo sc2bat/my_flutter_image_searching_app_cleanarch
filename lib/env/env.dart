@@ -16,4 +16,7 @@ abstract class Env {
 
   @EnviedField()
   static const String testEmail = _Env.testEmail;
+
+  @EnviedField()
+  static const String testUuid = _Env.testUuid;
 }

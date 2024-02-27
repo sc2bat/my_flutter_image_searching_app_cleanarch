@@ -42,14 +42,18 @@ class _UserScreenState extends State<UserScreen> {
     });
 
     try {
-      final userId = supabase.auth.currentUser!.id;
-      final data = await supabase
-          .from(TB_USER_PROFILE)
-          .select()
-          .eq('user_Id', userId)
-          .single();
-      _userName = data['user_name'] ?? 'none';
-      _userEmail = data['email'] ?? '';
+      final Session? session = supabase.auth.currentSession;
+      final user = session?.user;
+      final userUuid = user?.id;
+      if (userUuid != null) {
+        final data = await supabase
+            .from(TB_USER_PROFILE)
+            .select()
+            .eq('user_uuid', userUuid)
+            .single();
+        _userName = data['user_name'] ?? 'none';
+      }
+      _userEmail = user?.email ?? '';
     } on PostgrestException catch (error) {
       SnackBar(
         content: Text(error.message),
