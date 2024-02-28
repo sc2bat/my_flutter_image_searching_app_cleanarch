@@ -88,7 +88,7 @@ class _UserScreenState extends State<UserScreen> {
     ),
     ActivityItem(
       icon: Icons.download,
-      title: 'Downloaded',
+      title: 'Downloads',
     ),
     ActivityItem(
       icon: Icons.share,
@@ -164,8 +164,8 @@ class _UserScreenState extends State<UserScreen> {
                                   case 'Comments':
                                     context.push('/home/user/comments');
                                     break;
-                                  case 'Downloaded':
-                                    context.push('/home/user/downloaded');
+                                  case 'Downloads':
+                                    context.push('/home/user/downloads');
                                     break;
                                   case 'Shared':
                                     context.push('/home/user/shared');
