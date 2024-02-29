@@ -6,4 +6,7 @@ abstract interface class ImageRepository {
       List<Map<String, dynamic>> jsonPhotos);
 
   Future<Result<PhotoModel>> getSinglePhotoFromSupabase(int imageId);
+
+  Future<Result<Map<String, dynamic>>> getPhotoCountInfoFromSupabase(
+      int imageId);
 }

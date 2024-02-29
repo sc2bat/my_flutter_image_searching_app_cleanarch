@@ -1,5 +1,5 @@
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/result.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/comment/comment_repository.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/comment_repository.dart';
 
 class CommentUseCase {
   final CommentRepositoy _commentRepositoy;

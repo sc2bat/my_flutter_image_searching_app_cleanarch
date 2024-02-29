@@ -8,7 +8,7 @@ import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dar
 
 class DownloadBoxWidget extends StatefulWidget {
   final PhotoModel photoModel;
-  final Function(String) downloadFunction;
+  final Function(String imageSize, String downloadImageUrl) downloadFunction;
   const DownloadBoxWidget({
     Key? key,
     required this.photoModel,
@@ -124,18 +124,25 @@ class _DownloadBoxWidgetState extends State<DownloadBoxWidget> {
               ElevatedButton(
                 onPressed: () {
                   logger.info(imageSize);
+                  String size = '';
                   String downlaodImageUrl = '';
                   switch (imageSize) {
                     case ImageSize.preview:
                       logger.info(widget.photoModel.previewUrl);
+                      size =
+                          '${widget.photoModel.previewWidth} x ${widget.photoModel.previewHeight}';
                       downlaodImageUrl = widget.photoModel.previewUrl ?? '';
                       break;
                     case ImageSize.webformat:
                       logger.info(widget.photoModel.webformatUrl);
+                      size =
+                          '${widget.photoModel.webformatWidth} x ${widget.photoModel.webformatHeight}';
                       downlaodImageUrl = widget.photoModel.webformatUrl ?? '';
                       break;
                     case ImageSize.large:
                       logger.info(widget.photoModel.largeImageUrl);
+                      size =
+                          '${widget.photoModel.imageWidth} x ${widget.photoModel.imageHeight}';
                       downlaodImageUrl = widget.photoModel.largeImageUrl ?? '';
                       break;
                     default:
@@ -148,7 +155,7 @@ class _DownloadBoxWidgetState extends State<DownloadBoxWidget> {
                   } else {
                     logger.info('IMAGE SIZE IN NULL');
                   }
-                  widget.downloadFunction(downlaodImageUrl);
+                  widget.downloadFunction(size, downlaodImageUrl);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: baseColor,

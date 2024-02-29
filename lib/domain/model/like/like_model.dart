@@ -12,7 +12,7 @@ class LikeModel with _$LikeModel {
     @JsonKey(name: 'like_user_id') required int likeUserId,
     @JsonKey(name: 'like_image_id') required int likeImageId,
     @JsonKey(name: 'is_liked') required bool isLiked,
-    @JsonKey(name: 'is_deleted') required bool isDeleted,
+    @JsonKey(name: 'like_is_deleted') required bool isDeleted,
   }) = _LikeModel;
 
   factory LikeModel.fromJson(Map<String, Object?> json) =>

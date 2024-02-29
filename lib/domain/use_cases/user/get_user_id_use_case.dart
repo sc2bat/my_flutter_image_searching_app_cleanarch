@@ -1,6 +1,6 @@
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/result.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/user/user_model.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/user/user_repository.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/user_repository.dart';
 
 class GetUserIdUseCase {
   final UserRepository _userRepository;

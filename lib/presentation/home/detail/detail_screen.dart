@@ -5,7 +5,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/functions.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/theme.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detail/detail_view_model.dart';
@@ -34,8 +33,6 @@ class _DetailScreenState extends State<DetailScreen> {
   late TextEditingController _commentTextEditingController;
   late PhotoModel photoModel;
 
-  final session = supabase.auth.currentSession;
-
   StreamSubscription? _streamSubscription;
 
   final ScrollController _detailScreenScrollerController = ScrollController();
@@ -57,6 +54,7 @@ class _DetailScreenState extends State<DetailScreen> {
           );
         });
       });
+
       detailViewModel.init(widget.imageId);
     });
 
@@ -218,20 +216,26 @@ class _DetailScreenState extends State<DetailScreen> {
                           child: IconButton(
                             onPressed: () {
                               logger.info('press download button');
-                              if (detailState.photoModel != null) {
-                                showModalBottomSheet<void>(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return DownloadBoxWidget(
-                                      photoModel: detailState.photoModel!,
-                                      downloadFunction: (downloadImageUrl) =>
-                                          detailViewModel.downloadFunction(
-                                              downloadImageUrl),
-                                    );
-                                  },
-                                );
+                              if (detailViewModel.session != null) {
+                                if (detailState.photoModel != null) {
+                                  showModalBottomSheet<void>(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return DownloadBoxWidget(
+                                        photoModel: detailState.photoModel!,
+                                        downloadFunction: (size,
+                                                downloadImageUrl) =>
+                                            detailViewModel.downloadFunction(
+                                                size, downloadImageUrl),
+                                      );
+                                    },
+                                  );
+                                } else {
+                                  _showErrorDialog(context);
+                                }
                               } else {
-                                _showErrorDialog(context);
+                                detailViewModel.normalShowToast(
+                                    'Download feature requires SignIn');
                               }
                             },
                             icon: const Icon(
@@ -249,23 +253,29 @@ class _DetailScreenState extends State<DetailScreen> {
                           child: IconButton(
                             onPressed: () {
                               logger.info('press share button');
-                              if (detailState.photoModel != null) {
-                                showModalBottomSheet<void>(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    String pageUrl =
-                                        detailState.photoModel?.pageUrl ??
-                                            'ERROR';
-                                    return ShareBoxWidget(
-                                      pageUrl: pageUrl,
-                                      shareFunction: (message) =>
-                                          detailViewModel
-                                              .shareFunction(message),
-                                    );
-                                  },
-                                );
+                              if (detailViewModel.session != null) {
+                                detailViewModel.recordShareHistory();
+                                if (detailState.photoModel != null) {
+                                  showModalBottomSheet<void>(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      String pageUrl =
+                                          detailState.photoModel?.pageUrl ??
+                                              'ERROR';
+                                      return ShareBoxWidget(
+                                        pageUrl: pageUrl,
+                                        shareFunction: (message) =>
+                                            detailViewModel
+                                                .normalShowToast(message),
+                                      );
+                                    },
+                                  );
+                                } else {
+                                  _showErrorDialog(context);
+                                }
                               } else {
-                                _showErrorDialog(context);
+                                detailViewModel.normalShowToast(
+                                    'Share feature requires SignIn');
                               }
                             },
                             icon: const Icon(
@@ -289,9 +299,9 @@ class _DetailScreenState extends State<DetailScreen> {
                                   builder: (BuildContext context) {
                                     return InfoBoxWidget(
                                       photoModel: detailState.photoModel!,
-                                      viewCount: 394,
-                                      downlaodCount: 55,
-                                      shareCount: 33,
+                                      viewCount: detailState.viewCount,
+                                      downlaodCount: detailState.downlaodCount,
+                                      shareCount: detailState.shareCount,
                                     );
                                   },
                                 );
@@ -411,9 +421,10 @@ class _DetailScreenState extends State<DetailScreen> {
                                   ],
                                 )
                               : const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                        'The community is waiting for your news!\n Log in to write comments.'),
+                                        'The community is waiting for your news!\nSign in to write comments.'),
                                   ],
                                 ),
                         ),

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/env/env.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/theme.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_view_model.dart';
@@ -49,7 +48,7 @@ class _SignInScreenState extends State<SignInScreen> {
         if (session != null) {
           signViewModel.updateRedirecting();
           // _redirecting = true;
-          context.go('/home');
+          context.go('/index');
         }
       });
     });

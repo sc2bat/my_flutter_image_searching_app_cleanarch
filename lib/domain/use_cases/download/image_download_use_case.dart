@@ -12,7 +12,7 @@ class ImageDownloadUseCase {
     required PhotoRepository photoRepository,
   }) : _photoRepository = photoRepository;
 
-  Future<Result<bool>> saveImage(downloadImageUrl) async {
+  Future<Result<String>> saveImage(downloadImageUrl) async {
     final result = await _photoRepository.getImageBytes(downloadImageUrl);
 
     return result.when(success: (response) async {
@@ -32,7 +32,7 @@ class ImageDownloadUseCase {
         final finalPath = await FlutterFileDialog.saveFile(params: params);
 
         if (finalPath != null) {
-          return const Result.success(true);
+          return Result.success(fileName);
         } else {
           return const Result.error('saveImage finalPath null error');
         }

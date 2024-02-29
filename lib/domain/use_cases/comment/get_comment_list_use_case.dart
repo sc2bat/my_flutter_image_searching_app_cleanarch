@@ -1,6 +1,6 @@
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/result.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/comment/comment_model.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/comment/comment_repository.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/comment_repository.dart';
 
 class GetCommentListUseCase {
   final CommentRepositoy _commentRepositoy;
