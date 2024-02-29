@@ -47,7 +47,7 @@ class ImageRepositoryImpl implements ImageRepository {
           .eq('view_image_id', imageId)
           .count();
 
-      final downlaodData = await supabase
+      final downloadData = await supabase
           .from(TB_DOWNLOAD_HISTORY)
           .select()
           .eq('download_image_id', imageId)
@@ -61,7 +61,7 @@ class ImageRepositoryImpl implements ImageRepository {
 
       final Map<String, dynamic> data = {
         'view_count': viewData.count,
-        'download_count': downlaodData.count,
+        'download_count': downloadData.count,
         'share_count': shareData.count,
       };
 
