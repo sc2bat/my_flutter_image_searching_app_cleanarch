@@ -5,6 +5,22 @@ import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dar
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() {
+  test('like count test', () async {
+    int imageId = 5535486;
+    final supabase = SupabaseClient(Env.supabaseUrl, Env.supabaseApiKey);
+    try {
+      final result = await supabase
+          .from(TB_LIKE_HISTORY)
+          .select('like_id')
+          .eq('like_image_id', imageId)
+          .count();
+      logger.info(result);
+      logger.info(result.count);
+    } catch (e) {
+      logger.info(e);
+    }
+  });
+
   test('like only handler data test', () async {
     final supabase = SupabaseClient(Env.supabaseUrl, Env.supabaseApiKey);
     Map<String, dynamic> jsonData = {

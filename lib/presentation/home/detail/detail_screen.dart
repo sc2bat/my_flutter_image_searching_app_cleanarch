@@ -1,20 +1,20 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/model/comment/comment_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/functions.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/theme.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detail/detail_view_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detail/widget/comment_box_widget.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/widget/common/sign_elevated_button_widget.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 import 'package:provider/provider.dart';
 
+import 'widget/comment_edit_delete_alert_dialog_widget.dart';
 import 'widget/download_box_widget.dart';
 import 'widget/info_box_widget.dart';
 import 'widget/share_box_widget.dart';
@@ -40,16 +40,9 @@ class _DetailScreenState extends State<DetailScreen> {
 
   final ScrollController _detailScreenScrollerController = ScrollController();
 
-  int userId = 1;
-
   @override
   void initState() {
     Future.microtask(() {
-      // if (session != null) {
-      //   userId = int.parse(session!.user.id);
-      //   logger.info(userId);
-      // }
-
       final detailViewModel = context.read<DetailViewModel>();
 
       _streamSubscription =
@@ -64,10 +57,7 @@ class _DetailScreenState extends State<DetailScreen> {
           );
         });
       });
-      detailViewModel.init(
-        userId, // userId
-        widget.imageId,
-      );
+      detailViewModel.init(widget.imageId);
     });
 
     _commentTextEditingController = TextEditingController();
@@ -97,29 +87,10 @@ class _DetailScreenState extends State<DetailScreen> {
     final detailViewModel = context.watch<DetailViewModel>();
     final detailState = detailViewModel.detailState;
 
-    List<String> possibleContents = [
-      'Great photo!',
-      'Nice shot!',
-      'Beautiful!',
-      'Amazing!',
-      'Wonderful!',
-    ];
-
-    List<CommentModel> commentList = List.generate(
-        possibleContents.length,
-        (index) => CommentModel(
-              commentId: index * Random().nextInt(100),
-              userId: index,
-              imageId: index,
-              content: possibleContents[index],
-              createdAt: DateTime(2024, 01, Random().nextInt(31) + 1,
-                  Random().nextInt(24), 30, Random().nextInt(60)),
-            ));
-
     if (detailState.photoModel != null) {
       photoModel = detailState.photoModel!;
     } else {
-      photoModel = PhotoModel(imageId: 1);
+      photoModel = PhotoModel(imageId: 0);
     }
     return Scaffold(
       appBar: AppBar(
@@ -181,13 +152,8 @@ class _DetailScreenState extends State<DetailScreen> {
                             children: [
                               IconButton(
                                 onPressed: () {
-                                  logger.info('press favorite button');
-                                  if (session != null) {
-                                    detailViewModel.updateLike();
-                                  } else {
-                                    logger.info('login 해주세요');
-                                  }
-                                  // detailViewModel.
+                                  // logger.info('press favorite button');
+                                  detailViewModel.updateLike();
                                 },
                                 icon: Icon(
                                   detailState.likeModel != null &&
@@ -198,9 +164,9 @@ class _DetailScreenState extends State<DetailScreen> {
                                   size: 24.0,
                                 ),
                               ),
-                              const Text(
-                                '300',
-                                style: TextStyle(
+                              Text(
+                                '${detailState.likeCount}',
+                                style: const TextStyle(
                                   color: whiteColor,
                                   fontSize: 20.0,
                                 ),
@@ -218,23 +184,12 @@ class _DetailScreenState extends State<DetailScreen> {
                             children: [
                               IconButton(
                                 onPressed: () {
-                                  logger.info('press comment button');
-                                  if (detailState.photoModel != null &&
-                                      detailState.photoModel!.webformatWidth !=
-                                          null &&
-                                      detailState.photoModel!.webformatHeight !=
-                                          null) {
-                                    double imageHeight = MediaQuery.of(context)
-                                            .size
-                                            .width *
-                                        detailState
-                                            .photoModel!.webformatHeight! /
-                                        detailState.photoModel!.webformatWidth!
-                                      ..round();
-                                    _scrollToPosition(imageHeight >= 240.0
-                                        ? imageHeight
-                                        : 240.0);
-                                  }
+                                  double imageHeight = detailViewModel
+                                      .calcImageHeightMoveToComment(
+                                          MediaQuery.of(context).size.width);
+                                  _scrollToPosition(imageHeight >= 240.0
+                                      ? imageHeight
+                                      : 240.0);
                                 },
                                 icon: const Icon(
                                   Icons.chat_bubble_outline_outlined,
@@ -243,7 +198,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                 ),
                               ),
                               Text(
-                                '${commentList.length}',
+                                '${detailState.commentList.length}',
                                 style: const TextStyle(
                                   color: whiteColor,
                                   fontSize: 20.0,
@@ -391,41 +346,76 @@ class _DetailScreenState extends State<DetailScreen> {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(50.0),
-                                  child: Image.network(
-                                    sampleUserProfileUrl,
-                                    width: 48.0,
-                                    height: 48.0,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: ElevatedButton(
-                                  onPressed: () {},
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: baseColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(24.0),
+                          child: detailViewModel.session != null
+                              ? Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(50.0),
+                                        child: Image.network(
+                                          '$userProfileUrlWithFirstCharacter${detailState.userName[0].toUpperCase()}',
+                                          width: 48.0,
+                                          height: 48.0,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  child: const Text(
-                                    'Add Comment',
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: whiteColor,
+                                    Expanded(
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          if (detailState.photoModel != null) {
+                                            showModalBottomSheet<void>(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return CommentBoxWidget(
+                                                  insertCommentFunction:
+                                                      (content) =>
+                                                          detailViewModel
+                                                              .insertComment(
+                                                                  content),
+                                                );
+                                              },
+                                            );
+                                          } else {
+                                            _showErrorDialog(context);
+                                          }
+                                          logger.info('press add comment done');
+                                          double imageHeight = detailViewModel
+                                              .calcImageHeightMoveToComment(
+                                                  MediaQuery.of(context)
+                                                      .size
+                                                      .width);
+                                          _scrollToPosition(imageHeight >= 240.0
+                                              ? imageHeight
+                                              : 240.0);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: baseColor,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(24.0),
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          'Add Comment',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: whiteColor,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                  ],
+                                )
+                              : const Row(
+                                  children: [
+                                    Text(
+                                        'The community is waiting for your news!\n Log in to write comments.'),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
                         ),
                       ],
                     ),
@@ -435,13 +425,13 @@ class _DetailScreenState extends State<DetailScreen> {
                     child: Container(
                       height: MediaQuery.of(context).size.height *
                           0.1 *
-                          commentList.length,
+                          detailState.commentList.length,
                       constraints: BoxConstraints(
                         maxHeight: MediaQuery.of(context).size.height * 0.3,
                       ),
                       child: Scrollbar(
                         child: ListView.builder(
-                          itemCount: commentList.length,
+                          itemCount: detailState.commentList.length,
                           itemBuilder: (context, index) {
                             return Container(
                               constraints: BoxConstraints(
@@ -455,7 +445,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(50.0),
                                       child: Image.network(
-                                        sampleUserProfileUrl,
+                                        '$userProfileUrlWithFirstCharacter${detailState.commentList[index].userName[0].toUpperCase()}',
                                         width: 48.0,
                                         height: 48.0,
                                       ),
@@ -480,7 +470,9 @@ class _DetailScreenState extends State<DetailScreen> {
                                                       maxWidth: 160,
                                                     ),
                                                     child: Text(
-                                                      '${'username' * commentList[index].userId}${commentList[index].userId}',
+                                                      detailState
+                                                          .commentList[index]
+                                                          .userName,
                                                       style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
@@ -496,7 +488,8 @@ class _DetailScreenState extends State<DetailScreen> {
                                                   ),
                                                   Text(
                                                     getTimeDifference(
-                                                      commentList[index]
+                                                      detailState
+                                                          .commentList[index]
                                                           .createdAt
                                                           .toString(),
                                                     ),
@@ -504,9 +497,33 @@ class _DetailScreenState extends State<DetailScreen> {
                                                 ],
                                               ),
                                             ),
-                                            commentList[index].userId == userId
+                                            detailState.commentList[index]
+                                                        .userId ==
+                                                    detailState.userId
                                                 ? IconButton(
-                                                    onPressed: () {},
+                                                    onPressed: () {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return CommentEditDeleteAlertDialogWidget(
+                                                            commentInfo: detailState
+                                                                    .commentList[
+                                                                index],
+                                                            editCommentFunction: (commentId,
+                                                                    content) =>
+                                                                detailViewModel
+                                                                    .editComment(
+                                                                        commentId,
+                                                                        content),
+                                                            deleteCommentFunction:
+                                                                (commmentId) =>
+                                                                    detailViewModel
+                                                                        .deleteComment(
+                                                                            commmentId),
+                                                          );
+                                                        },
+                                                      );
+                                                    },
                                                     icon: const Icon(
                                                       Icons.more_horiz_outlined,
                                                     ),
@@ -515,7 +532,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                           ],
                                         ),
                                         Text(
-                                          '${commentList[index].content}',
+                                          '${detailState.commentList[index].content}',
                                           softWrap: true,
                                         ),
                                       ],

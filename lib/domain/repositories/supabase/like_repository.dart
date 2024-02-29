@@ -6,4 +6,5 @@ abstract interface class LikeRepository {
   Future<Result<LikeModel>> getLikeData(int userId, int imageId);
   Future<Result<Map<String, dynamic>>> handleLike(
       Map<String, dynamic> jsonLike);
+  Future<Result<int>> getLikeCount(int imageId);
 }
