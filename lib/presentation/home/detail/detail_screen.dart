@@ -549,7 +549,7 @@ class _DetailScreenState extends State<DetailScreen> {
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: Text(
-                      'Recommend Image',
+                      'Trending',
                       style: TextStyle(
                         fontSize: 24.0,
                         fontWeight: FontWeight.bold,
