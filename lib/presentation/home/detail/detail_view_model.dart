@@ -7,11 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/like/like_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/comment/comment_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/comment/get_comment_list_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/download/downlaod_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/download/image_download_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/home/popular_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/like/like_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo/image_info_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo/photo_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/share/share_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/get_user_id_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/view/view_history_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detail/detail_state.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detail/detail_ui_event.dart';
@@ -22,25 +26,37 @@ class DetailViewModel with ChangeNotifier {
   final PhotoUseCase _photoUseCase;
   final LikeUseCase _likeUseCase;
   final PopularUserCase _popularUserCase;
+  final ImageInfoUseCase _imageInfoUseCase;
   final ImageDownloadUseCase _imageDownloadUseCase;
+  final DownlaodUseCase _downlaodUserCase;
   final GetCommentListUseCase _getCommentListUseCase;
   final CommentUseCase _commentUseCase;
+  final ShareUseCase _shareUseCase;
+  final ViewHistoryUseCase _viewHistoryUseCase;
 
   DetailViewModel({
     required GetUserIdUseCase getUserIdUseCase,
     required PhotoUseCase photoUseCase,
     required LikeUseCase likeUseCase,
     required PopularUserCase popularUserCase,
+    required ImageInfoUseCase imageInfoUseCase,
     required ImageDownloadUseCase imageDownloadUseCase,
+    required DownlaodUseCase downlaodUserCase,
     required GetCommentListUseCase getCommentListUseCase,
     required CommentUseCase commentUseCase,
+    required ShareUseCase shareUseCase,
+    required ViewHistoryUseCase viewHistoryUseCase,
   })  : _getUserIdUseCase = getUserIdUseCase,
         _photoUseCase = photoUseCase,
         _likeUseCase = likeUseCase,
         _popularUserCase = popularUserCase,
+        _imageInfoUseCase = imageInfoUseCase,
         _imageDownloadUseCase = imageDownloadUseCase,
+        _downlaodUserCase = downlaodUserCase,
         _getCommentListUseCase = getCommentListUseCase,
-        _commentUseCase = commentUseCase;
+        _commentUseCase = commentUseCase,
+        _shareUseCase = shareUseCase,
+        _viewHistoryUseCase = viewHistoryUseCase;
 
   // state
   DetailState _detailState = DetailState();
@@ -69,6 +85,8 @@ class DetailViewModel with ChangeNotifier {
     await getCommentList(imageId);
     // 추천 이미지 리스트 조회
     await getRecommandImageList(imageId);
+    // 이미지 info 카운트 조회
+    await getViewDownloadShareCount(imageId);
 
     // 세션 여부 판단
     if (session != null) {
@@ -76,6 +94,11 @@ class DetailViewModel with ChangeNotifier {
 
       await getIsLiked(detailState.userId, imageId);
     }
+
+    // view record
+    await recordViewHistory(imageId);
+
+    logger.info('qwerasdf 333');
 
     _detailState = detailState.copyWith(isLoading: false);
 
@@ -117,6 +140,19 @@ class DetailViewModel with ChangeNotifier {
   }
 
   // view use case
+  Future<void> recordViewHistory(int imageId) async {
+    final result = await _viewHistoryUseCase.recordViewHistory(
+        imageId, detailState.userId);
+    result.when(
+      success: (_) {
+        logger.info('${detailState.photoModel!.imageId} view');
+      },
+      error: (error) {
+        logger.info(error);
+        throw Exception(error);
+      },
+    );
+  }
 
   // comment use case
   Future<void> getCommentList(int imageId) async {
@@ -214,23 +250,58 @@ class DetailViewModel with ChangeNotifier {
   }
 
   // download use case
-  Future<void> downloadFunction(String downloadImageUrl) async {
+  Future<void> downloadFunction(String size, String downloadImageUrl) async {
     final result = await _imageDownloadUseCase.saveImage(downloadImageUrl);
 
     result.when(
-      success: (_) {
+      success: (fileName) async {
         _detailUiEventStreamController
             .add(DetailUiEvent.showToast('image download done'));
+
+        if (detailState.photoModel != null) {
+          final downloadhistoryResult = await _downlaodUserCase.insert(
+            detailState.userId,
+            detailState.photoModel!.imageId,
+            size,
+            fileName,
+          );
+          downloadhistoryResult.when(
+            success: (_) => logger.info('donwloadHistory done'),
+            error: (error) {
+              _detailUiEventStreamController
+                  .add(DetailUiEvent.showToast(error));
+            },
+          );
+        }
       },
       error: (error) {
         _detailUiEventStreamController.add(DetailUiEvent.showToast(error));
       },
     );
+
+    if (detailState.photoModel != null) {
+      await getViewDownloadShareCount(detailState.photoModel!.imageId);
+    }
   }
 
   // share use case
-  Future<void> shareFunction(String message) async {
+  void recordShareHistory() async {
+    if (detailState.photoModel != null) {
+      await _shareUseCase.insert(
+          detailState.photoModel!.imageId, detailState.userId);
+    }
+
+    if (detailState.photoModel != null) {
+      await getViewDownloadShareCount(detailState.photoModel!.imageId);
+    }
+  }
+
+  Future<void> normalShowToast(String message) async {
     _detailUiEventStreamController.add(DetailUiEvent.showToast(message));
+
+    if (detailState.photoModel != null) {
+      await getViewDownloadShareCount(detailState.photoModel!.imageId);
+    }
   }
 
   // like use case
@@ -276,7 +347,7 @@ class DetailViewModel with ChangeNotifier {
       notifyListeners();
     } else {
       _detailUiEventStreamController
-          .add(DetailUiEvent.showToast('The like feature requires signIn'));
+          .add(DetailUiEvent.showToast('Like feature requires signIn'));
     }
   }
 
@@ -290,6 +361,24 @@ class DetailViewModel with ChangeNotifier {
         logger.info(message);
         return null;
       },
+    );
+  }
+
+  // image info
+  Future<void> getViewDownloadShareCount(int imageId) async {
+    final result = await _imageInfoUseCase.fetch(imageId);
+    result.when(
+      success: (data) {
+        logger.info(data);
+        _detailState = detailState.copyWith(
+          viewCount: data['view_count'],
+          downlaodCount: data['download_count'],
+          shareCount: data['share_count'],
+        );
+
+        notifyListeners();
+      },
+      error: (error) => normalShowToast(error),
     );
   }
 

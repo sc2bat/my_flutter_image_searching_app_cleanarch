@@ -1,33 +1,43 @@
 import 'package:get_it/get_it.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/comment/comment_repositoy_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/photo/photo_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/pixabay/pixabay_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/search/search_keyword_repository_impl.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/comment_repositoy_impl.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/download_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/image_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/like_repository_impl.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/share_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/sign_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/tag_repository_impl.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/user/user_repository_impl.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/comment/comment_repository.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/user_repository_impl.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/view_history_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/photo/photo_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/pixabay/pixabay_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/search/search_keyword_repository.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/comment_repository.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/download_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/image_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/like_repository.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/share_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/sign_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/tag_repository.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/user/user_repository.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/user_repository.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/view_history_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/comment/comment_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/comment/get_comment_list_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/download/downlaod_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/download/image_download_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/home/popular_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/home/topsearch_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/like/like_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo/image_info_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo/photo_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/search/search_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/share/share_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/sign_in_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/sign_out_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/get_user_id_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/view/view_history_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detail/detail_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_view_model.dart';
@@ -66,6 +76,15 @@ void registerDependencies() {
     )
     ..registerSingleton<CommentRepositoy>(
       CommentRepositoyImpl(),
+    )
+    ..registerSingleton<DownloadRepository>(
+      DownloadRepositoryImpl(),
+    )
+    ..registerSingleton<ShareRepository>(
+      ShareRepositoryImpl(),
+    )
+    ..registerSingleton<ViewHistoryRepository>(
+      ViewHistoryRepositoryImpl(),
     );
 
   // use cases
@@ -111,6 +130,12 @@ void registerDependencies() {
         tagRepository: getIt<TagRepository>(),
       ),
     )
+    // count info
+    ..registerSingleton<ImageInfoUseCase>(
+      ImageInfoUseCase(
+        imageRepository: getIt<ImageRepository>(),
+      ),
+    )
     // like
     ..registerSingleton<LikeUseCase>(
       LikeUseCase(
@@ -123,6 +148,11 @@ void registerDependencies() {
         photoRepository: getIt<PhotoRepository>(),
       ),
     )
+    ..registerSingleton<DownlaodUseCase>(
+      DownlaodUseCase(
+        downloadRepository: getIt<DownloadRepository>(),
+      ),
+    )
     // comment
     ..registerSingleton<GetCommentListUseCase>(
       GetCommentListUseCase(
@@ -132,6 +162,18 @@ void registerDependencies() {
     ..registerSingleton<CommentUseCase>(
       CommentUseCase(
         commentRepositoy: getIt<CommentRepositoy>(),
+      ),
+    )
+    // share
+    ..registerSingleton<ShareUseCase>(
+      ShareUseCase(
+        shareRepository: getIt<ShareRepository>(),
+      ),
+    )
+    // view
+    ..registerSingleton<ViewHistoryUseCase>(
+      ViewHistoryUseCase(
+        viewHistoryRepository: getIt<ViewHistoryRepository>(),
       ),
     );
 
@@ -168,9 +210,13 @@ void registerDependencies() {
         photoUseCase: getIt<PhotoUseCase>(),
         likeUseCase: getIt<LikeUseCase>(),
         popularUserCase: getIt<PopularUserCase>(),
+        imageInfoUseCase: getIt<ImageInfoUseCase>(),
         imageDownloadUseCase: getIt<ImageDownloadUseCase>(),
+        downlaodUserCase: getIt<DownlaodUseCase>(),
         getCommentListUseCase: getIt<GetCommentListUseCase>(),
         commentUseCase: getIt<CommentUseCase>(),
+        shareUseCase: getIt<ShareUseCase>(),
+        viewHistoryUseCase: getIt<ViewHistoryUseCase>(),
       ),
     );
 }

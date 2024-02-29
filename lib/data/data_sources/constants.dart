@@ -37,3 +37,4 @@ const String TB_USER_PROFILE = 'tb_user_profile';
 const String FUNC_GET_POPULAR_IMAGE_COUNT = 'get_popular_image_count';
 const String FUNC_GET_TAG_COUNT = 'get_tag_counts';
 const String FUNC_GET_IMAGE_COMMENT = 'get_image_comments';
+const String FUNC_GET_IMAGE_COUNT_INFO = 'get_image_count_info';

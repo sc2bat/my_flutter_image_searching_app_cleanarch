@@ -22,7 +22,6 @@ class ImageRepositoryImpl implements ImageRepository {
 
   @override
   Future<Result<PhotoModel>> getSinglePhotoFromSupabase(int imageId) async {
-    // imageId = 4670857;
     try {
       final data = await supabase
           .from(TB_IMAGE_INFO)
@@ -35,6 +34,40 @@ class ImageRepositoryImpl implements ImageRepository {
     } catch (e) {
       logger.info('getSinglePhotoFromSupabase error $e');
       throw Exception(e);
+    }
+  }
+
+  @override
+  Future<Result<Map<String, dynamic>>> getPhotoCountInfoFromSupabase(
+      int imageId) async {
+    try {
+      final viewData = await supabase
+          .from(TB_VIEW_HISTORY)
+          .select()
+          .eq('view_image_id', imageId)
+          .count();
+
+      final downlaodData = await supabase
+          .from(TB_DOWNLOAD_HISTORY)
+          .select()
+          .eq('download_image_id', imageId)
+          .count();
+
+      final shareData = await supabase
+          .from(TB_SHARE_HISTORY)
+          .select()
+          .eq('share_image_id', imageId)
+          .count();
+
+      final Map<String, dynamic> data = {
+        'view_count': viewData.count,
+        'download_count': downlaodData.count,
+        'share_count': shareData.count,
+      };
+
+      return Result.success(data);
+    } catch (e) {
+      return Result.error('$e');
     }
   }
 }

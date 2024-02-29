@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/home/popular_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/sign_in_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/sign_out_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_state.dart';
 
 import '../../domain/use_cases/home/topsearch_use_case.dart';
@@ -26,6 +27,8 @@ class HomeViewModel with ChangeNotifier {
   HomeState _homeState = const HomeState();
 
   HomeState get homeState => _homeState;
+
+  final session = supabase.auth.currentSession;
 
   Future<void> init() async {
     getPopulars();

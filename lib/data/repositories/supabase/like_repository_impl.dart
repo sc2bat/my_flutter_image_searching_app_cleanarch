@@ -29,6 +29,8 @@ class LikeRepositoryImpl implements LikeRepository {
           .count();
       int count = countData.count;
 
+      logger.info(count);
+
       if (count == 0) {
         await supabase.from(TB_LIKE_HISTORY).insert({
           'like_user_id': userId,
@@ -42,6 +44,7 @@ class LikeRepositoryImpl implements LikeRepository {
           .eq('like_user_id', userId)
           .eq('like_image_id', imageId)
           .single();
+      logger.info(data);
 
       return Result.success(LikeModel.fromJson(data));
     } catch (e) {

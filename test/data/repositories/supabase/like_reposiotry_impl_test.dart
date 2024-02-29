@@ -28,7 +28,7 @@ void main() {
       'like_user_id': 1,
       'like_image_id': 5535486,
       'is_liked': false,
-      'is_deleted': false,
+      'like_is_deleted': false,
     };
 
     logger.info('LikeRepositoryImpl handleLike');
