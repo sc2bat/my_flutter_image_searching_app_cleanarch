@@ -11,17 +11,17 @@ import '../../domain/use_cases/home/topsearch_use_case.dart';
 class HomeViewModel with ChangeNotifier {
   final SignInUseCase _signInUseCase;
   final SignOutUseCase _signOutUseCase;
-  final PopularUserCase _popularUserCase;
+  final PopularUseCase _popularUseCase;
   final TopsearchUseCase _topsearchUseCase;
 
   HomeViewModel({
     required SignInUseCase signInUseCase,
     required SignOutUseCase signOutUseCase,
-    required PopularUserCase popularUserCase,
+    required PopularUseCase popularUseCase,
     required TopsearchUseCase topsearchUseCase,
   })  : _signInUseCase = signInUseCase,
         _signOutUseCase = signOutUseCase,
-        _popularUserCase = popularUserCase,
+        _popularUseCase = popularUseCase,
         _topsearchUseCase = topsearchUseCase;
 
   HomeState _homeState = const HomeState();
@@ -41,7 +41,7 @@ class HomeViewModel with ChangeNotifier {
 
     List<Map<String, dynamic>> popularList = [];
 
-    final popularsResult = await _popularUserCase.fetch();
+    final popularsResult = await _popularUseCase.fetch();
 
     popularsResult.when(
       success: (data) {

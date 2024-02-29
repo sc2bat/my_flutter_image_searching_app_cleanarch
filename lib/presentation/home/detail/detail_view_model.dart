@@ -25,10 +25,10 @@ class DetailViewModel with ChangeNotifier {
   final GetUserIdUseCase _getUserIdUseCase;
   final PhotoUseCase _photoUseCase;
   final LikeUseCase _likeUseCase;
-  final PopularUserCase _popularUserCase;
+  final PopularUseCase _popularUseCase;
   final ImageInfoUseCase _imageInfoUseCase;
   final ImageDownloadUseCase _imageDownloadUseCase;
-  final DownlaodUseCase _downlaodUserCase;
+  final DownlaodUseCase _downloadUseCase;
   final GetCommentListUseCase _getCommentListUseCase;
   final CommentUseCase _commentUseCase;
   final ShareUseCase _shareUseCase;
@@ -38,10 +38,10 @@ class DetailViewModel with ChangeNotifier {
     required GetUserIdUseCase getUserIdUseCase,
     required PhotoUseCase photoUseCase,
     required LikeUseCase likeUseCase,
-    required PopularUserCase popularUserCase,
+    required PopularUseCase popularUseCase,
     required ImageInfoUseCase imageInfoUseCase,
     required ImageDownloadUseCase imageDownloadUseCase,
-    required DownlaodUseCase downlaodUserCase,
+    required DownlaodUseCase downlaodUseCase,
     required GetCommentListUseCase getCommentListUseCase,
     required CommentUseCase commentUseCase,
     required ShareUseCase shareUseCase,
@@ -49,10 +49,10 @@ class DetailViewModel with ChangeNotifier {
   })  : _getUserIdUseCase = getUserIdUseCase,
         _photoUseCase = photoUseCase,
         _likeUseCase = likeUseCase,
-        _popularUserCase = popularUserCase,
+        _popularUseCase = popularUseCase,
         _imageInfoUseCase = imageInfoUseCase,
         _imageDownloadUseCase = imageDownloadUseCase,
-        _downlaodUserCase = downlaodUserCase,
+        _downloadUseCase = downlaodUseCase,
         _getCommentListUseCase = getCommentListUseCase,
         _commentUseCase = commentUseCase,
         _shareUseCase = shareUseCase,
@@ -84,7 +84,7 @@ class DetailViewModel with ChangeNotifier {
     // 이미지 댓글 조회
     await getCommentList(imageId);
     // 추천 이미지 리스트 조회
-    await getRecommandImageList(imageId);
+    await getRecommendImageList(imageId);
     // 이미지 info 카운트 조회
     await getViewDownloadShareCount(imageId);
 
@@ -259,7 +259,7 @@ class DetailViewModel with ChangeNotifier {
             .add(DetailUiEvent.showToast('image download done'));
 
         if (detailState.photoModel != null) {
-          final downloadhistoryResult = await _downlaodUserCase.insert(
+          final downloadhistoryResult = await _downloadUseCase.insert(
             detailState.userId,
             detailState.photoModel!.imageId,
             size,
@@ -383,10 +383,10 @@ class DetailViewModel with ChangeNotifier {
   }
 
   // recommend image
-  Future<void> getRecommandImageList(int imageId) async {
+  Future<void> getRecommendImageList(int imageId) async {
     List<Map<String, dynamic>> recommendImageList = [];
 
-    final popularsResult = await _popularUserCase.fetch();
+    final popularsResult = await _popularUseCase.fetch();
 
     popularsResult.when(
       success: (dataList) {

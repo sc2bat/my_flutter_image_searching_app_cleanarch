@@ -119,8 +119,8 @@ void registerDependencies() {
       ),
     )
     // popular
-    ..registerSingleton<PopularUserCase>(
-      PopularUserCase(
+    ..registerSingleton<PopularUseCase>(
+      PopularUseCase(
         likeRepository: getIt<LikeRepository>(),
       ),
     )
@@ -182,7 +182,7 @@ void registerDependencies() {
   getIt
     ..registerFactory<HomeViewModel>(
       () => HomeViewModel(
-        popularUserCase: getIt<PopularUserCase>(),
+        popularUseCase: getIt<PopularUseCase>(),
         topsearchUseCase: getIt<TopsearchUseCase>(),
         signInUseCase: getIt<SignInUseCase>(),
         signOutUseCase: getIt<SignOutUseCase>(),
@@ -209,10 +209,10 @@ void registerDependencies() {
         getUserIdUseCase: getIt<GetUserIdUseCase>(),
         photoUseCase: getIt<PhotoUseCase>(),
         likeUseCase: getIt<LikeUseCase>(),
-        popularUserCase: getIt<PopularUserCase>(),
+        popularUseCase: getIt<PopularUseCase>(),
         imageInfoUseCase: getIt<ImageInfoUseCase>(),
         imageDownloadUseCase: getIt<ImageDownloadUseCase>(),
-        downlaodUserCase: getIt<DownlaodUseCase>(),
+        downlaodUseCase: getIt<DownlaodUseCase>(),
         getCommentListUseCase: getIt<GetCommentListUseCase>(),
         commentUseCase: getIt<CommentUseCase>(),
         shareUseCase: getIt<ShareUseCase>(),
