@@ -15,6 +15,6 @@ class DetailState with _$DetailState {
     LikeModel? likeModel,
     @Default(0) int likeCount,
     @Default([]) List<CommentModel> commentList,
-    @Default([]) List<Map<String, dynamic>> recommandImageList,
+    @Default([]) List<Map<String, dynamic>> recommendImageList,
   }) = _DetailState;
 }

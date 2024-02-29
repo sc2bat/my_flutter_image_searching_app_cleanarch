@@ -293,9 +293,9 @@ class DetailViewModel with ChangeNotifier {
     );
   }
 
-  // recommand image
+  // recommend image
   Future<void> getRecommandImageList(int imageId) async {
-    List<Map<String, dynamic>> recommandImageList = [];
+    List<Map<String, dynamic>> recommendImageList = [];
 
     final popularsResult = await _popularUserCase.fetch();
 
@@ -303,15 +303,15 @@ class DetailViewModel with ChangeNotifier {
       success: (dataList) {
         for (var data in dataList) {
           if (data['image_id'] != imageId) {
-            recommandImageList.add(data);
+            recommendImageList.add(data);
           }
-          if (recommandImageList.length > 6) {
+          if (recommendImageList.length > 6) {
             break;
           }
         }
 
         _detailState = detailState.copyWith(
-          recommandImageList: recommandImageList,
+          recommendImageList: recommendImageList,
         );
       },
       error: (e) {

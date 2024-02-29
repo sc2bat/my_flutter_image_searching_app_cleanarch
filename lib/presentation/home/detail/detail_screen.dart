@@ -549,14 +549,14 @@ class _DetailScreenState extends State<DetailScreen> {
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: Text(
-                      'Recommand Image',
+                      'Recommend Image',
                       style: TextStyle(
                         fontSize: 24.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  for (var recommand in detailState.recommandImageList)
+                  for (var recommend in detailState.recommendImageList)
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Center(
@@ -568,12 +568,12 @@ class _DetailScreenState extends State<DetailScreen> {
                               context.push(
                                 '/detail',
                                 extra: {
-                                  'imageId': recommand['image_id'],
+                                  'imageId': recommend['image_id'],
                                 },
                               );
                             },
                             child: Image.network(
-                              recommand['preview_url'],
+                              recommend['preview_url'],
                               fit: BoxFit.cover,
                             ),
                           ),
