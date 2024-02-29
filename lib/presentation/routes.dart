@@ -7,7 +7,7 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/comments/user_comments_screen.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/downloaded/user_downloaded_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/downloads/user_downloads_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/likes/user_likes_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_profile_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/shared/user_shared_screen.dart';
@@ -66,8 +66,8 @@ final router = GoRouter(
               routes: const [],
             ),
             GoRoute(
-              path: 'downloaded',
-              builder: (_, __) => const UserDownloadedScreen(),
+              path: 'downloads',
+              builder: (_, __) => const UserDownloadsScreen(),
               routes: const [],
             ),
             GoRoute(
