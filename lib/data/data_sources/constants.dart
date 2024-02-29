@@ -12,6 +12,9 @@ const String pixabayApiById =
 const String sampleUserProfileUrl =
     'https://place-hold.it/60x60/666/fff/000?text=user&fontsize=24';
 
+const String userProfileUrlWithFirstCharacter =
+    'https://place-hold.it/60x60/666/fff/000?fontsize=24&text=';
+
 const String sampleImageUrl =
     'https://place-hold.it/300x300/666/fff/000?text=sample&fontsize=40';
 
@@ -33,3 +36,4 @@ const String TB_USER_PROFILE = 'tb_user_profile';
 // supabase function
 const String FUNC_GET_POPULAR_IMAGE_COUNT = 'get_popular_image_count';
 const String FUNC_GET_TAG_COUNT = 'get_tag_counts';
+const String FUNC_GET_IMAGE_COMMENT = 'get_image_comments';

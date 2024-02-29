@@ -1,3 +1,4 @@
+import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/result.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/tag_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
@@ -8,7 +9,7 @@ class TagRepositoryImpl implements TagRepository {
   Future<Result<List<Map<String, dynamic>>>> getTagCounts() async {
     try {
       final List<Map<String, dynamic>> data =
-          await supabase.rpc('get_tag_counts');
+          await supabase.rpc(FUNC_GET_TAG_COUNT);
       return Result.success(data);
     } catch (e) {
       logger.info('getTagCounts error $e');

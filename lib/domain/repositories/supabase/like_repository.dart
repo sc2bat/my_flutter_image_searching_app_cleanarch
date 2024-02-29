@@ -4,5 +4,7 @@ import 'package:my_flutter_image_searching_app_cleanarch/domain/model/like/like_
 abstract interface class LikeRepository {
   Future<Result<List<Map<String, dynamic>>>> getPopularPhotos();
   Future<Result<LikeModel>> getLikeData(int userId, int imageId);
-  Future<Result<void>> handleLike(Map<String, dynamic> jsonLike);
+  Future<Result<Map<String, dynamic>>> handleLike(
+      Map<String, dynamic> jsonLike);
+  Future<Result<int>> getLikeCount(int imageId);
 }

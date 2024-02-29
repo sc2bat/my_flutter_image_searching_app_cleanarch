@@ -9,9 +9,12 @@ part 'detail_state.freezed.dart';
 class DetailState with _$DetailState {
   const factory DetailState({
     @Default(true) bool isLoading,
+    @Default(0) int userId,
+    @Default('') String userName,
     PhotoModel? photoModel,
     LikeModel? likeModel,
+    @Default(0) int likeCount,
     @Default([]) List<CommentModel> commentList,
-    @Default([]) List<Map<String, dynamic>> recommandImageList,
+    @Default([]) List<Map<String, dynamic>> recommendImageList,
   }) = _DetailState;
 }

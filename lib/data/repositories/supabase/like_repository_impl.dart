@@ -10,7 +10,7 @@ class LikeRepositoryImpl implements LikeRepository {
   Future<Result<List<Map<String, dynamic>>>> getPopularPhotos() async {
     try {
       final List<Map<String, dynamic>> data =
-          await supabase.rpc('get_popular_image_count');
+          await supabase.rpc(FUNC_GET_POPULAR_IMAGE_COUNT);
       return Result.success(data);
     } catch (e) {
       logger.info('getPopularPhotos error $e');
@@ -30,9 +30,11 @@ class LikeRepositoryImpl implements LikeRepository {
       int count = countData.count;
 
       if (count == 0) {
-        await supabase
-            .from(TB_LIKE_HISTORY)
-            .insert({'like_user_id': userId, 'like_image_id': imageId});
+        await supabase.from(TB_LIKE_HISTORY).insert({
+          'like_user_id': userId,
+          'like_image_id': imageId,
+          'is_liked': false,
+        });
       }
       Map<String, dynamic> data = await supabase
           .from(TB_LIKE_HISTORY)
@@ -48,13 +50,35 @@ class LikeRepositoryImpl implements LikeRepository {
   }
 
   @override
-  Future<Result<void>> handleLike(Map<String, dynamic> jsonLike) async {
+  Future<Result<Map<String, dynamic>>> handleLike(
+      Map<String, dynamic> jsonData) async {
     try {
-      await supabase.from(TB_LIKE_HISTORY).upsert(
-            jsonLike,
-            onConflict: 'like_id',
-          );
-      return const Result.success(null);
+      final result = await supabase
+          .from(TB_LIKE_HISTORY)
+          .update({
+            'is_liked': !jsonData['is_liked'],
+          })
+          .eq('like_user_id', jsonData['like_user_id'])
+          .eq('like_image_id', jsonData['like_image_id'])
+          .eq('like_id', jsonData['like_id'])
+          .select()
+          .single();
+      return Result.success(result);
+    } catch (e) {
+      return Result.error('$e');
+    }
+  }
+
+  @override
+  Future<Result<int>> getLikeCount(int imageId) async {
+    try {
+      final result = await supabase
+          .from(TB_LIKE_HISTORY)
+          .select('like_id')
+          .eq('like_image_id', imageId)
+          .eq('is_liked', true)
+          .count();
+      return Result.success(result.count);
     } catch (e) {
       return Result.error('$e');
     }

@@ -9,11 +9,12 @@ part 'comment_model.g.dart';
 class CommentModel with _$CommentModel {
   factory CommentModel({
     @JsonKey(name: 'comment_id') required int commentId,
-    @JsonKey(name: 'comment_user_id') required int userId,
+    @JsonKey(name: 'user_id') required int userId,
+    @JsonKey(name: 'user_name') required String userName,
     @JsonKey(name: 'comment_image_id') required int imageId,
-    @JsonKey(name: 'content') String? content,
-    @JsonKey(name: 'created_at') DateTime? createdAt,
-    @JsonKey(name: 'is_deleted') bool? isDeleted,
+    @JsonKey(name: 'comment_content') String? content,
+    @JsonKey(name: 'comment_created_at') DateTime? createdAt,
+    @JsonKey(name: 'comment_is_deleted') bool? isDeleted,
   }) = _CommentModel;
 
   factory CommentModel.fromJson(Map<String, Object?> json) =>

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/theme.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detail/widget/modal_title_widget.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -84,4 +83,3 @@ class ShareBoxWidget extends StatelessWidget {
     );
   }
 }
-

@@ -20,7 +20,7 @@ void main() {
 
   test('supabase select get_tag_counts', () async {
     final supabase = SupabaseClient(Env.supabaseUrl, Env.supabaseApiKey);
-    final List<dynamic> data = await supabase.rpc('get_tag_counts');
+    final List<dynamic> data = await supabase.rpc(FUNC_GET_TAG_COUNT);
 
     logger.info(data);
 
