@@ -32,6 +32,7 @@ import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/home/t
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/like/like_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo/image_info_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo/photo_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/search/search_like_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/search/search_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/share/share_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/sign_in_use_case.dart';
@@ -120,6 +121,11 @@ void registerDependencies() {
     ..registerSingleton<SearchUseCase>(
       SearchUseCase(
         searchKeywordRepository: getIt<SearchKeywordRepository>(),
+      ),
+    )
+    ..registerSingleton<SearchLikeUseCase>(
+      SearchLikeUseCase(
+        likeRepository: getIt<LikeRepository>(),
       ),
     )
     // popular
@@ -213,10 +219,10 @@ void registerDependencies() {
     // search view model
     ..registerFactory<SearchViewModel>(
       () => SearchViewModel(
-        signInUseCase: getIt<SignInUseCase>(),
-        signOutUseCase: getIt<SignOutUseCase>(),
         photoUseCase: getIt<PhotoUseCase>(),
         searchUseCase: getIt<SearchUseCase>(),
+        searchLikeUseCase: getIt<SearchLikeUseCase>(),
+        getUserIdUseCase: getIt<GetUserIdUseCase>(),
       ),
     )
     ..registerFactory<DetailViewModel>(

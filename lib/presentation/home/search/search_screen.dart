@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/model/like/like_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/theme.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_state.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_view_model.dart';
@@ -23,7 +24,6 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   late final TextEditingController _searchTextController;
-  // final _focusNode = FocusNode();
 
   StreamSubscription? _streamSubscription;
 
@@ -64,7 +64,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     final SearchViewModel searchViewModel = context.watch();
-    final SearchState searchState = searchViewModel.getSearchState;
+    final SearchState searchState = searchViewModel.searchState;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -117,8 +117,16 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                     itemCount: searchState.photos.length,
                     itemBuilder: (context, index) {
+                      LikeModel? likeModel =
+                          searchViewModel.getLikeModelByImageId(
+                              searchState.photos[index].imageId);
                       return SearchImageContainerWidget(
-                          photo: searchState.photos[index]);
+                        photo: searchState.photos[index],
+                        likeModel: likeModel,
+                        likeUpdateFunction: (likeModel) =>
+                            searchViewModel.updateLike(likeModel),
+                        // tapLike : ()=>searchViewModel.tapLike
+                      );
                     },
                   ),
                 ),

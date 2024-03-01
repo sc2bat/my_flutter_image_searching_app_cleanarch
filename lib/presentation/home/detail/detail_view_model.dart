@@ -117,7 +117,7 @@ class DetailViewModel with ChangeNotifier {
       },
       error: (message) {
         logger.info(message);
-        throw Exception(e);
+        throw Exception(message);
       },
     );
   }
@@ -133,7 +133,7 @@ class DetailViewModel with ChangeNotifier {
       },
       error: (message) {
         logger.info(message);
-        throw Exception(e);
+        throw Exception(message);
       },
     );
   }
@@ -375,7 +375,7 @@ class DetailViewModel with ChangeNotifier {
     final result = await _imageInfoUseCase.fetch(imageId);
     result.when(
       success: (data) {
-        logger.info(data);
+        // logger.info(data);
         _detailState = detailState.copyWith(
           viewCount: data['view_count'],
           downlaodCount: data['download_count'],

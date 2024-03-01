@@ -276,8 +276,8 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
           GestureDetector(
             onTap: () {
               widget.searchViewModel.getSearchHistories();
-              _createOverlay(context,
-                  widget.searchViewModel.getSearchState.searchHistories);
+              _createOverlay(
+                  context, widget.searchViewModel.searchState.searchHistories);
             },
             child: const SizedBox(
               width: double.infinity,
