@@ -9,6 +9,7 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/searc
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/comments/user_comments_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/comments/user_comments_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/downloads/user_downloads_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/downloads/user_downloads_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/history/user_history_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/likes/user_likes_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_profile_screen.dart';
@@ -70,7 +71,9 @@ final router = GoRouter(
             ),
             GoRoute(
               path: 'downloads',
-              builder: (_, __) => const UserDownloadsScreen(),
+              builder: (_, __) => ChangeNotifierProvider(
+                  create: (_) => getIt<UserDownloadsViewModel>(),
+                  child: const UserDownloadsScreen()),
               routes: const [],
             ),
             GoRoute(

@@ -37,12 +37,14 @@ import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/share/
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/sign_in_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/sign_out_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/comment/user_comment_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/download/user_download_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/get_user_id_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/view/view_history_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detail/detail_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/comments/user_comments_view_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/downloads/user_downloads_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_view_model.dart';
 
 final getIt = GetIt.instance;
@@ -155,6 +157,11 @@ void registerDependencies() {
         downloadRepository: getIt<DownloadRepository>(),
       ),
     )
+    ..registerSingleton<UserDownloadUseCase>(
+      UserDownloadUseCase(
+        downloadRepository: getIt<DownloadRepository>(),
+      ),
+    )
     // comment
     ..registerSingleton<GetCommentListUseCase>(
       GetCommentListUseCase(
@@ -234,6 +241,13 @@ void registerDependencies() {
       () => UserCommentsViewModel(
         getUserIdUseCase: getIt<GetUserIdUseCase>(),
         userCommentUseCase: getIt<UserCommentUseCase>(),
+      ),
+    )
+    // downloads
+    ..registerFactory<UserDownloadsViewModel>(
+      () => UserDownloadsViewModel(
+        getUserIdUseCase: getIt<GetUserIdUseCase>(),
+        userDownloadUseCase: getIt<UserDownloadUseCase>(),
       ),
     );
 }

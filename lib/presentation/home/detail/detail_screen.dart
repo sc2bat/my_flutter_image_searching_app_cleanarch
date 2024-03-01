@@ -385,6 +385,12 @@ class _DetailScreenState extends State<DetailScreen> {
                                                           detailViewModel
                                                               .insertComment(
                                                                   content),
+                                                  commentTextFieldValidation:
+                                                      (List<String> message) {
+                                                    return detailViewModel
+                                                        .commentTextFieldValidation(
+                                                            message);
+                                                  },
                                                 );
                                               },
                                             );

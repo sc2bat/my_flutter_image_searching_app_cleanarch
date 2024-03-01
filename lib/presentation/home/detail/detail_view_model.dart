@@ -85,8 +85,6 @@ class DetailViewModel with ChangeNotifier {
     await getCommentList(imageId);
     // 추천 이미지 리스트 조회
     await getRecommendImageList(imageId);
-    // 이미지 info 카운트 조회
-    await getViewDownloadShareCount(imageId);
 
     // 세션 여부 판단
     if (session != null) {
@@ -98,7 +96,8 @@ class DetailViewModel with ChangeNotifier {
     // view record
     await recordViewHistory(imageId);
 
-    logger.info('qwerasdf 333');
+    // 이미지 info 카운트 조회
+    await getViewDownloadShareCount(imageId);
 
     _detailState = detailState.copyWith(isLoading: false);
 
@@ -166,6 +165,13 @@ class DetailViewModel with ChangeNotifier {
         throw Exception(error);
       },
     );
+  }
+
+  bool commentTextFieldValidation(List<String> content) {
+    final validResult = content.every((line) => line.trim().isEmpty);
+    _detailUiEventStreamController
+        .add(DetailUiEvent.showToast('Please write the content'));
+    return validResult;
   }
 
   Future<void> insertComment(List<String> content) async {
