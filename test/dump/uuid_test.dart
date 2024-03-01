@@ -13,6 +13,7 @@ void main() {
     logger.info(uuidString);
     logger.info(uuidV1);
     logger.info('${uuidV1 is String}');
+    logger.info('show me the money');
   });
 
   test('uuid test2 ', () {

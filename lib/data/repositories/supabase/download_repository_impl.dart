@@ -12,7 +12,7 @@ class DownloadRepositoryImpl implements DownloadRepository {
         'download_user_id': userId,
         'download_image_id': imageId,
         'download_size': imageSize,
-        'download_fileName': fileName,
+        'download_file_name': fileName,
       });
 
       return const Result.success(null);

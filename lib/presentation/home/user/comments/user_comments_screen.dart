@@ -1,72 +1,149 @@
 import 'package:flutter/material.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:go_router/go_router.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/model/user/comment/user_comment_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/functions.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/theme.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/comments/user_comments_state.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/comments/user_comments_view_model.dart';
+import 'package:provider/provider.dart';
 
 class UserCommentsScreen extends StatefulWidget {
   const UserCommentsScreen({super.key});
 
   @override
+  @mustBeOverridden
   State<UserCommentsScreen> createState() => _UserCommentScreenState();
 }
 
 class _UserCommentScreenState extends State<UserCommentsScreen> {
-  late final TextEditingController _userNameTextFieldController;
-
-  bool _isLoading = false;
-
+  late ScrollController _scrollController;
   @override
   void initState() {
-    _userNameTextFieldController = TextEditingController();
+    Future.microtask(() {
+      final UserCommentsViewModel userCommentsViewModel = context.read();
+
+      if (userCommentsViewModel.session == null) context.go('/splash');
+
+      userCommentsViewModel.init();
+    });
+
+    _scrollController = ScrollController();
+
+    _scrollController.addListener(_scrollListener);
+
     super.initState();
   }
 
   @override
   void dispose() {
-    _userNameTextFieldController.dispose();
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
     super.dispose();
   }
 
-  Future<void> _getUserAccount() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final userId = supabase.auth.currentUser!.id;
-      final data = await supabase
-          .from(TB_USER_PROFILE)
-          .select()
-          .eq('userId', userId)
-          .single();
-      _userNameTextFieldController.text =
-          (data['user_name'] ?? 'none') as String;
-    } on PostgrestException catch (error) {
-      SnackBar(
-        content: Text(error.message),
-        backgroundColor: Theme.of(context).colorScheme.error,
-      );
-    } catch (error) {
-      SnackBar(
-        content: const Text('Unexpected error occurred'),
-        backgroundColor: Theme.of(context).colorScheme.error,
-      );
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+  void _scrollListener() {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      final UserCommentsViewModel userCommentsViewModel = context.read();
+      userCommentsViewModel.loadMoreComment(
+          userCommentsViewModel.userCommentsState.userId,
+          userCommentsViewModel.userCommentsState.currentItemCount);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final UserCommentsViewModel userCommentsViewModel = context.watch();
+    final UserCommentsState userCommentsState =
+        userCommentsViewModel.userCommentsState;
+    final imageSize = (MediaQuery.of(context).size.width / 4.5);
+
     return Scaffold(
-      appBar: AppBar(),
-      body: const Center(
-        child: Text('comments screen'),
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text(
+          'Comments',
+          style: TextStyle(
+            color: Colors.black87,
+            fontSize: 24.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
+      body: userCommentsState.isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Container(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      controller: _scrollController,
+                      itemCount: userCommentsState.commentList.length,
+                      itemBuilder: (context, index) {
+                        UserCommentModel comment =
+                            userCommentsState.commentList[index];
+                        return Container(
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () => context.push('/detail', extra: {
+                                  'imageId': comment.imageId,
+                                }),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                    width: imageSize,
+                                    height: imageSize,
+                                    child: Image.network(
+                                      comment.previewUrl,
+                                      // width: imageSize,
+                                      // height: imageSize,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    constraints: BoxConstraints(
+                                      maxWidth:
+                                          MediaQuery.of(context).size.width *
+                                              0.7,
+                                    ),
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Text(
+                                        comment.content,
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    getTimeDifference(
+                                        comment.createdAt.toString()),
+                                    style: TextStyle(
+                                      color: weakBlack,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
     );
   }
 }

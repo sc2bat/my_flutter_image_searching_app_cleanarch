@@ -38,3 +38,5 @@ const String FUNC_GET_POPULAR_IMAGE_COUNT = 'get_popular_image_count';
 const String FUNC_GET_TAG_COUNT = 'get_tag_counts';
 const String FUNC_GET_IMAGE_COMMENT = 'get_image_comments';
 const String FUNC_GET_IMAGE_COUNT_INFO = 'get_image_count_info';
+const String FUNC_GET_USER_COMMENTS = 'get_user_comments';
+const String FUNC_GET_PAGINATED_USER_COMMENTS = 'get_paginated_user_comments';
