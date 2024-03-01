@@ -22,6 +22,7 @@ class _UserScreenState extends State<UserScreen> {
   bool _isLoading = false;
   String _userName = '';
   String _userEmail = '';
+  int _userId = 0;
 
   @override
   void initState() {
@@ -52,6 +53,7 @@ class _UserScreenState extends State<UserScreen> {
             .eq('user_uuid', userUuid)
             .single();
         _userName = data['user_name'] ?? 'none';
+        _userId = data['user_id'] ?? 0;
       }
       _userEmail = user?.email ?? '';
     } on PostgrestException catch (error) {
@@ -107,6 +109,10 @@ class _UserScreenState extends State<UserScreen> {
 
   @override
   Widget build(BuildContext context) {
+    /*if (_userId == 0) {
+      context.push('/index');
+    }*/
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('ImageCraft'),
@@ -156,7 +162,8 @@ class _UserScreenState extends State<UserScreen> {
                               onTap: () {
                                 switch (activityItem.title) {
                                   case 'History':
-                                    context.push('/home/user/history');
+                                    context.push('/home/user/history',
+                                    extra: {'userId': _userId,});
                                     break;
                                   case 'Likes':
                                     context.push('/home/user/likes');

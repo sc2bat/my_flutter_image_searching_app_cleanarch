@@ -1,5 +1,6 @@
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/result.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/model/user_history/user_history_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/view_history_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
 
@@ -22,5 +23,20 @@ class ViewHistoryRepositoryImpl implements ViewHistoryRepository {
   Future<Result<void>> delete(List<int> imageIdList, int userId) {
     // TODO: implement delete
     throw UnimplementedError();
+  }
+
+  @override
+  Future<Result<List<UserHistoryModel>>> getUserHistoryList(int userId) async {
+    try {
+      final viewData = await supabase
+        .from(TB_VIEW_HISTORY)
+        .select()
+        .eq('view_user_id', userId);
+      List<UserHistoryModel> userHistoryModel = [];
+      userHistoryModel = viewData.map((e) => UserHistoryModel.fromJson(e)).toList();
+      return Result.success(userHistoryModel);
+    } catch (e) {
+      return Result.error('$e');
+    }
   }
 }
