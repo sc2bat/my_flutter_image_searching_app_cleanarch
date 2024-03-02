@@ -9,14 +9,16 @@ class ImageRepositoryImpl implements ImageRepository {
   @override
   Future<Result<void>> savePhotosToSupabase(
       List<Map<String, dynamic>> jsonPhotos) async {
+    logger.info(jsonPhotos);
     try {
       await supabase
           .from(TB_IMAGE_INFO)
           .upsert(jsonPhotos, onConflict: 'image_id');
       return const Result.success(null);
     } catch (e) {
-      logger.info('savePhotosToSupabase error $e');
-      throw Exception('savePhotosToSupabase Exception $e');
+      // logger.info('savePhotosToSupabase error $e');
+      // throw Exception('savePhotosToSupabase Exception $e');
+      return Result.error('savePhotosToSupabase error $e');
     }
   }
 
@@ -32,8 +34,7 @@ class ImageRepositoryImpl implements ImageRepository {
 
       return Result.success(PhotoModel.fromJson(data));
     } catch (e) {
-      logger.info('getSinglePhotoFromSupabase error $e');
-      throw Exception(e);
+      return Result.error('getSinglePhotoFromSupabase error $e');
     }
   }
 
@@ -67,7 +68,7 @@ class ImageRepositoryImpl implements ImageRepository {
 
       return Result.success(data);
     } catch (e) {
-      return Result.error('$e');
+      return Result.error('getPhotoCountInfoFromSupabase $e');
     }
   }
 }

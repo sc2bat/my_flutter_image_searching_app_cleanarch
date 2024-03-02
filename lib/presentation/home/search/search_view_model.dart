@@ -47,15 +47,6 @@ class SearchViewModel with ChangeNotifier {
     final executeResult = await _photoUseCase.execute(query);
     executeResult.when(
       success: (photoList) async {
-        // 세션 여부 판단
-        if (session != null) {
-          await getUserId(session!.user.id);
-
-          if (searchState.userModel != null) {
-            await getPhotoLikeList(searchState.userModel!.userId, photoList);
-          }
-        }
-
         _searchState =
             searchState.copyWith(isLoading: false, photos: photoList);
 
@@ -64,7 +55,18 @@ class SearchViewModel with ChangeNotifier {
         final saveResult =
             await _photoUseCase.save(photoList.map((e) => e.toJson()).toList());
         saveResult.when(
-          success: (_) {
+          success: (_) async {
+            // 세션 여부 판단
+            if (session != null) {
+              await getUserId(session!.user.id);
+
+              if (searchState.userModel != null) {
+                await getPhotoLikeList(
+                    searchState.userModel!.userId, photoList);
+              }
+
+              notifyListeners();
+            }
             _searchUiEventStreamController
                 .add(const SearchUiEvent.showSnackBar('search success'));
           },
@@ -87,12 +89,12 @@ class SearchViewModel with ChangeNotifier {
         _searchState =
             searchState.copyWith(searchHistories: searchKeywordHistories);
         logger.info(searchKeywordHistories.length);
+        notifyListeners();
       },
       error: (message) {
         _searchUiEventStreamController.add(SearchUiEvent.showSnackBar(message));
       },
     );
-    notifyListeners();
   }
 
   Future<void> addSearchHistories(String keyword) async {
@@ -187,7 +189,6 @@ class SearchViewModel with ChangeNotifier {
   }
 
   Future<void> updateLikeState(LikeModel? likeModel) async {
-    logger.info('qwerasdf updateLike');
     if (likeModel != null) {
       List<LikeModel> likeList = List.from(searchState.likeList);
       for (var element in likeList) {
@@ -201,11 +202,20 @@ class SearchViewModel with ChangeNotifier {
   }
 
   LikeModel? getLikeModelByImageId(int imageId) {
-    if (searchState.likeList.isNotEmpty) {
+    try {
       return searchState.likeList
           .firstWhere((element) => element.likeImageId == imageId);
-    } else {
+    } catch (e) {
       return null;
     }
+  }
+
+  bool textFieldValid(String searchKeyword) {
+    if (searchKeyword.trim().isEmpty) {
+      _searchUiEventStreamController
+          .add(const SearchUiEvent.showSnackBar('please enter search Keyword'));
+      return false;
+    }
+    return true;
   }
 }
