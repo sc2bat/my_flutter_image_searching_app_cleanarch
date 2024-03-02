@@ -47,10 +47,7 @@ class SearchViewModel with ChangeNotifier {
     final executeResult = await _photoUseCase.execute(query);
     executeResult.when(
       success: (photoList) async {
-        _searchState =
-            searchState.copyWith(isLoading: false, photos: photoList);
-
-        notifyListeners();
+        _searchState = searchState.copyWith(photos: photoList);
 
         final saveResult =
             await _photoUseCase.save(photoList.map((e) => e.toJson()).toList());
@@ -64,11 +61,14 @@ class SearchViewModel with ChangeNotifier {
                 await getPhotoLikeList(
                     searchState.userModel!.userId, photoList);
               }
+              _searchState = searchState.copyWith(isLoading: false);
 
               notifyListeners();
             }
-            _searchUiEventStreamController
-                .add(const SearchUiEvent.showSnackBar('search success'));
+            _searchUiEventStreamController.add(SearchUiEvent.showSnackBar(
+                photoList.isNotEmpty
+                    ? 'search success'
+                    : 'No search results found'));
           },
           error: (message) {
             _searchUiEventStreamController

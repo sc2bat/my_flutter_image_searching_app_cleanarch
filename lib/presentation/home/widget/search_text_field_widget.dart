@@ -89,7 +89,7 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
                                             widget.searchViewModel.getPhotos(
                                                 widget
                                                     .searchTextController.text);
-                                            _removeOverlay();
+                                            removeOverlay();
                                           },
                                           child: Text(
                                             searchHistories[reversedIndex],
@@ -107,7 +107,7 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
                                               .removeSearchHistories(
                                                   searchHistories[
                                                       reversedIndex]);
-                                          _removeOverlay();
+                                          removeOverlay();
                                           // _createOverlay(
                                           //     context,
                                           //     widget
@@ -154,7 +154,7 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
                   child: Center(
                     child: IconButton(
                       onPressed: () {
-                        _removeOverlay();
+                        removeOverlay();
                       },
                       icon: const Icon(
                         Icons.arrow_drop_up,
@@ -171,7 +171,7 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
     Overlay.of(context).insert(_overlayEntry!);
   }
 
-  void _removeOverlay() {
+  void removeOverlay() {
     _overlayEntry?.remove();
     _overlayEntry = null;
   }
@@ -186,7 +186,7 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
             onTap: () {},
             onSubmitted: (value) {
               if (widget.searchViewModel.textFieldValid(value)) {
-                _removeOverlay();
+                removeOverlay();
                 widget.searchViewModel.addSearchHistories(value);
                 widget.searchViewModel.getPhotos(value);
               }
@@ -228,7 +228,7 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
                     onPressed: () {
                       if (widget.searchViewModel
                           .textFieldValid(widget.searchTextController.text)) {
-                        _removeOverlay();
+                        removeOverlay();
                         widget.searchViewModel.addSearchHistories(
                             widget.searchTextController.text);
 
