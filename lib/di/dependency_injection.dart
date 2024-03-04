@@ -206,7 +206,6 @@ void registerDependencies() {
       ),
     );
 
-
   // view models
   // home view model
   getIt
@@ -256,9 +255,11 @@ void registerDependencies() {
       () => UserCommentsViewModel(
         getUserIdUseCase: getIt<GetUserIdUseCase>(),
         userCommentUseCase: getIt<UserCommentUseCase>(),
+      ),
+    )
     // history
     ..registerFactory<UserHistoryViewModel>(
-          () => UserHistoryViewModel(
+      () => UserHistoryViewModel(
         userHistoryUseCase: getIt<UserHistoryUseCase>(),
       ),
     )
