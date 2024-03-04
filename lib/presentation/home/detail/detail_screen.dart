@@ -450,6 +450,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                     MediaQuery.of(context).size.height * 0.1,
                               ),
                               child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -503,6 +504,9 @@ class _DetailScreenState extends State<DetailScreen> {
                                                           .commentList[index]
                                                           .createdAt
                                                           .toString(),
+                                                    ),
+                                                    style: TextStyle(
+                                                      color: weakBlack,
                                                     ),
                                                   ),
                                                 ],
