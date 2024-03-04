@@ -1,38 +1,38 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/model/like/like_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo/photo_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/search/search_like_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/search/search_use_case.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/sign_in_use_case.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/sign_out_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/get_user_id_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_state.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_ui_event.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 
 class SearchViewModel with ChangeNotifier {
-  final SignInUseCase _signInUseCase;
-  final SignOutUseCase _signOutUseCase;
   final PhotoUseCase _photoUseCase;
+  final SearchLikeUseCase _searchLikeUseCase;
+  final GetUserIdUseCase _getUserIdUseCase;
   final SearchUseCase _searchUseCase;
 
   SearchViewModel({
-    required SignInUseCase signInUseCase,
-    required SignOutUseCase signOutUseCase,
     required PhotoUseCase photoUseCase,
+    required SearchLikeUseCase searchLikeUseCase,
+    required GetUserIdUseCase getUserIdUseCase,
     required SearchUseCase searchUseCase,
-  })  : _signInUseCase = signInUseCase,
-        _signOutUseCase = signOutUseCase,
-        _photoUseCase = photoUseCase,
+  })  : _photoUseCase = photoUseCase,
+        _searchLikeUseCase = searchLikeUseCase,
+        _getUserIdUseCase = getUserIdUseCase,
         _searchUseCase = searchUseCase;
 
   // state
   SearchState _searchState = const SearchState();
-  SearchState get getSearchState => _searchState;
+  SearchState get searchState => _searchState;
 
-  // list
-  List<PhotoModel> _photoList = [];
-  List<String> _searchKeywordHistories = [];
+  final session = supabase.auth.currentSession;
 
   // ui event
   final _searchUiEventStreamController = StreamController<SearchUiEvent>();
@@ -40,28 +40,35 @@ class SearchViewModel with ChangeNotifier {
       _searchUiEventStreamController.stream;
 
   Future<void> getPhotos(String query) async {
-    _searchState = getSearchState.copyWith(isLoading: true);
+    _searchState = searchState.copyWith(isLoading: true);
     notifyListeners();
 
     // await Future.delayed(const Duration(seconds: 2));
     final executeResult = await _photoUseCase.execute(query);
     executeResult.when(
       success: (photoList) async {
-        _photoList = photoList;
-
-        _searchState =
-            getSearchState.copyWith(isLoading: false, photos: _photoList);
-
-        notifyListeners();
-
-        logger.info('photoList[0].imageId ${photoList[0].imageId}');
+        _searchState = searchState.copyWith(photos: photoList);
 
         final saveResult =
             await _photoUseCase.save(photoList.map((e) => e.toJson()).toList());
         saveResult.when(
-          success: (_) {
-            _searchUiEventStreamController
-                .add(const SearchUiEvent.showSnackBar('save success'));
+          success: (_) async {
+            // 세션 여부 판단
+            if (session != null) {
+              await getUserId(session!.user.id);
+
+              if (searchState.userModel != null) {
+                await getPhotoLikeList(
+                    searchState.userModel!.userId, photoList);
+              }
+              _searchState = searchState.copyWith(isLoading: false);
+
+              notifyListeners();
+            }
+            _searchUiEventStreamController.add(SearchUiEvent.showSnackBar(
+                photoList.isNotEmpty
+                    ? 'search success'
+                    : 'No search results found'));
           },
           error: (message) {
             _searchUiEventStreamController
@@ -79,17 +86,15 @@ class SearchViewModel with ChangeNotifier {
     final result = await _searchUseCase.getSearchKeywordList();
     result.when(
       success: (searchKeywordHistories) {
-        _searchKeywordHistories = searchKeywordHistories;
-
         _searchState =
-            getSearchState.copyWith(searchHistories: _searchKeywordHistories);
+            searchState.copyWith(searchHistories: searchKeywordHistories);
         logger.info(searchKeywordHistories.length);
+        notifyListeners();
       },
       error: (message) {
         _searchUiEventStreamController.add(SearchUiEvent.showSnackBar(message));
       },
     );
-    notifyListeners();
   }
 
   Future<void> addSearchHistories(String keyword) async {
@@ -129,5 +134,88 @@ class SearchViewModel with ChangeNotifier {
         _searchUiEventStreamController.add(SearchUiEvent.showSnackBar(message));
       },
     );
+  }
+
+  // user use case
+  Future<void> getUserId(String userUuid) async {
+    final result = await _getUserIdUseCase.getUserInfo(userUuid);
+
+    result.when(
+      success: (data) {
+        _searchState = searchState.copyWith(userModel: data);
+      },
+      error: (message) {
+        logger.info(message);
+        throw Exception(message);
+      },
+    );
+  }
+
+  Future<void> getPhotoLikeList(int userId, List<PhotoModel> photoList) async {
+    final result = await _searchLikeUseCase.fetch(userId, photoList);
+    result.when(success: (data) {
+      _searchState = searchState.copyWith(likeList: data);
+
+      notifyListeners();
+    }, error: (message) {
+      logger.info(message);
+      throw Exception(message);
+    });
+  }
+
+  Future<void> updateLike(LikeModel? likeModel) async {
+    if (likeModel != null) {
+      List<LikeModel> likeList = List.from(searchState.likeList);
+      final result = await _searchLikeUseCase.updateLike(likeModel);
+
+      result.when(
+          success: (data) {
+            for (var element in likeList) {
+              if (element.likeId == data.likeId) {
+                element.isLiked = data.isLiked;
+              }
+            }
+            _searchState = searchState.copyWith(likeList: likeList);
+            notifyListeners();
+
+            String likeReulstMessage =
+                data.isLiked ? 'like success' : 'dislike success';
+            _searchUiEventStreamController
+                .add(SearchUiEvent.showSnackBar(likeReulstMessage));
+          },
+          error: (error) => _searchUiEventStreamController
+              .add(SearchUiEvent.showSnackBar(error)));
+    }
+  }
+
+  Future<void> updateLikeState(LikeModel? likeModel) async {
+    if (likeModel != null) {
+      List<LikeModel> likeList = List.from(searchState.likeList);
+      for (var element in likeList) {
+        if (element.likeId == likeModel.likeId) {
+          element.isLiked = likeModel.isLiked;
+        }
+      }
+      _searchState = searchState.copyWith(likeList: likeList);
+      notifyListeners();
+    }
+  }
+
+  LikeModel? getLikeModelByImageId(int imageId) {
+    try {
+      return searchState.likeList
+          .firstWhere((element) => element.likeImageId == imageId);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  bool textFieldValid(String searchKeyword) {
+    if (searchKeyword.trim().isEmpty) {
+      _searchUiEventStreamController
+          .add(const SearchUiEvent.showSnackBar('please enter search Keyword'));
+      return false;
+    }
+    return true;
   }
 }

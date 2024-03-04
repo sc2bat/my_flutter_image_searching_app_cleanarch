@@ -32,11 +32,13 @@ import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/home/t
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/like/like_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo/image_info_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo/photo_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/search/search_like_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/search/search_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/share/share_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/sign_in_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/sign_out_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/comment/user_comment_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/download/user_download_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/get_user_id_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/history/user_history_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/view/view_history_use_case.dart';
@@ -44,6 +46,7 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detai
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/comments/user_comments_view_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/downloads/user_downloads_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/history/user_history_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_view_model.dart';
 
@@ -122,6 +125,11 @@ void registerDependencies() {
         searchKeywordRepository: getIt<SearchKeywordRepository>(),
       ),
     )
+    ..registerSingleton<SearchLikeUseCase>(
+      SearchLikeUseCase(
+        likeRepository: getIt<LikeRepository>(),
+      ),
+    )
     // popular
     ..registerSingleton<PopularUseCase>(
       PopularUseCase(
@@ -154,6 +162,11 @@ void registerDependencies() {
     )
     ..registerSingleton<DownlaodUseCase>(
       DownlaodUseCase(
+        downloadRepository: getIt<DownloadRepository>(),
+      ),
+    )
+    ..registerSingleton<UserDownloadUseCase>(
+      UserDownloadUseCase(
         downloadRepository: getIt<DownloadRepository>(),
       ),
     )
@@ -215,10 +228,10 @@ void registerDependencies() {
     // search view model
     ..registerFactory<SearchViewModel>(
       () => SearchViewModel(
-        signInUseCase: getIt<SignInUseCase>(),
-        signOutUseCase: getIt<SignOutUseCase>(),
         photoUseCase: getIt<PhotoUseCase>(),
         searchUseCase: getIt<SearchUseCase>(),
+        searchLikeUseCase: getIt<SearchLikeUseCase>(),
+        getUserIdUseCase: getIt<GetUserIdUseCase>(),
       ),
     )
     ..registerFactory<DetailViewModel>(
@@ -247,6 +260,13 @@ void registerDependencies() {
     ..registerFactory<UserHistoryViewModel>(
           () => UserHistoryViewModel(
         userHistoryUseCase: getIt<UserHistoryUseCase>(),
+      ),
+    )
+    // downloads
+    ..registerFactory<UserDownloadsViewModel>(
+      () => UserDownloadsViewModel(
+        getUserIdUseCase: getIt<GetUserIdUseCase>(),
+        userDownloadUseCase: getIt<UserDownloadUseCase>(),
       ),
     );
 }

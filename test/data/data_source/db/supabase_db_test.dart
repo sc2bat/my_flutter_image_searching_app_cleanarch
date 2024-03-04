@@ -117,22 +117,22 @@ void main() {
   //       .upsert(jsonPhotoList, onConflict: 'image_id');
   // });
 
-  // group('Supabase CRUD Tests', () {
-  //   late SupabaseClient client;
+  group('Supabase CRUD Tests', () {
+    late SupabaseClient client;
 
-  //   setUpAll(() async {
-  //     await Supabase.initialize(
-  //       url: Env.supabaseUrl,
-  //       anonKey: Env.supabaseApiKey,
-  //     );
-  //     client = Supabase.instance.client;
-  //   });
+    setUpAll(() async {
+      await Supabase.initialize(
+        url: Env.supabaseUrl,
+        anonKey: Env.supabaseApiKey,
+      );
+      client = Supabase.instance.client;
+    });
 
-  //   test('Insert data into Supabase table', () async {
-  //     final data = await client.from(TB_USER_PROFILE).select();
-  //     logger.info(data);
-  //   });
-  // });
+    test('Insert data into Supabase table', () async {
+      final data = await client.from(TB_USER_PROFILE).select();
+      logger.info(data);
+    });
+  });
 
   test('supabase test 004', () async {
     final supabase = SupabaseClient(

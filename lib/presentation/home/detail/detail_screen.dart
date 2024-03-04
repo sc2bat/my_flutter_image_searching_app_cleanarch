@@ -10,7 +10,6 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/the
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detail/detail_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detail/widget/comment_box_widget.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/widget/common/sign_elevated_button_widget.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 import 'package:provider/provider.dart';
 
 import 'widget/comment_edit_delete_alert_dialog_widget.dart';
@@ -108,6 +107,12 @@ class _DetailScreenState extends State<DetailScreen> {
             ],
           ),
         ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back), // 변경하고자 하는 아이콘
+          onPressed: () {
+            context.pop(detailState.likeModel);
+          },
+        ),
         actions: const [
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8.0),
@@ -150,7 +155,6 @@ class _DetailScreenState extends State<DetailScreen> {
                             children: [
                               IconButton(
                                 onPressed: () {
-                                  // logger.info('press favorite button');
                                   detailViewModel.updateLike();
                                 },
                                 icon: Icon(
@@ -215,7 +219,7 @@ class _DetailScreenState extends State<DetailScreen> {
                           ),
                           child: IconButton(
                             onPressed: () {
-                              logger.info('press download button');
+                              // logger.info('press download button');
                               if (detailViewModel.session != null) {
                                 if (detailState.photoModel != null) {
                                   showModalBottomSheet<void>(
@@ -252,7 +256,7 @@ class _DetailScreenState extends State<DetailScreen> {
                           ),
                           child: IconButton(
                             onPressed: () {
-                              logger.info('press share button');
+                              // logger.info('press share button');
                               if (detailViewModel.session != null) {
                                 detailViewModel.recordShareHistory();
                                 if (detailState.photoModel != null) {
@@ -292,7 +296,7 @@ class _DetailScreenState extends State<DetailScreen> {
                           ),
                           child: IconButton(
                             onPressed: () {
-                              logger.info('press info button');
+                              // logger.info('press info button');
                               if (detailState.photoModel != null) {
                                 showModalBottomSheet<void>(
                                   context: context,
@@ -385,13 +389,19 @@ class _DetailScreenState extends State<DetailScreen> {
                                                           detailViewModel
                                                               .insertComment(
                                                                   content),
+                                                  commentTextFieldValidation:
+                                                      (List<String> message) {
+                                                    return detailViewModel
+                                                        .commentTextFieldValidation(
+                                                            message);
+                                                  },
                                                 );
                                               },
                                             );
                                           } else {
                                             _showErrorDialog(context);
                                           }
-                                          logger.info('press add comment done');
+                                          // logger.info('press add comment done');
                                           double imageHeight = detailViewModel
                                               .calcImageHeightMoveToComment(
                                                   MediaQuery.of(context)

@@ -31,22 +31,10 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
     super.dispose();
   }
 
-  bool _textFieldValid(String searchKeyword) {
-    if (searchKeyword.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('please enter search Keyword'),
-        ),
-      );
-      return false;
-    }
-    return true;
-  }
-
   void _createOverlay(BuildContext context, List<String> searchHistories) {
     _overlayEntry = OverlayEntry(
       builder: (BuildContext context) => Positioned(
-        top: 140.0,
+        top: MediaQuery.of(context).size.height * 0.154,
         left: 20.0,
         right: 20.0,
         child: Material(
@@ -101,7 +89,7 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
                                             widget.searchViewModel.getPhotos(
                                                 widget
                                                     .searchTextController.text);
-                                            _removeOverlay();
+                                            removeOverlay();
                                           },
                                           child: Text(
                                             searchHistories[reversedIndex],
@@ -119,7 +107,7 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
                                               .removeSearchHistories(
                                                   searchHistories[
                                                       reversedIndex]);
-                                          // _removeOverlay();
+                                          removeOverlay();
                                           // _createOverlay(
                                           //     context,
                                           //     widget
@@ -150,43 +138,28 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
                   ),
                 ),
                 Container(
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
+                  height: 28.0,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      top: BorderSide(
+                        color: weakBlack,
+                        width: 0.4,
+                      ),
+                    ),
+                    borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(16.0),
                       bottomRight: Radius.circular(16.0),
                     ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // toggle button save setting
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Row(
-                          children: [
-                            const Text('save option'),
-                            ElevatedButton(
-                              onPressed: () {},
-                              child: const Text('toggle'),
-                            ),
-                          ],
-                        ),
+                  child: Center(
+                    child: IconButton(
+                      onPressed: () {
+                        removeOverlay();
+                      },
+                      icon: const Icon(
+                        Icons.arrow_drop_up,
                       ),
-                      // 닫기
-                      Row(
-                        children: [
-                          const Text('close'),
-                          IconButton(
-                            onPressed: () {
-                              _removeOverlay();
-                            },
-                            icon: const Icon(
-                              Icons.close_rounded,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ],
@@ -198,7 +171,7 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
     Overlay.of(context).insert(_overlayEntry!);
   }
 
-  void _removeOverlay() {
+  void removeOverlay() {
     _overlayEntry?.remove();
     _overlayEntry = null;
   }
@@ -212,8 +185,8 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
             controller: widget.searchTextController,
             onTap: () {},
             onSubmitted: (value) {
-              if (_textFieldValid(value)) {
-                _removeOverlay();
+              if (widget.searchViewModel.textFieldValid(value)) {
+                removeOverlay();
                 widget.searchViewModel.addSearchHistories(value);
                 widget.searchViewModel.getPhotos(value);
               }
@@ -253,8 +226,9 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
                   ),
                   IconButton(
                     onPressed: () {
-                      if (_textFieldValid(widget.searchTextController.text)) {
-                        _removeOverlay();
+                      if (widget.searchViewModel
+                          .textFieldValid(widget.searchTextController.text)) {
+                        removeOverlay();
                         widget.searchViewModel.addSearchHistories(
                             widget.searchTextController.text);
 
@@ -276,8 +250,8 @@ class _SearchTextFieldWidgetState extends State<SearchTextFieldWidget> {
           GestureDetector(
             onTap: () {
               widget.searchViewModel.getSearchHistories();
-              _createOverlay(context,
-                  widget.searchViewModel.getSearchState.searchHistories);
+              _createOverlay(
+                  context, widget.searchViewModel.searchState.searchHistories);
             },
             child: const SizedBox(
               width: double.infinity,
