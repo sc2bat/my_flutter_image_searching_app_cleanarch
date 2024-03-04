@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/history/user_history_state.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/history/user_history_view_model.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../utils/simple_logger.dart';
 
 class UserHistoryScreen extends StatefulWidget {
-  const UserHistoryScreen({super.key});
+  final int userId;
+  const UserHistoryScreen({super.key, required this.userId});
 
   @override
   State<UserHistoryScreen> createState() => _UserHistoryScreenState();
@@ -32,12 +38,22 @@ class _UserHistoryScreenState extends State<UserHistoryScreen> {
 
   @override
   void initState() {
+    Future.microtask(() {
+      final userHistoryViewModel = context.read<UserHistoryViewModel>();
+      userHistoryViewModel.init(widget.userId);
+    });
+
+
     super.initState();
     _selectedImageList = List.generate(_imageLinks.length, (_) => false);
   }
 
   @override
   Widget build(BuildContext context) {
+    final UserHistoryViewModel userHistoryViewModel = context.watch();
+    final UserHistoryState userHistoryState = userHistoryViewModel.userHistoryState;
+    logger.info('userHistoryList ${userHistoryState.userHistoryList}');
+
     final selectedImageCount =
         _selectedImageList.where((e) => e == true).length;
     return Scaffold(
