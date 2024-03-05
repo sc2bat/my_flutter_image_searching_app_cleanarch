@@ -13,6 +13,10 @@
 #### figma Link
  : https://www.figma.com/file/ZgYiqQP96drdGBBDSCToZG/ImageCraft?type=design&node-id=135%3A1065&mode=design&t=iEV3JigFZxxISPiu-1
 
+### DATABASE SUPABASE SCHEMA
+![supabase_schema_visualizer](https://github.com/sc2bat/my_flutter_image_searching_app_cleanarch/assets/87482415/43490d9b-f613-4f35-99f7-ae81dd32f019)
+
+
 ### pakage list
 ```
   http: ^1.2.0
@@ -47,8 +51,26 @@
 - [x] 이미지 검색 히스토리
 - [x] 인기 이미지 추천 (오늘의 이미지)
 - [x] 이미지 파일 다운로드
-- [x] 이미지 찜하기
+- [x] 이미지 좋아요 기능
 - [x] 이미지 공유
-- [x] 계정 활동 내역
 - [x] 이미지 리뷰
+- [x] 계정 활동(뷰, 다운로드, 공유, 댓글 등) 내역 
 
+#### preview
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>https://github.com/sc2bat/my_flutter_image_searching_app_cleanarch/assets/87482415/400ba700-9aea-47fc-aae5-c260336a5bc8</td>            <td>https://github.com/sc2bat/my_flutter_image_searching_app_cleanarch/assets/87482415/dbafb116-c894-4c91-bf03-96b1010c7771</td>
+          <td>https://github.com/sc2bat/my_flutter_image_searching_app_cleanarch/assets/87482415/0aa1b0ac-8eed-4c73-9198-d9c4fa721bf3</td>
+          <td>5</td>
+        </tr>
+    </tbody>
+</table>
