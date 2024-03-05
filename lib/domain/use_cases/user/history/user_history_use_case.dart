@@ -20,7 +20,10 @@ class UserHistoryUseCase {
               userHistoryModel.add(model);
             }
           }
-          return Result.success(userHistoryModel.toList());
+          // Sort the userHistoryModel list in descending order of viewId
+          final sortedUserHistoryList = userHistoryModel.toList()
+            ..sort((a, b) => b.viewId.compareTo(a.viewId));
+          return Result.success(sortedUserHistoryList);
         },
         error: (message) {
           return Result.error(message);

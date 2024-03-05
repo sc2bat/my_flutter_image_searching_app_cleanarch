@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/user/history/user_history_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/history/user_history_state.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/history/user_history_view_model.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 import 'package:provider/provider.dart';
 
 class UserHistoryScreen extends StatefulWidget {
@@ -33,7 +32,6 @@ class _UserHistoryScreenState extends State<UserHistoryScreen> {
     final UserHistoryState userHistoryState =
         userHistoryViewModel.userHistoryState;
 
-//    final selectedImageCount = _selectedImageList.where((e) => e == true).length;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -72,7 +70,6 @@ class _UserHistoryScreenState extends State<UserHistoryScreen> {
                   mainAxisSpacing: 2.0,
                 ),
                 itemCount: userHistoryState.userHistoryList.length,
-                // _imageLinks.length,
                 itemBuilder: (context, index) {
                   UserHistoryModel history =
                       userHistoryState.userHistoryList[index];
@@ -80,7 +77,6 @@ class _UserHistoryScreenState extends State<UserHistoryScreen> {
                     onTap: () {
                       if (userHistoryState.isSelectMode) {
                         userHistoryViewModel.selectToDelete(history.viewId);
-                        logger.info('ontap viewID ${history.viewId}');
                       } else {
                         context.push('/detail', extra: {
                           'imageId': history.imageId,
@@ -91,21 +87,19 @@ class _UserHistoryScreenState extends State<UserHistoryScreen> {
                       if (!userHistoryState.isSelectMode) {
                         userHistoryViewModel.updateIsSelectMode();
                         userHistoryViewModel.selectToDelete(history.viewId);
-                        logger.info('ontap viewID ${history.viewId}');
                       }
-
-                      /*setState(() {
-                        _selectedImageList =
-                            userHistoryViewModel.getSelectedImageList();
-                        _selectedImageList[index] = true;
-                      });*/
                     },
                     child: Stack(
                       children: [
                         Image.network(
                           history.previewUrl,
                           fit: BoxFit.cover,
-                          height: MediaQuery.of(context).size.width * 0.5,
+                          height: (MediaQuery.of(context).size.width > MediaQuery.of(context).size.height)
+                              ? MediaQuery.of(context).size.width * 0.5
+                              : MediaQuery.of(context).size.width,
+                          width: (MediaQuery.of(context).size.height > MediaQuery.of(context).size.width)
+                              ? MediaQuery.of(context).size.height * 0.5
+                              : MediaQuery.of(context).size.height,
                         ),
                         Positioned(
                           bottom: 4.0,
@@ -133,7 +127,7 @@ class _UserHistoryScreenState extends State<UserHistoryScreen> {
                   );
                 },
               ),
-              if (userHistoryState.selectedImageList.length > 0)
+              if (userHistoryState.selectedImageList.isNotEmpty)
                 Positioned(
                   bottom: 32.0,
                   left: 0.0,

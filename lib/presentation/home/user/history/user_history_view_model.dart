@@ -19,10 +19,6 @@ class UserHistoryViewModel with ChangeNotifier {
 
   UserHistoryState get userHistoryState => _userHistoryState;
 
-  /* List<bool> getSelectedImageList() {
-    return List.generate(userHistoryState.userHistoryList.length, (_) => false);
-  } */
-
   Future<void> init(int userId) async {
     _userHistoryState = userHistoryState.copyWith(isLoading: true);
     notifyListeners();
