@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/user/history/user_history_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/history/user_history_state.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/history/user_history_view_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../utils/simple_logger.dart';
 
 class UserHistoryScreen extends StatefulWidget {
   final int userId;
+
   const UserHistoryScreen({super.key, required this.userId});
 
   @override
@@ -17,12 +16,6 @@ class UserHistoryScreen extends StatefulWidget {
 }
 
 class _UserHistoryScreenState extends State<UserHistoryScreen> {
-
-  late PhotoModel photo;
-
-  bool _isSelectMode = false;
-  List<bool> _selectedImageList = [];
-
   @override
   void initState() {
     Future.microtask(() {
@@ -40,8 +33,7 @@ class _UserHistoryScreenState extends State<UserHistoryScreen> {
     final UserHistoryState userHistoryState =
         userHistoryViewModel.userHistoryState;
 
-    final selectedImageCount =
-        _selectedImageList.where((e) => e == true).length;
+//    final selectedImageCount = _selectedImageList.where((e) => e == true).length;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -57,15 +49,12 @@ class _UserHistoryScreenState extends State<UserHistoryScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: TextButton(
-              child: Text(_isSelectMode ? 'Cancel' : 'Select'),
+              child: Text(userHistoryState.isSelectMode ? 'Cancel' : 'Select'),
               onPressed: () {
-                setState(() {
-                  _isSelectMode = !_isSelectMode;
-                });
-                if (!_isSelectMode) {
-                  _selectedImageList =
-                      userHistoryViewModel.getSelectedImageList();
+                if (userHistoryState.isSelectMode) {
+                  userHistoryViewModel.cancelImageList();
                 }
+                userHistoryViewModel.updateIsSelectMode();
               },
             ),
           ),
@@ -85,14 +74,13 @@ class _UserHistoryScreenState extends State<UserHistoryScreen> {
                 itemCount: userHistoryState.userHistoryList.length,
                 // _imageLinks.length,
                 itemBuilder: (context, index) {
-                  UserHistoryModel history = userHistoryState.userHistoryList[index];
+                  UserHistoryModel history =
+                      userHistoryState.userHistoryList[index];
                   return GestureDetector(
                     onTap: () {
-                      if (_isSelectMode) {
-                        setState(() {
-                          _selectedImageList[index] =
-                              !_selectedImageList[index];
-                        });
+                      if (userHistoryState.isSelectMode) {
+                        userHistoryViewModel.selectToDelete(history.viewId);
+                        logger.info('ontap viewID ${history.viewId}');
                       } else {
                         context.push('/detail', extra: {
                           'imageId': history.imageId,
@@ -100,16 +88,17 @@ class _UserHistoryScreenState extends State<UserHistoryScreen> {
                       }
                     },
                     onLongPress: () {
-                      if (!_isSelectMode) {
-                        setState(() {
-                          _isSelectMode = true;
-                        });
+                      if (!userHistoryState.isSelectMode) {
+                        userHistoryViewModel.updateIsSelectMode();
+                        userHistoryViewModel.selectToDelete(history.viewId);
+                        logger.info('ontap viewID ${history.viewId}');
                       }
-                      setState(() {
+
+                      /*setState(() {
                         _selectedImageList =
                             userHistoryViewModel.getSelectedImageList();
                         _selectedImageList[index] = true;
-                      });
+                      });*/
                     },
                     child: Stack(
                       children: [
@@ -121,10 +110,11 @@ class _UserHistoryScreenState extends State<UserHistoryScreen> {
                         Positioned(
                           bottom: 4.0,
                           right: 4.0,
-                          child: _isSelectMode
+                          child: userHistoryState.isSelectMode
                               ? Container(
                                   margin: const EdgeInsets.all(4.0),
-                                  child: _selectedImageList[index]
+                                  child: userHistoryState.selectedImageList
+                                          .contains(history.viewId)
                                       ? const Icon(
                                           Icons.check_circle,
                                           color: Colors.blueAccent,
@@ -143,7 +133,7 @@ class _UserHistoryScreenState extends State<UserHistoryScreen> {
                   );
                 },
               ),
-              if (selectedImageCount > 0)
+              if (userHistoryState.selectedImageList.length > 0)
                 Positioned(
                   bottom: 32.0,
                   left: 0.0,
@@ -157,15 +147,18 @@ class _UserHistoryScreenState extends State<UserHistoryScreen> {
                               color: Colors.grey.shade300, width: 1.0),
                         )),
                     child: Center(
-                      child: Text(
-                        'Delete($selectedImageCount)',
-                        style: const TextStyle(
-                          color: Colors.redAccent,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
+                        child: TextButton(
+                            child: Text(
+                              'Delete(${userHistoryState.selectedImageList.length})',
+                              style: const TextStyle(
+                                color: Colors.redAccent,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            onPressed: () {
+                              userHistoryViewModel.deleteSelectedImages();
+                            })),
                   ),
                 )
             ]),
