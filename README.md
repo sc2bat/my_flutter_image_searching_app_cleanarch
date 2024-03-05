@@ -21,6 +21,16 @@
   go_router: ^13.1.0
   provider: ^6.1.1
   equatable: ^2.0.5
+  freezed_annotation: ^2.4.1
+  get_it: ^7.6.7
+  supabase_flutter: ^2.3.2
+  shared_preferences: ^2.2.2
+  path_provider: ^2.1.2
+  qr_flutter: ^4.1.0
+  fluttertoast: ^8.2.4
+  uuid: ^4.3.3
+  flutter_file_dialog: ^3.0.2
+  email_validator: ^2.1.17
 
   // dev
   envied_generator: ^0.5.3
@@ -39,7 +49,6 @@
 - [x] 이미지 파일 다운로드
 - [x] 이미지 찜하기
 - [x] 이미지 공유
-- [ ] 계정 활동 내역
-- [ ] 이미지 리뷰
-- [ ] 이미지 편집
+- [x] 계정 활동 내역
+- [x] 이미지 리뷰
 
