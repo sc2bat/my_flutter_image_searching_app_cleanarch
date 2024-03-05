@@ -1,4 +1,4 @@
-# my_flutter_image_searching_app_cleanarch
+# IMAGE CRAFT
 
 이미지 검색 앱 클린아키텍쳐 버전
 
