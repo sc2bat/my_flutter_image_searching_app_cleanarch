@@ -20,18 +20,18 @@ void main() {
         },
       );
 
-      List<UserDownloadModel> userDownlaodList =
+      List<UserDownloadModel> userDownloadList =
           data.map((e) => UserDownloadModel.fromJson(e)).toList();
 
-      logger.info(userDownlaodList[0]);
+      logger.info(userDownloadList[0]);
 
-      String fileName = userDownlaodList[0].fileName.split('/').last;
+      String fileName = userDownloadList[0].fileName.split('/').last;
 
       logger.info(fileName);
 
       expect(fileName, 'image_craft_ffebac20-ced5-1ee5-a761-65a277c2c99d.jpg');
 
-      expect(userDownlaodList.length, 10);
+      expect(userDownloadList.length, 10);
     } catch (e) {
       logger.info('$e');
     }

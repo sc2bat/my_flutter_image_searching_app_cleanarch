@@ -125,37 +125,37 @@ class _DownloadBoxWidgetState extends State<DownloadBoxWidget> {
                 onPressed: () {
                   logger.info(imageSize);
                   String size = '';
-                  String downlaodImageUrl = '';
+                  String downloadImageUrl = '';
                   switch (imageSize) {
                     case ImageSize.preview:
                       logger.info(widget.photoModel.previewUrl);
                       size =
                           '${widget.photoModel.previewWidth} x ${widget.photoModel.previewHeight}';
-                      downlaodImageUrl = widget.photoModel.previewUrl ?? '';
+                      downloadImageUrl = widget.photoModel.previewUrl ?? '';
                       break;
                     case ImageSize.webformat:
                       logger.info(widget.photoModel.webformatUrl);
                       size =
                           '${widget.photoModel.webformatWidth} x ${widget.photoModel.webformatHeight}';
-                      downlaodImageUrl = widget.photoModel.webformatUrl ?? '';
+                      downloadImageUrl = widget.photoModel.webformatUrl ?? '';
                       break;
                     case ImageSize.large:
                       logger.info(widget.photoModel.largeImageUrl);
                       size =
                           '${widget.photoModel.imageWidth} x ${widget.photoModel.imageHeight}';
-                      downlaodImageUrl = widget.photoModel.largeImageUrl ?? '';
+                      downloadImageUrl = widget.photoModel.largeImageUrl ?? '';
                       break;
                     default:
-                      downlaodImageUrl = '';
+                      downloadImageUrl = '';
                       break;
                   }
-                  if (downlaodImageUrl != '') {
+                  if (downloadImageUrl != '') {
                     logger.info('download~');
                     Navigator.of(context).pop();
                   } else {
                     logger.info('IMAGE SIZE IN NULL');
                   }
-                  widget.downloadFunction(size, downlaodImageUrl);
+                  widget.downloadFunction(size, downloadImageUrl);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: baseColor,

@@ -15,7 +15,7 @@ class DetailState with _$DetailState {
     LikeModel? likeModel,
     @Default(0) int likeCount,
     @Default(0) int viewCount,
-    @Default(0) int downlaodCount,
+    @Default(0) int downloadCount,
     @Default(0) int shareCount,
     @Default([]) List<CommentModel> commentList,
     @Default([]) List<Map<String, dynamic>> recommendImageList,

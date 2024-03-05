@@ -5,13 +5,13 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detai
 class InfoBoxWidget extends StatelessWidget {
   final PhotoModel photoModel;
   final int viewCount;
-  final int downlaodCount;
+  final int downloadCount;
   final int shareCount;
   const InfoBoxWidget({
     super.key,
     required this.photoModel,
     required this.viewCount,
-    required this.downlaodCount,
+    required this.downloadCount,
     required this.shareCount,
   });
 
@@ -82,7 +82,7 @@ class InfoBoxWidget extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              '$downlaodCount',
+                              '$downloadCount',
                               style: const TextStyle(
                                 fontSize: 20.0,
                               ),
