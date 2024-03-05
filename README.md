@@ -5,8 +5,13 @@
 ## Getting Started
 
 ### Link
+ : https://github.com/sc2bat/my_flutter_image_searching_app_cleanarch
 
+#### project
+ : https://github.com/users/sc2bat/projects/3
+ 
 #### figma Link
+ : https://www.figma.com/file/ZgYiqQP96drdGBBDSCToZG/ImageCraft?type=design&node-id=135%3A1065&mode=design&t=iEV3JigFZxxISPiu-1
 
 ### pakage list
 ```
@@ -16,6 +21,16 @@
   go_router: ^13.1.0
   provider: ^6.1.1
   equatable: ^2.0.5
+  freezed_annotation: ^2.4.1
+  get_it: ^7.6.7
+  supabase_flutter: ^2.3.2
+  shared_preferences: ^2.2.2
+  path_provider: ^2.1.2
+  qr_flutter: ^4.1.0
+  fluttertoast: ^8.2.4
+  uuid: ^4.3.3
+  flutter_file_dialog: ^3.0.2
+  email_validator: ^2.1.17
 
   // dev
   envied_generator: ^0.5.3
@@ -28,12 +43,12 @@
 ### 사용 API
 - https://pixabay.com/api/docs/
 
-### 추가하고싶은 기능
-- [ ] 이미지 파일 다운로드
-- [ ] 이미지 찜하기
-- [ ] 이미지 편집
-- [ ] 이미지 공유
-- [ ] 이미지 리뷰
-- [ ] 이미지 검색 히스토리
-- [ ] 인기 이미지 추천 (오늘의 이미지)
+### 기능
+- [x] 이미지 검색 히스토리
+- [x] 인기 이미지 추천 (오늘의 이미지)
+- [x] 이미지 파일 다운로드
+- [x] 이미지 찜하기
+- [x] 이미지 공유
+- [x] 계정 활동 내역
+- [x] 이미지 리뷰
 

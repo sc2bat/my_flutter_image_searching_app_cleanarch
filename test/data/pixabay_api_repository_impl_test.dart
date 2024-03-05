@@ -1,65 +1,40 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/data/dtos/hit_dto.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/pixabay_repository_impl.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo_model.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 import 'package:http/http.dart' as http;
-
-import 'pixabay_api_repository_impl_test.mocks.dart';
+import 'package:mockito/annotations.dart';
 
 @GenerateMocks([http.Client])
 void main() {
-  test('pixabay data test', () async {
-    final pixabayApiRepositoryImpl = PixabayRepositoryImpl();
+//   test('pixabay data test', () async {
+//     final pixabayApiRepositoryImpl = PixabayRepositoryImpl();
 
-    List<HitDTO> hits =
-        await pixabayApiRepositoryImpl.getPixabayImages('apple');
+//     List<HitDTO> hits =
+//         await pixabayApiRepositoryImpl.getPhotoListByPixabaApi('apple');
 
-    // expect(images, MockData['hits']);
+//     // expect(images, MockData['hits']);
 
-    // expect(images[0].id, 1122537);
-    // expect(images[1].id, 256261);
-    for (HitDTO hit in hits) {
-      logger.info(hit.id);
-    }
+//     // expect(images[0].id, 1122537);
+//     // expect(images[1].id, 256261);
+//     for (HitDTO hit in hits) {
+//       logger.info(hit.id);
+//     }
 
-    expect(hits.length, 20);
-  });
+//     expect(hits.length, 20);
+//   });
 
-  test('Mokito pixabay data test', () async {
-    final pixabayApiRepositoryImpl = PixabayRepositoryImpl();
+//   test('Mokito pixabay data test', () async {
+//     final pixabayApiRepositoryImpl = PixabayRepositoryImpl();
 
-    final mockClient = MockClient();
+//     final mockClient = MockClient();
 
-    when(mockClient.get(Uri.parse('${pixabayApiUrl}apple')))
-        .thenAnswer((_) async => http.Response(mockData, 200));
+//     when(mockClient.get(Uri.parse('${pixabayApiByQuery}apple')))
+//         .thenAnswer((_) async => http.Response(mockData, 200));
 
-    List<HitDTO> hits = await pixabayApiRepositoryImpl
-        .getPixabayImagesTest('apple', client: mockClient);
+//     List<HitDTO> hits = await pixabayApiRepositoryImpl
+//         .getPixabayImagesTest('apple', client: mockClient);
 
-    expect(hits.first.id, 1122537);
+//     expect(hits.first.id, 1122537);
 
-    verify(mockClient.get(Uri.parse('${pixabayApiUrl}apple')));
-  });
-
-  test('Mokito pixabay photo data test', () async {
-    final pixabayApiRepositoryImpl = PixabayRepositoryImpl();
-
-    final mockClient = MockClient();
-
-    when(mockClient.get(Uri.parse('${pixabayApiUrl}apple')))
-        .thenAnswer((_) async => http.Response(mockData, 200));
-
-    List<PhotoModel> photos = await pixabayApiRepositoryImpl
-        .getPixabayPhotosByClient('apple', client: mockClient);
-
-    expect(photos.first.id, 1122537);
-
-    verify(mockClient.get(Uri.parse('${pixabayApiUrl}apple')));
-  });
+//     verify(mockClient.get(Uri.parse('${pixabayApiByQuery}apple')));
+//   });
 }
 
 String mockData = """

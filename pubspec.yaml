@@ -43,6 +43,14 @@ dependencies:
   equatable: ^2.0.5
   freezed_annotation: ^2.4.1
   get_it: ^7.6.7
+  supabase_flutter: ^2.3.2
+  shared_preferences: ^2.2.2
+  path_provider: ^2.1.2
+  qr_flutter: ^4.1.0
+  fluttertoast: ^8.2.4
+  uuid: ^4.3.3
+  flutter_file_dialog: ^3.0.2
+  email_validator: ^2.1.17
 
 dev_dependencies:
   flutter_test:
