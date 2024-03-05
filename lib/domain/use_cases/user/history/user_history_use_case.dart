@@ -30,4 +30,13 @@ class UserHistoryUseCase {
       return Result.error('$e');
     }
   }
+
+  Future<Result<void>> deleteUserHistories(List<int> viewIds) async {
+    try {
+      final result = await _viewHistoryRepository.deleteUserHistories(viewIds);
+      return result;
+    } catch (e) {
+      return Result.error('deleteUserHistories USECASE 에러 $e');
+    }
+  }
 }

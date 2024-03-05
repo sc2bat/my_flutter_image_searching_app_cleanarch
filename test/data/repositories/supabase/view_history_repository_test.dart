@@ -52,4 +52,19 @@ void main() {
       logger.info('user history list testing ERROR $e');
     }
   });
+
+
+  test('delete함수', () async {
+    final supabase = SupabaseClient(Env.supabaseUrl, Env.supabaseApiKey);
+    try {
+      final data = await supabase
+          .from(TB_VIEW_HISTORY)
+          .update({'view_is_deleted': true})
+          .eq('view_is_deleted', false)
+          .filter('view_id', 'in', '(${[17, 18, 19].join(',')})');
+      logger.info(data);
+    } catch (e) {
+      logger.info(e);
+    }
+  });
 }
