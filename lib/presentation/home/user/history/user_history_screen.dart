@@ -22,9 +22,6 @@ class _UserHistoryScreenState extends State<UserHistoryScreen> {
 
   bool _isSelectMode = false;
   List<bool> _selectedImageList = [];
-  bool _isLongPressed = false;
-  bool _isLongPressedAfter = false;
-  int _selectedIndex = -1;
 
   @override
   void initState() {
@@ -42,9 +39,6 @@ class _UserHistoryScreenState extends State<UserHistoryScreen> {
     final UserHistoryViewModel userHistoryViewModel = context.watch();
     final UserHistoryState userHistoryState =
         userHistoryViewModel.userHistoryState;
-    logger.info('유저히스토리리스트 ${userHistoryState.userHistoryList}');
-
-    _selectedImageList = List.generate(userHistoryState.userHistoryList.length, (_) => false);
 
     final selectedImageCount =
         _selectedImageList.where((e) => e == true).length;
@@ -113,11 +107,9 @@ class _UserHistoryScreenState extends State<UserHistoryScreen> {
                         });
                       }
                       setState(() {
-                        _isLongPressed = true;
                         _selectedImageList =
                             List.generate(userHistoryState.userHistoryList.length, (_) => false);
                         _selectedImageList[index] = true;
-                        _selectedIndex = index;
                       });
                     },
                     child: Stack(
