@@ -61,16 +61,25 @@
     <thead>
         <tr>
             <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
+            <th>VideoLink</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-          <td>https://github.com/sc2bat/my_flutter_image_searching_app_cleanarch/assets/87482415/400ba700-9aea-47fc-aae5-c260336a5bc8</td>            <td>https://github.com/sc2bat/my_flutter_image_searching_app_cleanarch/assets/87482415/dbafb116-c894-4c91-bf03-96b1010c7771</td>
+          <td>Main Page</td>
+          <td>https://github.com/sc2bat/my_flutter_image_searching_app_cleanarch/assets/87482415/400ba700-9aea-47fc-aae5-c260336a5bc8</td>
+        </tr>
+        <tr>
+          <td>Search Page</td>
           <td>https://github.com/sc2bat/my_flutter_image_searching_app_cleanarch/assets/87482415/0aa1b0ac-8eed-4c73-9198-d9c4fa721bf3</td>
-          <td>5</td>
+        </tr>
+        <tr>
+          <td>Detail Page</td>
+          <td>https://github.com/sc2bat/my_flutter_image_searching_app_cleanarch/assets/87482415/dbafb116-c894-4c91-bf03-96b1010c7771</td>
+        </tr>
+        <tr>
+          <td>User Page</td>
+          <td>https://github.com/sc2bat/my_flutter_image_searching_app_cleanarch/assets/87482415/f40d2de2-e737-4abf-852f-d4fa63c9a087</td>
         </tr>
     </tbody>
 </table>
