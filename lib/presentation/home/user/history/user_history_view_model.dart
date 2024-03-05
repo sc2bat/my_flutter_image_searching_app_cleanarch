@@ -17,6 +17,9 @@ class UserHistoryViewModel with ChangeNotifier {
   UserHistoryState _userHistoryState = UserHistoryState();
 
   UserHistoryState get userHistoryState => _userHistoryState;
+  List<bool> getSelectedImageList() {
+    return List.generate(userHistoryState.userHistoryList.length, (_) => false);
+  }
 
   Future<void> init(int userId) async {
     _userHistoryState = userHistoryState.copyWith(isLoading: true);
@@ -26,7 +29,9 @@ class UserHistoryViewModel with ChangeNotifier {
         await _userHistoryUseCase.getUserHistoryList(userId);
     userHistoryResult.when(
         success: (data) {
-          _userHistoryState = userHistoryState.copyWith(userHistoryList: data);
+          _userHistoryState = userHistoryState.copyWith(
+              userHistoryList: data,
+          selectedImageList: getSelectedImageList(),);
         },
         error: (message) {
           logger.info('userHistoryResult 가져오는 error $message');

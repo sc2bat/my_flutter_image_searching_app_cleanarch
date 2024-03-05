@@ -64,8 +64,7 @@ class _UserHistoryScreenState extends State<UserHistoryScreen> {
                 });
                 if (!_isSelectMode) {
                   _selectedImageList =
-                      List.generate(userHistoryState.userHistoryList.length, (_) => false);
-                  logger.info('_imageLinks 대신 userHistoryState.userHistoryList.length 에러');
+                      userHistoryViewModel.getSelectedImageList();
                 }
               },
             ),
@@ -108,7 +107,7 @@ class _UserHistoryScreenState extends State<UserHistoryScreen> {
                       }
                       setState(() {
                         _selectedImageList =
-                            List.generate(userHistoryState.userHistoryList.length, (_) => false);
+                            userHistoryViewModel.getSelectedImageList();
                         _selectedImageList[index] = true;
                       });
                     },

@@ -10,7 +10,7 @@ class UserHistoryState with _$UserHistoryState {
     @Default(false) bool isLoading,
     @Default([]) List<UserHistoryModel> userHistoryList,
     @Default(false) bool isSelectMode,
-    @Default([]) List<int> selectedImageList,
+    @Default([]) List<bool> selectedImageList,
     @Default(false) bool isLongPressed,
     @Default(false) bool isLongPressedAfter,
     @Default(-1) int selectedIndex,
