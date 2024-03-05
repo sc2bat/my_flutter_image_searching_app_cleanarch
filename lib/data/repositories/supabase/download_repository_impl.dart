@@ -57,10 +57,10 @@ class DownloadRepositoryImpl implements DownloadRepository {
         },
       );
 
-      List<UserDownloadModel> userDownlaodList =
+      List<UserDownloadModel> userDownloadList =
           data.map((e) => UserDownloadModel.fromJson(e)).toList();
 
-      return Result.success(userDownlaodList);
+      return Result.success(userDownloadList);
     } catch (e) {
       return Result.error('$e');
     }

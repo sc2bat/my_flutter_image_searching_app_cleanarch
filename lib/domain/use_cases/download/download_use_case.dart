@@ -1,9 +1,9 @@
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/result.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/download_repository.dart';
 
-class DownlaodUseCase {
+class DownloadUseCase {
   final DownloadRepository _downloadRepository;
-  DownlaodUseCase({
+  DownloadUseCase({
     required DownloadRepository downloadRepository,
   }) : _downloadRepository = downloadRepository;
 

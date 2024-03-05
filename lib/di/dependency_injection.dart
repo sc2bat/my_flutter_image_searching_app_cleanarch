@@ -25,7 +25,7 @@ import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/sup
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/view_history_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/comment/comment_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/comment/get_comment_list_use_case.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/download/downlaod_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/download/download_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/download/image_download_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/home/popular_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/home/topsearch_use_case.dart';
@@ -160,8 +160,8 @@ void registerDependencies() {
         photoRepository: getIt<PhotoRepository>(),
       ),
     )
-    ..registerSingleton<DownlaodUseCase>(
-      DownlaodUseCase(
+    ..registerSingleton<DownloadUseCase>(
+      DownloadUseCase(
         downloadRepository: getIt<DownloadRepository>(),
       ),
     )
@@ -241,7 +241,7 @@ void registerDependencies() {
         popularUseCase: getIt<PopularUseCase>(),
         imageInfoUseCase: getIt<ImageInfoUseCase>(),
         imageDownloadUseCase: getIt<ImageDownloadUseCase>(),
-        downlaodUseCase: getIt<DownlaodUseCase>(),
+        downloadUseCase: getIt<DownloadUseCase>(),
         getCommentListUseCase: getIt<GetCommentListUseCase>(),
         commentUseCase: getIt<CommentUseCase>(),
         shareUseCase: getIt<ShareUseCase>(),
