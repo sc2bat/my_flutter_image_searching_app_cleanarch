@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/history/user_history_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/history/user_history_state.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 
 class UserHistoryViewModel with ChangeNotifier {
   final UserHistoryUseCase _userHistoryUseCase;
+  final session = supabase.auth.currentSession;
 
   UserHistoryViewModel({
     required UserHistoryUseCase userHistoryUseCase,

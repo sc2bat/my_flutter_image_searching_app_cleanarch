@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/model/user_history/user_history_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/model/user/history/user_history_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/env/env.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -14,9 +14,9 @@ void main() {
       List<UserHistoryModel> userHistoryModel = [];
       userHistoryModel =
           viewData.map((e) => UserHistoryModel.fromJson(e)).toList();
-      logger.info(userHistoryModel);
+      logger.info('userHistoryModel $userHistoryModel');
     } catch (e) {
-      logger.info('user history list testing $e');
+      logger.info('user history list testing ERROR $e');
     }
   });
   test('view history insert testing', () async {
@@ -28,9 +28,28 @@ void main() {
         'view_image_id': 5535486,
       }).select();
 
-      logger.info(data);
+      logger.info('DATA $data');
     } catch (e) {
-      logger.info('$e');
+      logger.info('ERROR $e');
+    }
+  });
+  test('함수', () async {
+    final supabase = SupabaseClient(Env.supabaseUrl, Env.supabaseApiKey);
+    try {
+
+      final List<Map<String, dynamic>> viewData = await supabase.rpc(
+        FUNC_GET_USER_HISTORY,
+        params: {
+          'param_user_id': 2,
+        },
+      );
+
+      List<UserHistoryModel> userHistoryModel = [];
+      userHistoryModel =
+          viewData.map((e) => UserHistoryModel.fromJson(e)).toList();
+      logger.info('userHistoryModel $userHistoryModel');
+    } catch (e) {
+      logger.info('user history list testing ERROR $e');
     }
   });
 }

@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/model/user_history/user_history_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/model/user/history/user_history_model.dart';
 
 part 'user_history_state.freezed.dart';
 

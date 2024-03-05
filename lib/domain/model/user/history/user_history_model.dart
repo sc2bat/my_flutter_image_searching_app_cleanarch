@@ -9,9 +9,10 @@ part 'user_history_model.g.dart';
 class UserHistoryModel with _$UserHistoryModel {
   factory UserHistoryModel({
     @JsonKey(name: 'view_id') required int viewId,
-    @JsonKey(name: 'view_user_id') required int viewUserId,
-    @JsonKey(name: 'view_image_id') required int viewImageId,
+    @JsonKey(name: 'user_id') required int userId,
+    @JsonKey(name: 'image_id') required int imageId,
     @JsonKey(name: 'view_is_deleted') required bool viewIsDeleted,
+    @JsonKey(name: 'preview_url') required String previewUrl,
   }) = _UserHistoryModel;
 
   factory UserHistoryModel.fromJson(Map<String, Object?> json) =>

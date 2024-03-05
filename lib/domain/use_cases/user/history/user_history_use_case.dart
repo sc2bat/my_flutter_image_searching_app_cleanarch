@@ -1,5 +1,5 @@
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/result.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/model/user_history/user_history_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/model/user/history/user_history_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/view_history_repository.dart';
 
 class UserHistoryUseCase {
@@ -16,7 +16,7 @@ class UserHistoryUseCase {
           Set<UserHistoryModel> userHistoryModel = {};
 
           for (var model in data) {
-            if (!userHistoryModel.any((element) => element.viewImageId == model.viewImageId)) {
+            if (!userHistoryModel.any((element) => element.imageId == model.imageId)) {
               userHistoryModel.add(model);
             }
           }
