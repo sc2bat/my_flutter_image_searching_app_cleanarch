@@ -13,15 +13,7 @@ class UserHistoryUseCase {
       final result = await _viewHistoryRepository.getUserHistoryList(userId);
       return result.when(
         success: (data) {
-          Set<UserHistoryModel> userHistoryModel = {};
-
-          for (var model in data) {
-            if (!userHistoryModel.any((element) => element.imageId == model.imageId)) {
-              userHistoryModel.add(model);
-            }
-          }
-          // Sort the userHistoryModel list in descending order of viewId
-          final sortedUserHistoryList = userHistoryModel.toList()
+          final sortedUserHistoryList = data
             ..sort((a, b) => b.viewId.compareTo(a.viewId));
           return Result.success(sortedUserHistoryList);
         },

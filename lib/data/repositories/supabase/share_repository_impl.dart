@@ -10,6 +10,12 @@ class ShareRepositoryImpl implements ShareRepository {
   Future<Result<List<Map<String, dynamic>>>> insert(
       int imageId, int userId) async {
     try {
+      await supabase
+          .from(TB_SHARE_HISTORY)
+          .update({'share_is_deleted': true})
+          .eq('share_user_id', userId)
+          .eq('share_image_id', imageId)
+          .eq('share_is_deleted', false);
       final data = await supabase.from(TB_SHARE_HISTORY).insert({
         'share_user_id': userId,
         'share_image_id': imageId,
