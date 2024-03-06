@@ -44,3 +44,4 @@ const String FUNC_GET_PAGINATED_USER_COMMENTS = 'get_paginated_user_comments';
 const String FUNC_GET_PAGINATED_USER_DOWNLOAD_HISTORY =
     'get_paginated_user_download_history';
 const String FUNC_GET_USER_HISTORY = 'get_user_history';
+const String FUNC_GET_USER_LIKES = 'get_user_likes';
