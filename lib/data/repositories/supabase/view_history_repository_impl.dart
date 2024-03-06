@@ -8,6 +8,13 @@ class ViewHistoryRepositoryImpl implements ViewHistoryRepository {
   @override
   Future<Result<void>> insert(int imageId, int userId) async {
     try {
+      await supabase
+          .from(TB_VIEW_HISTORY)
+          .update({'view_is_deleted': true})
+          .eq('view_user_id', userId)
+          .eq('view_image_id', imageId)
+          .eq('view_is_deleted', false);
+
       await supabase.from(TB_VIEW_HISTORY).insert({
         'view_user_id': userId != 0 ? userId : null,
         'view_image_id': imageId,
