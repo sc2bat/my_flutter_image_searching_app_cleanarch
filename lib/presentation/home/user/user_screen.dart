@@ -176,7 +176,8 @@ class _UserScreenState extends State<UserScreen> {
                                     context.push('/home/user/downloads');
                                     break;
                                   case 'Shared':
-                                    context.push('/home/user/shared');
+                                    context.push('/home/user/shared',
+                                    extra: {'userId': _userId,});
                                     break;
                                 }
                               },

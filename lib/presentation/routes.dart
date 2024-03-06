@@ -22,6 +22,8 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/splash/splash_screen.dart';
 import 'package:provider/provider.dart';
 
+import 'home/user/shared/user_shared_view_model.dart';
+
 final router = GoRouter(
   initialLocation: '/index',
   routes: [
@@ -96,7 +98,15 @@ final router = GoRouter(
             ),
             GoRoute(
               path: 'shared',
-              builder: (_, __) => const UserSharedScreen(),
+              builder: (_, state) {
+                final map = state.extra! as Map<String, dynamic>;
+                return ChangeNotifierProvider(
+                  create: (_) => getIt<UserSharedViewModel>(),
+                  child: UserSharedScreen(
+                    userId: map['userId'],
+                  ),
+                );
+              },
               routes: const [],
             ),
           ],
