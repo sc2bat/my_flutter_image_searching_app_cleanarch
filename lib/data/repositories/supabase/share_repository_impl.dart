@@ -1,7 +1,9 @@
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/result.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/model/user/shared/user_shared_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/share_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 
 class ShareRepositoryImpl implements ShareRepository {
   @override
@@ -20,31 +22,36 @@ class ShareRepositoryImpl implements ShareRepository {
   }
 
   @override
-  Future<Result<void>> delete(int shareId) async {
+  Future<Result<List<UserSharedModel>>> getUserSharedList(int userId) async {
     try {
-      final result = await supabase
-          .from(TB_LIKE_HISTORY)
-          .select('like_id')
-          // .eq('like_image_id', imageId)
-          .eq('is_liked', true)
-          .count();
-      return Result.success(result.count);
+      final List<Map<String, dynamic>> sharedData = await supabase.rpc(
+        FUNC_GET_USER_SHARED,
+        params: {
+          'param_user_id': userId,
+        },
+      );
+      logger.info('userId print: $userId');
+      logger.info('SharedData print: $sharedData');
+      List<UserSharedModel> userSharedModel = [];
+      userSharedModel =
+          sharedData.map((e) => UserSharedModel.fromJson(e)).toList();
+      return Result.success(userSharedModel);
     } catch (e) {
       return Result.error('$e');
     }
   }
 
   @override
-  Future<Result<List<Map<String, dynamic>>>> getShareList(int userId) async {
+  Future<Result<void>> deleteUserShared(List<int> sharedIds) async {
     try {
-      final result = await supabase
+      await supabase
           .from(TB_SHARE_HISTORY)
-          .select()
-          .eq('share_user_id', userId)
-          .eq('share_is_deleted', false);
-      return Result.success(result);
+          .update({'share_is_deleted': true})
+          .eq('share_is_deleted', false)
+          .filter('share_id', 'in', '(${sharedIds.join(',')})');
+      return const Result.success(null);
     } catch (e) {
-      return Result.error('$e');
+      return Result.error('share repo impl delete 에러 $e');
     }
   }
 }
