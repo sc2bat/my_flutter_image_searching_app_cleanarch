@@ -166,7 +166,8 @@ class _UserScreenState extends State<UserScreen> {
                                     extra: {'userId': _userId,});
                                     break;
                                   case 'Likes':
-                                    context.push('/home/user/likes');
+                                    context.push('/home/user/likes',
+                                    extra: {'userId': _userId,});
                                     break;
                                   case 'Comments':
                                     context.push('/home/user/comments');
