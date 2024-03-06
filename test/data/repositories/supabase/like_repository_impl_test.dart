@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/model/user/likes/user_likes_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/env/env.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -146,5 +147,45 @@ void main() {
         .single();
 
     logger.info(data);
+  });
+
+  test('FUNC_GET_USER_LIKES 함수', () async {
+    final supabase = SupabaseClient(Env.supabaseUrl, Env.supabaseApiKey);
+    try {
+
+      final List<Map<String, dynamic>> viewData = await supabase.rpc(
+        FUNC_GET_USER_LIKES,
+        params: {
+          'param_user_id': 2,
+        },
+      );
+
+      List<UserLikesModel> userLikesModel = [];
+      userLikesModel =
+          viewData.map((e) => UserLikesModel.fromJson(e)).toList();
+      logger.info('userLikesModel $userLikesModel');
+    } catch (e) {
+      logger.info('user likes list testing ERROR $e');
+    }
+  });
+
+  test('FUNC_GET_USER_LIKES 함수', () async {
+    final supabase = SupabaseClient(Env.supabaseUrl, Env.supabaseApiKey);
+    try {
+
+      final List<Map<String, dynamic>> viewData = await supabase.rpc(
+        FUNC_GET_USER_LIKES,
+        params: {
+          'param_user_id': 2,
+        },
+      );
+
+      List<UserLikesModel> userLikesModel = [];
+      userLikesModel =
+          viewData.map((e) => UserLikesModel.fromJson(e)).toList();
+      logger.info('userLikesModel $userLikesModel');
+    } catch (e) {
+      logger.info('user likes list testing ERROR $e');
+    }
   });
 }

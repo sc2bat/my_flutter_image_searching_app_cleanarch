@@ -32,7 +32,7 @@ class UserHistoryViewModel with ChangeNotifier {
           );
         },
         error: (message) {
-          logger.info('userHistoryResult 가져오는 error $message');
+          logger.info('userHistoryResult error $message');
         },
     );
     logger.info('${userHistoryState.userHistoryList}');
@@ -50,14 +50,6 @@ class UserHistoryViewModel with ChangeNotifier {
             final List<UserHistoryModel> updatedUserHistoryList = userHistoryState.userHistoryList
                 .where((history) => !selectedViewIds.contains(history.viewId))
                 .toList();
-          /*final updatedUserHistoryList = userHistoryState.userHistoryList.map((history) {
-            if (selectedViewIds.contains(history.viewId)) {
-              logger.info('selectedViewIds.contains');
-              return history.copyWith(viewIsDeleted: true);
-            }
-            return history;
-          }).toList();*/
-          logger.info('viewmodel delete 성공?');
 
           // Remove deleted items from selectedViewIds
           _userHistoryState = _userHistoryState.copyWith(

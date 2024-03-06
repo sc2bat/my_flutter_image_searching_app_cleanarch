@@ -13,6 +13,7 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/history/user_history_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/history/user_history_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/likes/user_likes_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/likes/user_likes_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_profile_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/shared/user_shared_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/user_screen.dart';
@@ -68,7 +69,15 @@ final router = GoRouter(
             ),
             GoRoute(
               path: 'likes',
-              builder: (_, __) => const UserLikesScreen(),
+              builder: (_, state) {
+                final map = state.extra! as Map<String, dynamic>;
+                return ChangeNotifierProvider(
+                  create: (_) => getIt<UserLikesViewModel>(),
+                  child: UserLikesScreen(
+                    userId: map['userId'],
+                  ),
+                );
+              },
               routes: const [],
             ),
             GoRoute(
