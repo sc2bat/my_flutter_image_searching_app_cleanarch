@@ -15,6 +15,8 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/likes/user_likes_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/likes/user_likes_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_profile_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_name_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_bio_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/shared/user_shared_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/user_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_in_screen.dart';
@@ -54,7 +56,18 @@ final router = GoRouter(
             GoRoute(
               path: 'profile',
               builder: (_, __) => const UserProfileScreen(),
-              routes: const [],
+              routes: [
+                GoRoute(
+                  path: 'username',
+                  builder: (_, __) => const UserNameScreen(),
+                  routes: const [],
+                ),
+                GoRoute(
+                  path: 'userbio',
+                  builder: (_, __) => const UserBioScreen(),
+                  routes: const [],
+                ),
+              ],
             ),
             GoRoute(
               path: 'history',

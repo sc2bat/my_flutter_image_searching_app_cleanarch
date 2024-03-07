@@ -17,8 +17,7 @@ class UserScreen extends StatefulWidget {
 class _UserScreenState extends State<UserScreen> {
   bool isSigned = false;
 
-  late TextEditingController _userNameTextFieldController =
-      TextEditingController();
+ // late TextEditingController _userNameTextFieldController = TextEditingController();
   bool _isLoading = false;
   String _userName = '';
   String _userEmail = '';
@@ -26,14 +25,14 @@ class _UserScreenState extends State<UserScreen> {
 
   @override
   void initState() {
-    _userNameTextFieldController = TextEditingController();
+  //  _userNameTextFieldController = TextEditingController();
     _getUserAccount();
     super.initState();
   }
 
   @override
   void dispose() {
-    _userNameTextFieldController.dispose();
+  //  _userNameTextFieldController.dispose();
     super.dispose();
   }
 
@@ -109,10 +108,6 @@ class _UserScreenState extends State<UserScreen> {
 
   @override
   Widget build(BuildContext context) {
-    /*if (_userId == 0) {
-      context.push('/index');
-    }*/
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('ImageCraft'),
