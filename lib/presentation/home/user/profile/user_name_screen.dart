@@ -2,18 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class UserNameScreen extends StatefulWidget {
-  const UserNameScreen({super.key});
+  final String currentUserName;
+  const UserNameScreen({super.key, required this.currentUserName});
 
   @override
   _UserNameScreenState createState() => _UserNameScreenState();
 }
 
 class _UserNameScreenState extends State<UserNameScreen> {
-  final _usernameController = TextEditingController();
+  final _userNameController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _userNameController.text = widget.currentUserName;
+  }
 
   @override
   void dispose() {
-    _usernameController.dispose();
+    _userNameController.dispose();
     super.dispose();
   }
 
@@ -67,10 +74,11 @@ class _UserNameScreenState extends State<UserNameScreen> {
                 // TODO: 저장
                 context.push('/home/user/profile');
               },
-              child: const Text('Save',
-                  style: TextStyle(
-                    color: Colors.blueAccent,
-                  ),
+              child: const Text(
+                'Save',
+                style: TextStyle(
+                  color: Colors.blueAccent,
+                ),
               ),
             )
           ],
@@ -81,14 +89,12 @@ class _UserNameScreenState extends State<UserNameScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               TextFormField(
-                controller: _usernameController,
+                controller: _userNameController,
                 decoration: InputDecoration(
                   // TODO: 기존 username
                   labelText: 'sampleName',
                   suffixIcon: IconButton(
-                    onPressed: () {
-                      _usernameController.clear();
-                    },
+                    onPressed: () => _userNameController.clear(),
                     icon: const Icon(Icons.clear),
                   ),
                 ),

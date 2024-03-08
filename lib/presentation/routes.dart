@@ -59,7 +59,8 @@ final router = GoRouter(
               routes: [
                 GoRoute(
                   path: 'username',
-                  builder: (_, __) => const UserNameScreen(),
+                  builder: (_, __) => const UserNameScreen(
+                    currentUserName: '',),
                   routes: const [],
                 ),
                 GoRoute(
