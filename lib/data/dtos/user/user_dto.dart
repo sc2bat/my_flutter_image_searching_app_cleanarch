@@ -4,8 +4,8 @@ class UserDTO {
   final String userName;
   final DateTime updatedAt;
   final bool isDeleted;
-  final String userPicture;
-  final String userBio;
+  String? userPicture;
+  String? userBio;
 
   UserDTO({
     required this.userId,
@@ -24,8 +24,8 @@ class UserDTO {
       userName: json['user_name'] as String,
       updatedAt: DateTime.parse(json['updated_at'] as String),
       isDeleted: json['is_deleted'] as bool,
-      userPicture: json['user_picture'] as String,
-      userBio: json['user_bio'] as String,
+      userPicture: json['user_picture'] as String?,
+      userBio: json['user_bio'] as String?,
     );
   }
 }

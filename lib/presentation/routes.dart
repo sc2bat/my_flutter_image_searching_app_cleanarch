@@ -14,9 +14,9 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/history/user_history_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/likes/user_likes_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/likes/user_likes_view_model.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_profile_screen.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_name_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_bio_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_name_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_profile_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/shared/user_shared_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/user_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_in_screen.dart';
@@ -60,7 +60,8 @@ final router = GoRouter(
                 GoRoute(
                   path: 'username',
                   builder: (_, __) => const UserNameScreen(
-                    currentUserName: '',),
+                    currentUserName: '',
+                  ),
                   routes: const [],
                 ),
                 GoRoute(
@@ -147,7 +148,7 @@ final router = GoRouter(
         return ChangeNotifierProvider(
           create: (_) => getIt<DetailViewModel>(),
           child: DetailScreen(
-            imageId: map['imageId'],
+            imageId: map['imageId'] as int,
           ),
         );
       },
