@@ -21,8 +21,7 @@ class UserSharedViewModel with ChangeNotifier {
     _userSharedState = userSharedState.copyWith(isLoading: true);
     notifyListeners();
 
-    final userSharedResult =
-    await _userSharedUseCase.getUserSharedList(userId);
+    final userSharedResult = await _userSharedUseCase.getUserSharedList(userId);
     userSharedResult.when(
       success: (data) {
         _userSharedState = userSharedState.copyWith(
@@ -34,7 +33,8 @@ class UserSharedViewModel with ChangeNotifier {
         logger.info('userSharedResult error $message');
       },
     );
-    logger.info('userSharedState.userSharedList는 ${userSharedState.userSharedList}');
+    logger.info(
+        'userSharedState.userSharedList는 ${userSharedState.userSharedList}');
     _userSharedState = userSharedState.copyWith(isLoading: false);
     notifyListeners();
   }
@@ -43,17 +43,22 @@ class UserSharedViewModel with ChangeNotifier {
     final selectedShareIds = userSharedState.selectedImageList;
 
     if (selectedShareIds.isNotEmpty) {
-      final deleteResult = await _userSharedUseCase.deleteUserShared(selectedShareIds);
+      final deleteResult =
+          await _userSharedUseCase.deleteUserShared(selectedShareIds);
       deleteResult.when(
         success: (_) {
-          final List<UserSharedModel> updatedUserSharedList = userSharedState.userSharedList
-              .where((Shared) => !selectedShareIds.contains(Shared.shareId))
+          final List<UserSharedModel> updatedUserSharedList = userSharedState
+              .userSharedList
+              .where((shared) => !selectedShareIds.contains(shared.shareId))
               .toList();
 
           // Remove deleted items from selectedShareIds
           _userSharedState = _userSharedState.copyWith(
             userSharedList: updatedUserSharedList,
-            selectedImageList: selectedShareIds.where((id) => !updatedUserSharedList.any((Shared) => Shared.shareId == id)).toList(),
+            selectedImageList: selectedShareIds
+                .where((id) => !updatedUserSharedList
+                    .any((shared) => shared.shareId == id))
+                .toList(),
             isSelectMode: false,
           );
 

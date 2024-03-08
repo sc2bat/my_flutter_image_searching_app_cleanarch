@@ -2,7 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/photo/photo_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/pixabay/pixabay_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/search/search_keyword_repository_impl.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/comment_repositoy_impl.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/comment_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/download_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/image_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/like_repository_impl.dart';
@@ -85,8 +85,8 @@ void registerDependencies() {
     ..registerSingleton<PhotoRepository>(
       PhotoRepositoryImpl(),
     )
-    ..registerSingleton<CommentRepositoy>(
-      CommentRepositoyImpl(),
+    ..registerSingleton<CommentRepository>(
+      CommentRepositoryImpl(),
     )
     ..registerSingleton<DownloadRepository>(
       DownloadRepositoryImpl(),
@@ -183,17 +183,17 @@ void registerDependencies() {
     // comment
     ..registerSingleton<GetCommentListUseCase>(
       GetCommentListUseCase(
-        commentRepositoy: getIt<CommentRepositoy>(),
+        commentRepositoy: getIt<CommentRepository>(),
       ),
     )
     ..registerSingleton<CommentUseCase>(
       CommentUseCase(
-        commentRepositoy: getIt<CommentRepositoy>(),
+        commentRepositoy: getIt<CommentRepository>(),
       ),
     )
     ..registerSingleton<UserCommentUseCase>(
       UserCommentUseCase(
-        commentRepositoy: getIt<CommentRepositoy>(),
+        commentRepositoy: getIt<CommentRepository>(),
       ),
     )
 
@@ -228,15 +228,12 @@ void registerDependencies() {
       () => HomeViewModel(
         popularUseCase: getIt<PopularUseCase>(),
         topsearchUseCase: getIt<TopsearchUseCase>(),
-        signInUseCase: getIt<SignInUseCase>(),
-        signOutUseCase: getIt<SignOutUseCase>(),
       ),
     )
     // sign view model
     ..registerFactory<SignViewModel>(
       () => SignViewModel(
         signInUseCase: getIt<SignInUseCase>(),
-        signOutUseCase: getIt<SignOutUseCase>(),
       ),
     )
     // search view model
@@ -287,13 +284,13 @@ void registerDependencies() {
     )
     // likes
     ..registerFactory<UserLikesViewModel>(
-          () => UserLikesViewModel(
+      () => UserLikesViewModel(
         userLikesUseCase: getIt<UserLikesUseCase>(),
       ),
     )
-  // shared
+    // shared
     ..registerFactory<UserSharedViewModel>(
-          () => UserSharedViewModel(
+      () => UserSharedViewModel(
         userSharedUseCase: getIt<UserSharedUseCase>(),
       ),
     );

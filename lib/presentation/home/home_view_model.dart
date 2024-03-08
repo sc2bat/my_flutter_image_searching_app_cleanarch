@@ -1,27 +1,19 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/home/popular_use_case.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/sign_in_use_case.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/sign_out_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_state.dart';
 
 import '../../domain/use_cases/home/topsearch_use_case.dart';
 
 class HomeViewModel with ChangeNotifier {
-  final SignInUseCase _signInUseCase;
-  final SignOutUseCase _signOutUseCase;
   final PopularUseCase _popularUseCase;
   final TopsearchUseCase _topsearchUseCase;
 
   HomeViewModel({
-    required SignInUseCase signInUseCase,
-    required SignOutUseCase signOutUseCase,
     required PopularUseCase popularUseCase,
     required TopsearchUseCase topsearchUseCase,
-  })  : _signInUseCase = signInUseCase,
-        _signOutUseCase = signOutUseCase,
-        _popularUseCase = popularUseCase,
+  })  : _popularUseCase = popularUseCase,
         _topsearchUseCase = topsearchUseCase;
 
   HomeState _homeState = const HomeState();
