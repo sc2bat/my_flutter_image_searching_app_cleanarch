@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/result.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/user_repository_impl.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/di/dependency_injection.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/user/user_model.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/user_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 
 import '../../../common/theme.dart';
@@ -12,8 +10,7 @@ import '../../../common/theme.dart';
 class UserProfileScreen extends StatefulWidget {
   final String userUuid;
 
-  const UserProfileScreen(
-      {super.key, required this.userUuid});
+  const UserProfileScreen({super.key, required this.userUuid});
 
   @override
   _UserProfileScreenState createState() => _UserProfileScreenState();
@@ -21,53 +18,73 @@ class UserProfileScreen extends StatefulWidget {
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   // TODO: late 선언 확인
-  late String _currentUserName = '';
-  late String? _currentUserBio = '';
-  late String? _currentUserPicture = '';
+  final String _currentUserName = '사용자 이름 입력';
+  final String _currentUserBio = '상태 메세지 입력';
+  UserModel? userModel;
+  // late String? _currentUserPicture = '';
 
-  late String newUserName = _currentUserName;
-  late String? newUserBio = _currentUserBio;
-  late String? newUserPicture = _currentUserPicture;
+  // late String newUserName = _currentUserName;
+  // late String? newUserBio = _currentUserBio;
+  // late String? newUserPicture = _currentUserPicture;
+
+  late TextEditingController _userNameTextController;
+  late TextEditingController _userBioTextController;
 
   @override
   void initState() {
+    _userNameTextController = TextEditingController();
+    _userBioTextController = TextEditingController();
     super.initState();
     loadUserData();
   }
 
+  @override
+  void dispose() {
+    _userNameTextController.dispose();
+    _userBioTextController.dispose();
+    super.dispose();
+  }
+
   Future<void> loadUserData() async {
-    try{
+    try {
       final Result<UserModel> result =
           await UserRepositoryImpl().getUserInfo(widget.userUuid);
       result.when(
-        success: (userModel) {
-          setState(() {
-            _currentUserName = userModel.userName;
-            _currentUserBio = userModel.userBio;
-            _currentUserPicture = userModel.userPicture ?? '';
-          });
-          newUserName = _currentUserName;
-          newUserBio = _currentUserBio;
-          newUserPicture = _currentUserPicture ?? '';
+        success: (data) {
+          userModel = data;
+          _userNameTextController.text = data.userName;
+          _userBioTextController.text = data.userBio;
+          setState(() {});
+          // setState(() {
+          //   _currentUserName = userModel.userName;
+          //   _currentUserBio = userModel.userBio;
+          //   _currentUserPicture = userModel.userPicture ?? '';
+          // });
+          // newUserName = _currentUserName;
+          // newUserBio = _currentUserBio;
+          // newUserPicture = _currentUserPicture ?? '';
         },
-          error: (error) {
-            logger.info('getUserInfo 에러: $error');
-          },
+        error: (error) {
+          logger.info('getUserInfo 에러: $error');
+          throw Exception(error);
+        },
       );
     } catch (e) {
       logger.info('loadUserData 에러: $e');
+      throw Exception(e);
     }
   }
-  
+
   Future<void> updateUserInfo(
-      String newUserName,
-      String newUserBio,
-      String newUserPicture,
-      ) async{
+    String newUserName,
+    String newUserBio,
+    String newUserPicture,
+  ) async {
     try {
       await UserRepositoryImpl().updateUserName(widget.userUuid, newUserName);
       await UserRepositoryImpl().updateUserName(widget.userUuid, newUserBio);
-      await UserRepositoryImpl().updateUserName(widget.userUuid, newUserPicture);
+      await UserRepositoryImpl()
+          .updateUserName(widget.userUuid, newUserPicture);
       await loadUserData();
     } catch (e) {
       logger.info('updateUserInfo 에러: $e');
@@ -106,12 +123,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 onTap: () => _showPicturesOptionsBottomSheet(),
                 child: Align(
                   alignment: Alignment.center,
-                  child: _currentUserPicture != null && _currentUserPicture!.isNotEmpty // userPicture 고른 상태면,
+                  child: userModel != null &&
+                          userModel!
+                              .userPicture.isNotEmpty // userPicture 고른 상태면,
                       ? CircleAvatar(
                           radius: 80,
-                          backgroundImage: NetworkImage(_currentUserPicture!),
-                            // TODO: _curr                                                                                                                                 entUserPicture 샘플링크: 'https://cdn.pixabay.com/photo/2019/04/06/06/44/astronaut-4106766_960_720.jpg',
-                          )
+                          backgroundImage: NetworkImage(userModel!.userPicture),
+                          // TODO: _curr                                                                                                                                 entUserPicture 샘플링크: 'https://cdn.pixabay.com/photo/2019/04/06/06/44/astronaut-4106766_960_720.jpg',
+                        )
                       : const CircleAvatar(
                           radius: 80,
                           backgroundColor: Colors.transparent,
@@ -165,13 +184,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     const SizedBox(width: 32.0),
                     Expanded(
                       child: TextFormField(
+                        controller: _userNameTextController,
                         maxLength: 30,
                         maxLines: null,
-                        initialValue: _currentUserName,
                         decoration: InputDecoration(
                           hintText: _currentUserName, //'Enter username',
                           suffixIcon: IconButton(
-                            onPressed: () => _currentUserName = '', // TODO: Shouldn't it be newUserName?
+                            onPressed: _userNameTextController.clear,
                             icon: const Icon(
                               Icons.cancel,
                               size: 20,
@@ -214,11 +233,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       child: TextFormField(
                         maxLength: 150,
                         maxLines: null,
-                        controller: TextEditingController(text: newUserName),
+                        controller: _userBioTextController,
                         decoration: InputDecoration(
                           hintText: _currentUserBio,
                           suffixIcon: IconButton(
-                            onPressed: () => _currentUserBio = '', // TODO: _currentUserBio? Not newUserBio?
+                            onPressed: _userBioTextController.clear,
                             icon: const Icon(
                               Icons.cancel,
                               size: 20,
@@ -276,12 +295,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             maxLength: 30,
             maxLines: null,
             // TODO: tb_user_profile.username
-            controller: TextEditingController(text: newUserName),
+            controller: _userNameTextController,
             decoration: InputDecoration(
               suffixIcon: IconButton(
-                onPressed: () {
-                  newUserName=''; // TODO: _current? new?
-                },
+                onPressed: _userNameTextController.clear // TODO: _current? new?
+                ,
                 icon: const Icon(Icons.cancel),
               ),
             ),
@@ -356,12 +374,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           content: TextFormField(
             maxLength: 150,
             maxLines: null,
-            controller: TextEditingController(text: newUserBio),
+            controller: _userBioTextController,
             decoration: InputDecoration(
               // TODO: tb_user_profile.userBio 가져와서 labelText 대체
               labelText: 'bio_example',
               suffixIcon: IconButton(
-                onPressed: () => newUserBio = '',
+                onPressed: _userBioTextController.clear,
                 icon: const Icon(Icons.cancel),
               ),
             ),
@@ -438,13 +456,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             TextButton(
               child: const Text('Discard changes'),
               onPressed: () {
-                context.push('/home/user');
+                context.pop();
+                context.pop();
+                // context.push('/home/user');
               },
             ),
             TextButton(
               child: const Text('Keep editing'),
               onPressed: () {
-                Navigator.pop(context);
+                context.pop();
+                // Navigator.pop(context);
               },
             ),
           ],
@@ -481,7 +502,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 onTap: () {
                   setState(() {
                     // TODO: 프로필 사진을 기본값으로. Icon(Icons.account_circle) 또는 userProfileUrlWithFirstCharacter
-                    newUserPicture = '';
+                    // newUserPicture = '';
                   });
                   Navigator.pop(context);
                 },
