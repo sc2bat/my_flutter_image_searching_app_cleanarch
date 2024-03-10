@@ -14,9 +14,9 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/history/user_history_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/likes/user_likes_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/likes/user_likes_view_model.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_bio_screen.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_name_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_profile_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_name_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_bio_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/shared/user_shared_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/user_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_in_screen.dart';
@@ -24,6 +24,7 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/splash/splash_screen.dart';
 import 'package:provider/provider.dart';
 
+import '../domain/model/user/user_model.dart';
 import 'home/user/shared/user_shared_view_model.dart';
 
 final router = GoRouter(
@@ -55,7 +56,7 @@ final router = GoRouter(
           routes: [
             GoRoute(
               path: 'profile',
-              builder: (_, __) => const UserProfileScreen(),
+              builder: (_, __) => const UserProfileScreen(userUuid: '',),
               routes: [
                 GoRoute(
                   path: 'username',
@@ -148,7 +149,7 @@ final router = GoRouter(
         return ChangeNotifierProvider(
           create: (_) => getIt<DetailViewModel>(),
           child: DetailScreen(
-            imageId: map['imageId'] as int,
+            imageId: map['imageId'],
           ),
         );
       },

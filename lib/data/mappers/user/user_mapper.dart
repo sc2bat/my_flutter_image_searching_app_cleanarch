@@ -7,8 +7,8 @@ class UserMapper {
       userId: userDTO.userId,
       userUuid: userDTO.userUuid,
       userName: userDTO.userName,
-      userPicture: userDTO.userPicture ?? '',
-      userBio: userDTO.userBio ?? '',
+      userPicture: userDTO.userPicture,
+      userBio: userDTO.userBio,
     );
   }
 }

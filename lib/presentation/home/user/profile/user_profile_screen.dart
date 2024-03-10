@@ -1,41 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/result.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/user_repository_impl.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/di/dependency_injection.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/model/user/user_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/user_repository.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 
 import '../../../common/theme.dart';
 
 class UserProfileScreen extends StatefulWidget {
-  const UserProfileScreen({super.key});
+  final String userUuid;
+
+  const UserProfileScreen(
+      {super.key, required this.userUuid});
 
   @override
-  State<UserProfileScreen> createState() => _UserProfileScreenState();
+  _UserProfileScreenState createState() => _UserProfileScreenState();
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-  final _userNameController = TextEditingController();
-  final _userBioController = TextEditingController();
-  final _userPictureController = TextEditingController();
+  // TODO: late 선언 확인
+  late String _currentUserName = '';
+  late String? _currentUserBio = '';
+  late String? _currentUserPicture = '';
+
+  late String newUserName = _currentUserName;
+  late String? newUserBio = _currentUserBio;
+  late String? newUserPicture = _currentUserPicture;
 
   @override
   void initState() {
     super.initState();
-    _initUserProfileFields();
+    loadUserData();
   }
 
-  void _initUserProfileFields() {
-    setState(() {
-      // TODO: 입력받아 저장한 userName을 _userNameController의 text로 설정
-      _userNameController.text = '수정한 username';
-      _userBioController.text = '수정한 bio';
-      _userPictureController.text = '선택한 Picture';
-    });
+  Future<void> loadUserData() async {
+    try{
+      final Result<UserModel> result =
+          await UserRepositoryImpl().getUserInfo(widget.userUuid);
+      result.when(
+        success: (userModel) {
+          setState(() {
+            _currentUserName = userModel.userName;
+            _currentUserBio = userModel.userBio;
+            _currentUserPicture = userModel.userPicture ?? '';
+          });
+          newUserName = _currentUserName;
+          newUserBio = _currentUserBio;
+          newUserPicture = _currentUserPicture ?? '';
+        },
+          error: (error) {
+            logger.info('getUserInfo 에러: $error');
+          },
+      );
+    } catch (e) {
+      logger.info('loadUserData 에러: $e');
+    }
   }
-
-  @override
-  void dispose() {
-    _userNameController.dispose();
-    _userBioController.dispose();
-    _userPictureController.dispose();
-    super.dispose();
+  
+  Future<void> updateUserInfo(
+      String newUserName,
+      String newUserBio,
+      String newUserPicture,
+      ) async{
+    try {
+      await UserRepositoryImpl().updateUserName(widget.userUuid, newUserName);
+      await UserRepositoryImpl().updateUserName(widget.userUuid, newUserBio);
+      await UserRepositoryImpl().updateUserName(widget.userUuid, newUserPicture);
+      await loadUserData();
+    } catch (e) {
+      logger.info('updateUserInfo 에러: $e');
+    }
   }
 
   @override
@@ -70,15 +106,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 onTap: () => _showPicturesOptionsBottomSheet(),
                 child: Align(
                   alignment: Alignment.center,
-                  child: _userPictureController
-                          .text.isNotEmpty // userPicture 고른 상태면,
-                      ? const CircleAvatar(
+                  child: _currentUserPicture != null && _currentUserPicture!.isNotEmpty // userPicture 고른 상태면,
+                      ? CircleAvatar(
                           radius: 80,
-                          backgroundImage: NetworkImage(
-                            // TODO: 아래 '링크'를 userPicture로 받아서 대체
-                            'https://cdn.pixabay.com/photo/2019/04/06/06/44/astronaut-4106766_960_720.jpg',
-                          ),
-                        )
+                          backgroundImage: NetworkImage(_currentUserPicture!),
+                            // TODO: _curr                                                                                                                                 entUserPicture 샘플링크: 'https://cdn.pixabay.com/photo/2019/04/06/06/44/astronaut-4106766_960_720.jpg',
+                          )
                       : const CircleAvatar(
                           radius: 80,
                           backgroundColor: Colors.transparent,
@@ -101,7 +134,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
                 child: TextButton(
                   onPressed: () {
-                    // TODO: 하단 Widget 띄우기 Choose from Likes, Remove current picture
+                    // TODO: 하단 Widget 띄우기 Choose from Likes, Remove _current picture
                     _showPicturesOptionsBottomSheet();
                   },
                   child: const Text(
@@ -134,11 +167,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       child: TextFormField(
                         maxLength: 30,
                         maxLines: null,
-                        controller: _userNameController,
+                        initialValue: _currentUserName,
                         decoration: InputDecoration(
-                          hintText: 'Edit username here',
+                          hintText: _currentUserName, //'Enter username',
                           suffixIcon: IconButton(
-                            onPressed: () => _userNameController.clear(),
+                            onPressed: () => _currentUserName = '', // TODO: Shouldn't it be newUserName?
                             icon: const Icon(
                               Icons.cancel,
                               size: 20,
@@ -150,12 +183,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             return 'Please enter username';
                           }
                           if (value.length > 30) {
-                            return 'Username can' 't exceed 30 characters';
+                            return 'Username can\'t exceed 30 characters';
                           }
                           return null;
-                        },
-                        onSaved: (value) {
-                          _userNameController.text = value!;
                         },
                         onTap: () {
                           // TODO: Dialog에서 수정. userNameScreen에서 수정하려면 context.push('/home/user/profile/username');
@@ -184,11 +214,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       child: TextFormField(
                         maxLength: 150,
                         maxLines: null,
-                        controller: _userBioController,
+                        controller: TextEditingController(text: newUserName),
                         decoration: InputDecoration(
-                          hintText: 'Edit bio here',
+                          hintText: _currentUserBio,
                           suffixIcon: IconButton(
-                            onPressed: () => _userBioController.clear(),
+                            onPressed: () => _currentUserBio = '', // TODO: _currentUserBio? Not newUserBio?
                             icon: const Icon(
                               Icons.cancel,
                               size: 20,
@@ -200,9 +230,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             return 'Bio cannot exceed 150 characters';
                           }
                           return null;
-                        },
-                        onSaved: (value) {
-                          _userBioController.text = value!;
                         },
                         onTap: () {
                           // TODO: Dialog에서 수정. userBioScreen에서 수정하려면 context.push('/home/user/profile/userbio');
@@ -249,11 +276,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             maxLength: 30,
             maxLines: null,
             // TODO: tb_user_profile.username
-            controller: _userNameController,
+            controller: TextEditingController(text: newUserName),
             decoration: InputDecoration(
               suffixIcon: IconButton(
                 onPressed: () {
-                  _userNameController.clear();
+                  newUserName=''; // TODO: _current? new?
                 },
                 icon: const Icon(Icons.cancel),
               ),
@@ -329,14 +356,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           content: TextFormField(
             maxLength: 150,
             maxLines: null,
-            controller: _userBioController,
+            controller: TextEditingController(text: newUserBio),
             decoration: InputDecoration(
               // TODO: tb_user_profile.userBio 가져와서 labelText 대체
               labelText: 'bio_example',
               suffixIcon: IconButton(
-                onPressed: () {
-                  _userBioController.clear();
-                },
+                onPressed: () => newUserBio = '',
                 icon: const Icon(Icons.cancel),
               ),
             ),
@@ -438,7 +463,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             ListTile(
               leading: const Icon(Icons.favorite),
               title: const Text('Choose from Likes',
-              style: TextStyle(color: Colors.black87)),
+                  style: TextStyle(color: Colors.black87)),
               onTap: () {
                 // TODO: Likes grid 보여주고 선택하는 페이지, 선택한 사진 가져와서 CircleAvatar에 띄우기
                 Navigator.pop(context);
@@ -455,8 +480,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     style: TextStyle(color: Colors.redAccent)),
                 onTap: () {
                   setState(() {
-                  // TODO: 프로필 사진을 기본값으로. Icon(Icons.account_circle) 또는 userProfileUrlWithFirstCharacter
-                    _userPictureController.text = '';
+                    // TODO: 프로필 사진을 기본값으로. Icon(Icons.account_circle) 또는 userProfileUrlWithFirstCharacter
+                    newUserPicture = '';
                   });
                   Navigator.pop(context);
                 },
