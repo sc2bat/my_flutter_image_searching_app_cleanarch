@@ -18,6 +18,7 @@ class _UserScreenState extends State<UserScreen> {
   bool isSigned = false;
   bool _isLoading = false;
   String _userName = '';
+  String _userUuid = '';
   String _userEmail = '';
   int _userId = 0;
 
@@ -42,6 +43,7 @@ class _UserScreenState extends State<UserScreen> {
       final user = session?.user;
       final userUuid = user?.id;
       if (userUuid != null) {
+        _userUuid = userUuid;
         final data = await supabase
             .from(TB_USER_PROFILE)
             .select()
@@ -128,7 +130,8 @@ class _UserScreenState extends State<UserScreen> {
           Column(
             children: [
               ListTile(
-                onTap: () => context.push('/home/user/profile'),
+                onTap: () => context.push('/home/user/profile',
+                    extra: {'user_uuid': _userUuid}),
                 leading: const Icon(
                   Icons.account_circle,
                   size: 48.0,
@@ -166,12 +169,14 @@ class _UserScreenState extends State<UserScreen> {
                             onTap: () {
                               switch (activityItem.title) {
                                 case 'History':
-                                  context.push('/home/user/history',
-                                  extra: {'userId': _userId,});
+                                  context.push('/home/user/history', extra: {
+                                    'userId': _userId,
+                                  });
                                   break;
                                 case 'Likes':
-                                  context.push('/home/user/likes',
-                                  extra: {'userId': _userId,});
+                                  context.push('/home/user/likes', extra: {
+                                    'userId': _userId,
+                                  });
                                   break;
                                 case 'Comments':
                                   context.push('/home/user/comments');
@@ -180,8 +185,9 @@ class _UserScreenState extends State<UserScreen> {
                                   context.push('/home/user/downloads');
                                   break;
                                 case 'Shared':
-                                  context.push('/home/user/shared',
-                                  extra: {'userId': _userId,});
+                                  context.push('/home/user/shared', extra: {
+                                    'userId': _userId,
+                                  });
                                   break;
                               }
                             },
