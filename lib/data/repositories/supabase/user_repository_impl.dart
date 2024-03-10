@@ -40,6 +40,7 @@ class UserRepositoryImpl implements UserRepository {
     }
   }
 
+
   @override
   Future<Result<void>> updateUserBio(String userId, String newUserBio) async {
     try {
