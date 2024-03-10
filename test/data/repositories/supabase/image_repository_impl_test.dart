@@ -50,13 +50,13 @@ void main() {
         .count();
 
     logger.info(viewCount);
-    final downlaodCount = await supabase
+    final downloadCount = await supabase
         .from(TB_DOWNLOAD_HISTORY)
         .select('download_image_id')
         .eq('download_image_id', imageId)
         .count();
 
-    logger.info(downlaodCount);
+    logger.info(downloadCount);
     final shareCount = await supabase
         .from(TB_SHARE_HISTORY)
         .select('share_image_id')
@@ -65,11 +65,11 @@ void main() {
     logger.info(shareCount);
 
     logger.info(
-        'viewCount => $viewCount, downlaodCount=> $downlaodCount, shareCount => $shareCount');
+        'viewCount => $viewCount, downloadCount=> $downloadCount, shareCount => $shareCount');
 
     final Map<String, dynamic> data = {
       'view_count': viewCount.count,
-      'download_count': downlaodCount.count,
+      'download_count': downloadCount.count,
       'share_count': shareCount.count,
     };
 

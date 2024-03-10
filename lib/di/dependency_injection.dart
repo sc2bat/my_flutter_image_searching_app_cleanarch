@@ -25,7 +25,7 @@ import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/sup
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/view_history_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/comment/comment_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/comment/get_comment_list_use_case.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/download/downlaod_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/download/download_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/download/image_download_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/home/popular_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/home/topsearch_use_case.dart';
@@ -41,6 +41,8 @@ import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/c
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/download/user_download_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/get_user_id_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/history/user_history_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/likes/user_likes_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/shared/user_shared_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/view/view_history_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detail/detail_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/home_view_model.dart';
@@ -48,6 +50,8 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/searc
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/comments/user_comments_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/downloads/user_downloads_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/history/user_history_view_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/likes/user_likes_view_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/shared/user_shared_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_view_model.dart';
 
 final getIt = GetIt.instance;
@@ -154,14 +158,20 @@ void registerDependencies() {
         likeRepository: getIt<LikeRepository>(),
       ),
     )
+    ..registerSingleton<UserLikesUseCase>(
+      UserLikesUseCase(
+        likeRepository: getIt<LikeRepository>(),
+      ),
+    )
+
     // download
     ..registerSingleton<ImageDownloadUseCase>(
       ImageDownloadUseCase(
         photoRepository: getIt<PhotoRepository>(),
       ),
     )
-    ..registerSingleton<DownlaodUseCase>(
-      DownlaodUseCase(
+    ..registerSingleton<DownloadUseCase>(
+      DownloadUseCase(
         downloadRepository: getIt<DownloadRepository>(),
       ),
     )
@@ -190,6 +200,11 @@ void registerDependencies() {
     // share
     ..registerSingleton<ShareUseCase>(
       ShareUseCase(
+        shareRepository: getIt<ShareRepository>(),
+      ),
+    )
+    ..registerSingleton<UserSharedUseCase>(
+      UserSharedUseCase(
         shareRepository: getIt<ShareRepository>(),
       ),
     )
@@ -241,7 +256,7 @@ void registerDependencies() {
         popularUseCase: getIt<PopularUseCase>(),
         imageInfoUseCase: getIt<ImageInfoUseCase>(),
         imageDownloadUseCase: getIt<ImageDownloadUseCase>(),
-        downlaodUseCase: getIt<DownlaodUseCase>(),
+        downloadUseCase: getIt<DownloadUseCase>(),
         getCommentListUseCase: getIt<GetCommentListUseCase>(),
         commentUseCase: getIt<CommentUseCase>(),
         shareUseCase: getIt<ShareUseCase>(),
@@ -268,6 +283,18 @@ void registerDependencies() {
       () => UserDownloadsViewModel(
         getUserIdUseCase: getIt<GetUserIdUseCase>(),
         userDownloadUseCase: getIt<UserDownloadUseCase>(),
+      ),
+    )
+    // likes
+    ..registerFactory<UserLikesViewModel>(
+          () => UserLikesViewModel(
+        userLikesUseCase: getIt<UserLikesUseCase>(),
+      ),
+    )
+  // shared
+    ..registerFactory<UserSharedViewModel>(
+          () => UserSharedViewModel(
+        userSharedUseCase: getIt<UserSharedUseCase>(),
       ),
     );
 }

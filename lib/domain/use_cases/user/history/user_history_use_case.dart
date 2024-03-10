@@ -13,14 +13,9 @@ class UserHistoryUseCase {
       final result = await _viewHistoryRepository.getUserHistoryList(userId);
       return result.when(
         success: (data) {
-          Set<UserHistoryModel> userHistoryModel = {};
-
-          for (var model in data) {
-            if (!userHistoryModel.any((element) => element.imageId == model.imageId)) {
-              userHistoryModel.add(model);
-            }
-          }
-          return Result.success(userHistoryModel.toList());
+          final sortedUserHistoryList = data
+            ..sort((a, b) => b.viewId.compareTo(a.viewId));
+          return Result.success(sortedUserHistoryList);
         },
         error: (message) {
           return Result.error(message);
@@ -28,6 +23,15 @@ class UserHistoryUseCase {
       );
     } catch (e) {
       return Result.error('$e');
+    }
+  }
+
+  Future<Result<void>> deleteUserHistories(List<int> viewIds) async {
+    try {
+      final result = await _viewHistoryRepository.deleteUserHistories(viewIds);
+      return result;
+    } catch (e) {
+      return Result.error('deleteUserHistories USECASE 에러 $e');
     }
   }
 }
