@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/user_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/user_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/user_view_model.dart';
+
 import '../../common/theme.dart';
 
 class UserScreen extends StatefulWidget {
@@ -17,13 +18,14 @@ class _UserScreenState extends State<UserScreen> {
   bool isSigned = false;
   String _userName = '';
   String _userEmail = '';
-  int _userId = 0;
+  final int _userId = 0;
 
   @override
   void initState() {
     _userViewModel = UserViewModel(UserUseCase(UserRepositoryImpl()));
     _userViewModel.addListener(_updateUserInfo);
     _userViewModel.getUserAccount(context);
+
     super.initState();
   }
 
@@ -162,9 +164,9 @@ class _UserScreenState extends State<UserScreen> {
                   child: Text(
                     'Sign Out',
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                      decoration: TextDecoration.underline,
-                    ),
+                          color: Theme.of(context).colorScheme.primary,
+                          decoration: TextDecoration.underline,
+                        ),
                   ),
                 ),
               ),
