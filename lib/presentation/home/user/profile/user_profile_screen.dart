@@ -17,7 +17,6 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-  // TODO: late 선언 확인
   final String _currentUserName = '사용자 이름 입력';
   final String _currentUserBio = '상태 메세지 입력';
   UserModel? userModel;
@@ -141,7 +140,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
                 child: TextButton(
                   onPressed: () {
-                    // TODO: 하단 Widget 띄우기 Choose from Likes, Remove _current picture
                     _showPicturesOptionsBottomSheet();
                   },
                   child: const Text(
@@ -195,7 +193,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           return null;
                         },
                         onTap: () {
-                          // TODO: Dialog에서 수정. userNameScreen에서 수정하려면 context.push('/home/user/profile/username');
+                          _showEditUserNameDialog();
                         },
                       ),
                     )
@@ -238,7 +236,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           return null;
                         },
                         onTap: () {
-                          // TODO: Dialog에서 수정. userBioScreen에서 수정하려면 context.push('/home/user/profile/userbio');
                           _showEditUserBioDialog;
                         },
                       ),
@@ -281,12 +278,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           content: TextFormField(
             maxLength: 30,
             maxLines: null,
-            // TODO: tb_user_profile.username
             controller: _userNameTextController,
             decoration: InputDecoration(
               suffixIcon: IconButton(
-                onPressed: _userNameTextController.clear // TODO: _current? new?
-                ,
+                onPressed: _userNameTextController.clear,
                 icon: const Icon(Icons.cancel),
               ),
             ),
@@ -306,7 +301,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ElevatedButton(
                   // Discard Changes
                   onPressed: () {
-                    // TODO: 수정한 userName 저장하지 않기
                     context.pop();
                   },
                   style: ElevatedButton.styleFrom(
@@ -362,8 +356,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             maxLines: null,
             controller: _userBioTextController,
             decoration: InputDecoration(
-              // TODO: tb_user_profile.userBio 가져와서 labelText 대체
-              labelText: 'bio_example',
               suffixIcon: IconButton(
                 onPressed: _userBioTextController.clear,
                 icon: const Icon(Icons.cancel),
