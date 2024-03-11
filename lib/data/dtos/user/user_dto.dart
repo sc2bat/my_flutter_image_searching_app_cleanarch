@@ -4,6 +4,8 @@ class UserDTO {
   final String userName;
   final DateTime updatedAt;
   final bool isDeleted;
+  final String userPicture;
+  final String userBio;
 
   UserDTO({
     required this.userId,
@@ -11,6 +13,8 @@ class UserDTO {
     required this.userName,
     required this.updatedAt,
     required this.isDeleted,
+    required this.userPicture,
+    required this.userBio,
   });
 
   factory UserDTO.fromJson(Map<String, dynamic> json) {
@@ -20,6 +24,8 @@ class UserDTO {
       userName: json['user_name'] as String,
       updatedAt: DateTime.parse(json['updated_at'] as String),
       isDeleted: json['is_deleted'] as bool,
+      userPicture: json['user_picture'] as String,
+      userBio: json['user_bio'] as String,
     );
   }
 }

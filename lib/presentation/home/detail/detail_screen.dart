@@ -304,7 +304,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                     return InfoBoxWidget(
                                       photoModel: detailState.photoModel!,
                                       viewCount: detailState.viewCount,
-                                      downlaodCount: detailState.downlaodCount,
+                                      downloadCount: detailState.downloadCount,
                                       shareCount: detailState.shareCount,
                                     );
                                   },

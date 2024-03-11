@@ -1,6 +1,7 @@
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/result.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/like/like_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/model/user/likes/user_likes_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/like_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
@@ -81,6 +82,40 @@ class LikeRepositoryImpl implements LikeRepository {
       return Result.success(result.count);
     } catch (e) {
       return Result.error('$e');
+    }
+  }
+
+  @override
+  Future<Result<List<UserLikesModel>>> getUserLikesList(int userId) async {
+    try {
+      final List<Map<String, dynamic>> likesData = await supabase.rpc(
+        FUNC_GET_USER_LIKES,
+        params: {
+          'param_user_id': userId,
+        },
+      );
+      logger.info('userId print: $userId');
+      logger.info('likesData print: $likesData');
+      List<UserLikesModel> userLikesModel = [];
+      userLikesModel =
+          likesData.map((e) => UserLikesModel.fromJson(e)).toList();
+      return Result.success(userLikesModel);
+    } catch (e) {
+      return Result.error('$e');
+    }
+  }
+
+  @override
+  Future<Result<void>> deleteUserLikes(List<int> likeIds) async {
+    try {
+      await supabase
+          .from(TB_LIKE_HISTORY)
+          .update({'is_liked': false})
+          .eq('is_liked', true)
+          .filter('like_id', 'in', '(${likeIds.join(',')})');
+      return const Result.success(null);
+    } catch (e) {
+      return Result.error('like repo impl delete 에러 $e');
     }
   }
 }

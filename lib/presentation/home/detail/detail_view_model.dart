@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/like/like_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/comment/comment_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/comment/get_comment_list_use_case.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/download/downlaod_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/download/download_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/download/image_download_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/home/popular_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/like/like_use_case.dart';
@@ -28,7 +28,7 @@ class DetailViewModel with ChangeNotifier {
   final PopularUseCase _popularUseCase;
   final ImageInfoUseCase _imageInfoUseCase;
   final ImageDownloadUseCase _imageDownloadUseCase;
-  final DownlaodUseCase _downloadUseCase;
+  final DownloadUseCase _downloadUseCase;
   final GetCommentListUseCase _getCommentListUseCase;
   final CommentUseCase _commentUseCase;
   final ShareUseCase _shareUseCase;
@@ -41,7 +41,7 @@ class DetailViewModel with ChangeNotifier {
     required PopularUseCase popularUseCase,
     required ImageInfoUseCase imageInfoUseCase,
     required ImageDownloadUseCase imageDownloadUseCase,
-    required DownlaodUseCase downlaodUseCase,
+    required DownloadUseCase downloadUseCase,
     required GetCommentListUseCase getCommentListUseCase,
     required CommentUseCase commentUseCase,
     required ShareUseCase shareUseCase,
@@ -52,7 +52,7 @@ class DetailViewModel with ChangeNotifier {
         _popularUseCase = popularUseCase,
         _imageInfoUseCase = imageInfoUseCase,
         _imageDownloadUseCase = imageDownloadUseCase,
-        _downloadUseCase = downlaodUseCase,
+        _downloadUseCase = downloadUseCase,
         _getCommentListUseCase = getCommentListUseCase,
         _commentUseCase = commentUseCase,
         _shareUseCase = shareUseCase,
@@ -378,7 +378,7 @@ class DetailViewModel with ChangeNotifier {
         // logger.info(data);
         _detailState = detailState.copyWith(
           viewCount: data['view_count'],
-          downlaodCount: data['download_count'],
+          downloadCount: data['download_count'],
           shareCount: data['share_count'],
         );
 

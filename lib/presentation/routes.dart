@@ -13,6 +13,9 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/history/user_history_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/history/user_history_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/likes/user_likes_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/likes/user_likes_view_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_bio_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_name_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_profile_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/shared/user_shared_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/user_screen.dart';
@@ -20,6 +23,8 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/splash/splash_screen.dart';
 import 'package:provider/provider.dart';
+
+import 'home/user/shared/user_shared_view_model.dart';
 
 final router = GoRouter(
   initialLocation: '/index',
@@ -50,8 +55,26 @@ final router = GoRouter(
           routes: [
             GoRoute(
               path: 'profile',
-              builder: (_, __) => const UserProfileScreen(),
-              routes: const [],
+              builder: (_, state) {
+                final map = state.extra! as Map<String, dynamic>;
+                return UserProfileScreen(
+                  userUuid: map['user_uuid'],
+                );
+              },
+              routes: [
+                GoRoute(
+                  path: 'username',
+                  builder: (_, __) => const UserNameScreen(
+                    currentUserName: '',
+                  ),
+                  routes: const [],
+                ),
+                GoRoute(
+                  path: 'userbio',
+                  builder: (_, __) => const UserBioScreen(),
+                  routes: const [],
+                ),
+              ],
             ),
             GoRoute(
               path: 'history',
@@ -68,7 +91,15 @@ final router = GoRouter(
             ),
             GoRoute(
               path: 'likes',
-              builder: (_, __) => const UserLikesScreen(),
+              builder: (_, state) {
+                final map = state.extra! as Map<String, dynamic>;
+                return ChangeNotifierProvider(
+                  create: (_) => getIt<UserLikesViewModel>(),
+                  child: UserLikesScreen(
+                    userId: map['userId'],
+                  ),
+                );
+              },
               routes: const [],
             ),
             GoRoute(
@@ -87,7 +118,15 @@ final router = GoRouter(
             ),
             GoRoute(
               path: 'shared',
-              builder: (_, __) => const UserSharedScreen(),
+              builder: (_, state) {
+                final map = state.extra! as Map<String, dynamic>;
+                return ChangeNotifierProvider(
+                  create: (_) => getIt<UserSharedViewModel>(),
+                  child: UserSharedScreen(
+                    userId: map['userId'],
+                  ),
+                );
+              },
               routes: const [],
             ),
           ],
