@@ -4,14 +4,14 @@ import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/sup
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 
 class UserSharedUseCase {
-  final ShareRepository _ShareRepository;
+  final ShareRepository _shareRepository;
   UserSharedUseCase({
     required ShareRepository shareRepository,
-  }) : _ShareRepository = shareRepository;
+  }) : _shareRepository = shareRepository;
 
   Future<Result<List<UserSharedModel>>> getUserSharedList(int userId) async {
     try {
-      final result = await _ShareRepository.getUserSharedList(userId);
+      final result = await _shareRepository.getUserSharedList(userId);
       return result.when(
         success: (data) {
           logger.info('data print $data');
@@ -31,7 +31,7 @@ class UserSharedUseCase {
 
   Future<Result<void>> deleteUserShared(List<int> shareIds) async {
     try {
-      final result = await _ShareRepository.deleteUserShared(shareIds);
+      final result = await _shareRepository.deleteUserShared(shareIds);
       return result;
     } catch (e) {
       return Result.error('deleteShared USECASE 에러 $e');
