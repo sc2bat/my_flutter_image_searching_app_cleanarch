@@ -136,7 +136,7 @@ class _UserDownloadscreenState extends State<UserDownloadsScreen> {
                                                 0.6,
                                       ),
                                       child: Text(
-                                        'size : ${item.size}',
+                                        'fileName : ${item.fileName.split('/').last}',
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),

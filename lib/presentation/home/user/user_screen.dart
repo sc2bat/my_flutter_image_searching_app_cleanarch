@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../../../data/data_sources/constants.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/user_repository_impl.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/user_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/user_view_model.dart';
 import '../../common/theme.dart';
 
 class UserScreen extends StatefulWidget {
@@ -15,63 +13,24 @@ class UserScreen extends StatefulWidget {
 }
 
 class _UserScreenState extends State<UserScreen> {
+  late UserViewModel _userViewModel;
   bool isSigned = false;
-
- // late TextEditingController _userNameTextFieldController = TextEditingController();
-  bool _isLoading = false;
   String _userName = '';
   String _userEmail = '';
   int _userId = 0;
 
   @override
   void initState() {
-  //  _userNameTextFieldController = TextEditingController();
-    _getUserAccount();
+    _userViewModel = UserViewModel(UserUseCase(UserRepositoryImpl()));
+    _userViewModel.addListener(_updateUserInfo);
+    _userViewModel.getUserAccount(context);
     super.initState();
   }
 
   @override
   void dispose() {
-  //  _userNameTextFieldController.dispose();
+    _userViewModel.removeListener(_updateUserInfo);
     super.dispose();
-  }
-
-  Future<void> _getUserAccount() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final Session? session = supabase.auth.currentSession;
-      final user = session?.user;
-      final userUuid = user?.id;
-      if (userUuid != null) {
-        final data = await supabase
-            .from(TB_USER_PROFILE)
-            .select()
-            .eq('user_uuid', userUuid)
-            .single();
-        _userName = data['user_name'] ?? 'none';
-        _userId = data['user_id'] ?? 0;
-      }
-      _userEmail = user?.email ?? '';
-    } on PostgrestException catch (error) {
-      SnackBar(
-        content: Text(error.message),
-        backgroundColor: Theme.of(context).colorScheme.error,
-      );
-    } catch (error) {
-      SnackBar(
-        content: const Text('getUserAccount error'),
-        backgroundColor: Theme.of(context).colorScheme.error,
-      );
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
   }
 
   final List<ActivityItem> _activityItems = [
@@ -97,19 +56,11 @@ class _UserScreenState extends State<UserScreen> {
     ),
   ];
 
-  Future<void> signOut() async {
-    await supabase.auth.signOut();
-    logger.info('user_screen_logout');
-    setState(() {
-      isSigned = false;
-      context.push('/home');
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           'ImageCraft',
           style: TextStyle(
@@ -132,17 +83,18 @@ class _UserScreenState extends State<UserScreen> {
           Column(
             children: [
               ListTile(
-                onTap: () => context.push('/home/user/profile'),
+                onTap: () => context.push('/home/user/profile',
+                    extra: {'user_uuid': _userViewModel.userUuid}),
                 leading: const Icon(
                   Icons.account_circle,
                   size: 48.0,
                   color: baseColor,
                 ),
                 title: Text(
-                  _userName,
+                  _userViewModel.userName,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
-                subtitle: Text(_userEmail),
+                subtitle: Text(_userViewModel.userEmail),
               ),
               const Divider(),
               Padding(
@@ -170,12 +122,14 @@ class _UserScreenState extends State<UserScreen> {
                             onTap: () {
                               switch (activityItem.title) {
                                 case 'History':
-                                  context.push('/home/user/history',
-                                  extra: {'userId': _userId,});
+                                  context.push('/home/user/history', extra: {
+                                    'userId': _userId,
+                                  });
                                   break;
                                 case 'Likes':
-                                  context.push('/home/user/likes',
-                                  extra: {'userId': _userId,});
+                                  context.push('/home/user/likes', extra: {
+                                    'userId': _userId,
+                                  });
                                   break;
                                 case 'Comments':
                                   context.push('/home/user/comments');
@@ -184,8 +138,9 @@ class _UserScreenState extends State<UserScreen> {
                                   context.push('/home/user/downloads');
                                   break;
                                 case 'Shared':
-                                  context.push('/home/user/shared',
-                                  extra: {'userId': _userId,});
+                                  context.push('/home/user/shared', extra: {
+                                    'userId': _userId,
+                                  });
                                   break;
                               }
                             },
@@ -203,13 +158,13 @@ class _UserScreenState extends State<UserScreen> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: TextButton(
-                  onPressed: () => signOut(),
+                  onPressed: () => _userViewModel.signOut(context),
                   child: Text(
                     'Sign Out',
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                          decoration: TextDecoration.underline,
-                        ),
+                      color: Theme.of(context).colorScheme.primary,
+                      decoration: TextDecoration.underline,
+                    ),
                   ),
                 ),
               ),
@@ -219,6 +174,13 @@ class _UserScreenState extends State<UserScreen> {
         ],
       ),
     );
+  }
+
+  void _updateUserInfo() {
+    setState(() {
+      _userName = _userViewModel.userName;
+      _userEmail = _userViewModel.userEmail;
+    });
   }
 }
 

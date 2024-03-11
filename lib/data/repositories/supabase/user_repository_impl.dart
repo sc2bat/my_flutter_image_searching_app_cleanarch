@@ -25,4 +25,19 @@ class UserRepositoryImpl implements UserRepository {
       return Result.error('$e');
     }
   }
+
+  @override
+  Future<Result<void>> updateUserField(String userUuid, String fieldName, String newValue) async {
+    try {
+      final updateData = {fieldName: newValue};
+      await supabase
+          .from(TB_USER_PROFILE)
+          .update(updateData)
+          .eq('user_uuid', userUuid)
+          .single();
+      return const Result.success(null);
+    } catch (e) {
+      return Result.error('$e');
+    }
+  }
 }

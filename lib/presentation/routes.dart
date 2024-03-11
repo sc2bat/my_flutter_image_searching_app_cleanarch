@@ -55,7 +55,12 @@ final router = GoRouter(
           routes: [
             GoRoute(
               path: 'profile',
-              builder: (_, __) => const UserProfileScreen(),
+              builder: (_, state) {
+                final map = state.extra! as Map<String, dynamic>;
+                return UserProfileScreen(
+                  userUuid: map['user_uuid'],
+                );
+              },
               routes: [
                 GoRoute(
                   path: 'username',
@@ -148,7 +153,7 @@ final router = GoRouter(
         return ChangeNotifierProvider(
           create: (_) => getIt<DetailViewModel>(),
           child: DetailScreen(
-            imageId: map['imageId'] as int,
+            imageId: map['imageId'],
           ),
         );
       },
