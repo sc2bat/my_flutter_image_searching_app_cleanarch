@@ -21,11 +21,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   final String _currentUserName = '사용자 이름 입력';
   final String _currentUserBio = '상태 메세지 입력';
   UserModel? userModel;
-  // late String? _currentUserPicture = '';
-
-  // late String newUserName = _currentUserName;
-  // late String? newUserBio = _currentUserBio;
-  // late String? newUserPicture = _currentUserPicture;
 
   late TextEditingController _userNameTextController;
   late TextEditingController _userBioTextController;
@@ -55,14 +50,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           _userNameTextController.text = data.userName;
           _userBioTextController.text = data.userBio;
           setState(() {});
-          // setState(() {
-          //   _currentUserName = userModel.userName;
-          //   _currentUserBio = userModel.userBio;
-          //   _currentUserPicture = userModel.userPicture ?? '';
-          // });
-          // newUserName = _currentUserName;
-          // newUserBio = _currentUserBio;
-          // newUserPicture = _currentUserPicture ?? '';
         },
         error: (error) {
           logger.info('getUserInfo 에러: $error');
@@ -78,13 +65,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Future<void> updateUserInfo(
     String newUserName,
     String newUserBio,
-    String newUserPicture,
+//TODO:    userPictue은 다른 메소드로 이동. String newUserPicture,
   ) async {
     try {
-      await UserRepositoryImpl().updateUserName(widget.userUuid, newUserName);
-      await UserRepositoryImpl().updateUserName(widget.userUuid, newUserBio);
-      await UserRepositoryImpl()
-          .updateUserName(widget.userUuid, newUserPicture);
+      await UserRepositoryImpl().updateUserField(widget.userUuid, 'user_name', newUserName);
+      await UserRepositoryImpl().updateUserField(widget.userUuid, 'user_bio', newUserBio);
+//TODO:      await UserRepositoryImpl().updateUserPicture(widget.userUuid, 'user_picture', newUserPicture);
       await loadUserData();
     } catch (e) {
       logger.info('updateUserInfo 에러: $e');
@@ -98,9 +84,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
-            // TODO: userName 또는 userBio 값이 변경됨 & Save changes 버튼이 안 눌렸으면
-            _showBackDialog();
-            // TODO: context.push('/home/user');
+            if(_isUserDataChanged()) {
+              _showBackDialog();
+            } else {
+              context.pop();
+            }
           },
         ),
         centerTitle: true,
@@ -188,7 +176,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         maxLength: 30,
                         maxLines: null,
                         decoration: InputDecoration(
-                          hintText: _currentUserName, //'Enter username',
+                          hintText: _currentUserName,
                           suffixIcon: IconButton(
                             onPressed: _userNameTextController.clear,
                             icon: const Icon(
@@ -208,7 +196,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         },
                         onTap: () {
                           // TODO: Dialog에서 수정. userNameScreen에서 수정하려면 context.push('/home/user/profile/username');
-                          // _showEditUserNameDialog();
                         },
                       ),
                     )
@@ -339,10 +326,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   width: 32.0,
                 ),
                 ElevatedButton(
-                  // Save
                   onPressed: () {
                     // TODO: 수정한 userName 저장
-                    Navigator.pop(context);
+                    context.pop();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: editColor,
@@ -416,7 +402,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   // Save
                   onPressed: () {
                     // TODO: 수정한 userBio 저장
-                    Navigator.pop(context);
+                    context.pop();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: editColor,
@@ -458,14 +444,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               onPressed: () {
                 context.pop();
                 context.pop();
-                // context.push('/home/user');
               },
             ),
             TextButton(
               child: const Text('Keep editing'),
               onPressed: () {
                 context.pop();
-                // Navigator.pop(context);
               },
             ),
           ],
@@ -487,7 +471,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   style: TextStyle(color: Colors.black87)),
               onTap: () {
                 // TODO: Likes grid 보여주고 선택하는 페이지, 선택한 사진 가져와서 CircleAvatar에 띄우기
-                Navigator.pop(context);
+                context.pop();
               },
             ),
             Padding(
@@ -504,7 +488,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     // TODO: 프로필 사진을 기본값으로. Icon(Icons.account_circle) 또는 userProfileUrlWithFirstCharacter
                     // newUserPicture = '';
                   });
-                  Navigator.pop(context);
+                  context.pop();
                 },
               ),
             ),
@@ -515,12 +499,26 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   void _saveChanges() {
-    // TODO: 수정된 userName 또는 userBio 저장
+    final newUserName = _userNameTextController.text;
+    final newUserBio = _userBioTextController.text;
+
+    // avoid unnecessary database updates if the user hasn't made any modifications.
+    if (newUserName != userModel?.userName || newUserBio != userModel?.userBio) {
+      updateUserInfo(newUserName, newUserBio);
+    }
+
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Changes saved successfully'),
         duration: Duration(seconds: 2),
       ),
     );
+  }
+
+  bool _isUserDataChanged() {
+    final newUserName = _userNameTextController.text;
+    final newUserBio = _userBioTextController.text;
+
+    return newUserName != userModel?.userName || newUserBio != userModel?.userBio;
   }
 }
