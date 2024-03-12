@@ -64,9 +64,16 @@ final router = GoRouter(
                 GoRoute(
                   path: 'choose',
                   // builder: (_, __) => const ChooseProfileFromLikesScreen(userUuid: '', userId: 2,),
-                  builder: (context, child) {
-                    return const ChooseProfileFromLikesScreen(userId: 2, userUuid: '');
-                  }
+                  builder: (context, state) {
+                    final map = state.extra! as Map<String, dynamic>;
+                    return ChangeNotifierProvider<UserLikesViewModel>(
+                      create: (_) => getIt<UserLikesViewModel>(),
+                      child: const ChooseProfileFromLikesScreen(
+                        userId: 0,
+                        userUuid: '',
+                      ),
+                    );
+                  },
                 )
               ],
             ),
