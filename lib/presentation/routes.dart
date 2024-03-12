@@ -62,10 +62,8 @@ final router = GoRouter(
                 );
               },
               routes: [
-                // TODO: ChooseProfileFromLikesScreen
                 GoRoute(
                   path: 'choose',
-                  // builder: (_, __) => const ChooseProfileFromLikesScreen(userUuid: '', userId: 2,),
                   builder: (_, state) {
                     final map = state.extra! as Map<String, dynamic>;
                     return ChangeNotifierProvider(

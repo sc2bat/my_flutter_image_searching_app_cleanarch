@@ -71,4 +71,21 @@ class ImageRepositoryImpl implements ImageRepository {
       return Result.error('getPhotoCountInfoFromSupabase $e');
     }
   }
+
+  @override
+  Future<Result<List<PhotoModel>>> getRandomPhotos() async {
+    try {
+      final data = await supabase
+          .from(TB_IMAGE_INFO)
+          .select();
+      data.shuffle();
+      final limitData = data.take(20).toList();
+
+      List<PhotoModel> randomPhotoModel = limitData.map((e) => PhotoModel.fromJson(e)).toList();
+
+      return Result.success(randomPhotoModel);
+    } catch (e) {
+      return Result.error('getRandomPhotos error $e');
+    }
+  }
 }

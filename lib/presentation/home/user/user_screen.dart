@@ -15,10 +15,6 @@ class UserScreen extends StatefulWidget {
 
 class _UserScreenState extends State<UserScreen> {
   late UserViewModel _userViewModel;
-  // bool isSigned = false;
-  // String _userName = '';
-  // String _userEmail = '';
-  // final int _userId = 0;
 
   @override
   void initState() {
@@ -87,10 +83,10 @@ class _UserScreenState extends State<UserScreen> {
               ListTile(
                 onTap: () => context.push('/home/user/profile',
                     extra: {'user_uuid': _userViewModel.userUuid}),
-                leading: const Icon(
-                  Icons.account_circle,
-                  size: 48.0,
-                  color: baseColor,
+                leading: CircleAvatar(
+                  radius: 80,
+                  backgroundImage: NetworkImage(
+                      _userViewModel.userPicture),
                 ),
                 title: Text(
                   _userViewModel.userName,

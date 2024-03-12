@@ -44,7 +44,7 @@ class _ChooseUserPictureScreenState extends State<ChooseUserPictureScreen> {
         ),
         centerTitle: true,
         title: const Text(
-          'Favorites',
+          'Choose profile picture',
           style: TextStyle(
             color: Colors.black87,
             fontSize: 24.0,
@@ -73,7 +73,6 @@ class _ChooseUserPictureScreenState extends State<ChooseUserPictureScreen> {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
-            // TODO: 선택한 사진. 선택하지 않았을 때는 Likes 최근 이미지
             child: chooseUserPictureState
                     .selectedUserPicture.isNotEmpty // userPicture 고른 상태면,
                 ? CircleAvatar(

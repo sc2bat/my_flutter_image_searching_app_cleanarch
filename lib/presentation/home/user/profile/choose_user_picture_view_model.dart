@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/result.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/photo/photo_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/profile/random_photo_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/profile/save_user_picture_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/choose_user_picture_state.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 
 class ChooseUserPictureViewModel with ChangeNotifier {
   ChooseUserPictureViewModel({
-    required PhotoUseCase photoUseCase,
+    required RandomPhotoUseCase randomPhotoUseCase,
     required SaveUserPictureUseCase saveUserPictureUseCase,
-  })  : _photoUseCase = photoUseCase,
+  })  : _randomRandomPhotoUseCase = randomPhotoUseCase,
         _saveUserPictureUseCase = saveUserPictureUseCase;
-  final PhotoUseCase _photoUseCase;
+  final RandomPhotoUseCase _randomRandomPhotoUseCase;
   final SaveUserPictureUseCase _saveUserPictureUseCase;
 
   ChooseUserPictureState _chooseUserPictureState =
@@ -39,7 +39,7 @@ class ChooseUserPictureViewModel with ChangeNotifier {
   }
 
   Future<void> getPhotoListForChoose() async {
-    final result = await _photoUseCase.execute('');
+    final result = await _randomRandomPhotoUseCase.execute();
 
     switch (result) {
       case Success<List<PhotoModel>>():
