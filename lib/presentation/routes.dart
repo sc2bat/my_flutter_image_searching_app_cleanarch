@@ -14,7 +14,8 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/history/user_history_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/likes/user_likes_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/likes/user_likes_view_model.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/choose_profile_from_likes_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/choose_user_picture_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/choose_user_picture_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_profile_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/shared/user_shared_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/user_screen.dart';
@@ -60,17 +61,17 @@ final router = GoRouter(
                   userUuid: map['user_uuid'],
                 );
               },
-              routes: [ // TODO: ChooseProfileFromLikesScreen
+              routes: [
+                // TODO: ChooseProfileFromLikesScreen
                 GoRoute(
                   path: 'choose',
                   // builder: (_, __) => const ChooseProfileFromLikesScreen(userUuid: '', userId: 2,),
-                  builder: (context, state) {
+                  builder: (_, state) {
                     final map = state.extra! as Map<String, dynamic>;
-                    return ChangeNotifierProvider<UserLikesViewModel>(
-                      create: (_) => getIt<UserLikesViewModel>(),
-                      child: const ChooseProfileFromLikesScreen(
-                        userId: 0,
-                        userUuid: '',
+                    return ChangeNotifierProvider(
+                      create: (_) => getIt<ChooseUserPictureViewModel>(),
+                      child: ChooseUserPictureScreen(
+                        userModel: map['user_model'],
                       ),
                     );
                   },

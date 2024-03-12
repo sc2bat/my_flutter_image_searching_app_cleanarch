@@ -267,7 +267,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Discard changes?'),
-          content: Text('If you go back now, you will lose your changes.'),
+          content:
+              const Text('If you go back now, you will lose your changes.'),
           actions: <Widget>[
             TextButton(
               child: const Text('Discard changes'),
@@ -301,7 +302,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   style: TextStyle(color: Colors.black87)),
               onTap: () {
                 // TODO: Likes grid 보여주고 선택하는 페이지, extra를 써야 하나
-                context.push('/home/user/profile/choose');
+                if (userModel != null) {
+                  context.push('/home/user/profile/choose', extra: {
+                    'user_model': userModel,
+                  });
+                }
               },
             ),
             Padding(
