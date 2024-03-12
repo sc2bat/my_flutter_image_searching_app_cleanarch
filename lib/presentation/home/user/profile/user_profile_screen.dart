@@ -64,14 +64,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Future<void> updateUserInfo(
     String newUserName,
     String newUserBio,
-//TODO:    userPictue은 다른 메소드로 이동. String newUserPicture,
   ) async {
     try {
       await UserRepositoryImpl()
           .updateUserField(widget.userUuid, 'user_name', newUserName);
       await UserRepositoryImpl()
           .updateUserField(widget.userUuid, 'user_bio', newUserBio);
-//TODO:      await UserRepositoryImpl().updateUserPicture(widget.userUuid, 'user_picture', newUserPicture);
       await loadUserData();
     } catch (e) {
       logger.info('updateUserInfo 에러: $e');
@@ -269,13 +267,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Discard changes?'),
-          content: const SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text('If you go back now, you will lose your changes.'),
-              ],
-            ),
-          ),
+          content: Text('If you go back now, you will lose your changes.'),
           actions: <Widget>[
             TextButton(
               child: const Text('Discard changes'),
@@ -308,8 +300,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               title: const Text('Choose from Likes',
                   style: TextStyle(color: Colors.black87)),
               onTap: () {
-                // TODO: Likes grid 보여주고 선택하는 페이지, 선택한 사진 가져와서 CircleAvatar에 띄우기
-                context.pop();
+                // TODO: Likes grid 보여주고 선택하는 페이지, extra를 써야 하나
+                context.push('/home/user/profile/choose');
               },
             ),
             Padding(
@@ -323,8 +315,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     style: TextStyle(color: Colors.redAccent)),
                 onTap: () {
                   setState(() {
-                    // TODO: 프로필 사진을 기본값으로. Icon(Icons.account_circle) 또는 userProfileUrlWithFirstCharacter
-                    // newUserPicture = '';
+                    userModel!.userPicture = '';
                   });
                   context.pop();
                 },

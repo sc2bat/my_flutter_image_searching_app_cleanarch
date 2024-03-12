@@ -261,7 +261,13 @@ void registerDependencies() {
       ),
     )
     // user
-
+    // TODO: profile
+    // ..registerFactory<UserViewModel>(
+    //       () => UserViewModel(
+    //         getUserAccount: getIt<UserProfileUseCase>(),
+    //         signOut: getIt<UserProfileUseCase>(),
+    //   ),
+    // )
     // comments
     ..registerFactory<UserCommentsViewModel>(
       () => UserCommentsViewModel(
