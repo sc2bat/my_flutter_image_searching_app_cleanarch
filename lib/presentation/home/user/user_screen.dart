@@ -70,11 +70,22 @@ class _UserScreenState extends State<UserScreen> {
               ListTile(
                 onTap: () => context.push('/home/user/profile',
                     extra: {'user_uuid': _userViewModel.userUuid}),
-                leading: CircleAvatar(
-                  radius: 80,
-                  backgroundImage: NetworkImage(
-                      _userViewModel.userPicture),
-                ),
+                leading: _userViewModel.userPicture.isNotEmpty // userPicture 고른 상태면,
+                        ? CircleAvatar(
+                            radius: 25.0,
+                            backgroundImage:
+                                NetworkImage(_userViewModel.userPicture))
+                        : const CircleAvatar(
+                            radius: 25.0,
+                            backgroundColor: Colors.transparent,
+                            child: FittedBox(
+                              child: Icon(
+                                Icons.account_circle,
+                                size: 200,
+                                color: baseColor,
+                              ),
+                            ),
+                          ),
                 title: Text(
                   _userViewModel.userName,
                   style: Theme.of(context).textTheme.titleLarge,
