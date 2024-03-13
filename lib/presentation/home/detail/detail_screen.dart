@@ -10,6 +10,7 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/the
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detail/detail_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detail/widget/comment_box_widget.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/widget/common/sign_elevated_button_widget.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/widget/common/title_logo_widget.dart';
 import 'package:provider/provider.dart';
 
 import 'widget/comment_edit_delete_alert_dialog_widget.dart';
@@ -92,21 +93,7 @@ class _DetailScreenState extends State<DetailScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
-          'ImageCraft',
-          style: TextStyle(
-            color: baseColor,
-            fontSize: 24.0,
-            fontWeight: FontWeight.bold,
-            shadows: [
-              Shadow(
-                offset: const Offset(2.0, 2.0),
-                blurRadius: 4.0,
-                color: Colors.grey.withOpacity(0.5),
-              ),
-            ],
-          ),
-        ),
+        title: const TitleLogoWidget(),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back), // 변경하고자 하는 아이콘
           onPressed: () {
