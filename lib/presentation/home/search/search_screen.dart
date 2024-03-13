@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/like/like_model.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/theme.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_state.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/widget/search_text_field_widget.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/widget/common/sign_elevated_button_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../../widget/common/title_logo_widget.dart';
 import 'widget/search_image_container_widget.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -68,21 +68,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
-          'ImageCraft',
-          style: TextStyle(
-            color: baseColor,
-            fontSize: 24.0,
-            fontWeight: FontWeight.bold,
-            shadows: [
-              Shadow(
-                offset: const Offset(2.0, 2.0),
-                blurRadius: 4.0,
-                color: Colors.grey.withOpacity(0.5),
-              ),
-            ],
-          ),
-        ),
+        title: const TitleLogoWidget(),
         actions: const [
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8.0),

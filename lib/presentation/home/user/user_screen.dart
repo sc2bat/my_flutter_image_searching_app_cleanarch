@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/user_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/user_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/user_view_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/widget/common/title_logo_widget.dart';
+
 import '../../common/theme.dart';
 
 class UserScreen extends StatefulWidget {
@@ -58,21 +60,7 @@ class _UserScreenState extends State<UserScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
-          'ImageCraft',
-          style: TextStyle(
-            color: baseColor,
-            fontSize: 24.0,
-            fontWeight: FontWeight.bold,
-            shadows: [
-              Shadow(
-                offset: const Offset(2.0, 2.0),
-                blurRadius: 4.0,
-                color: Colors.grey.withOpacity(0.5),
-              ),
-            ],
-          ),
-        ),
+        title: const TitleLogoWidget(),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
