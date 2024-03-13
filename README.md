@@ -1,14 +1,18 @@
-# my_flutter_image_searching_app_cleanarch
+# IMAGE CRAFT
+Simple Image Searching Mobile Application Built with Flutter
 
-이미지 검색 앱 클린아키텍쳐 버전
 
-## Getting Started
+#### image
+![ImageCraft_cover](https://github.com/sc2bat/my_flutter_image_searching_app_cleanarch/assets/87482415/c77f1a67-b0bf-4aa7-b48a-3116695e8bb1)
 
-### Link
- : https://github.com/sc2bat/my_flutter_image_searching_app_cleanarch
+#### video
+[![Video Label](http://img.youtube.com/vi/7kZtB71lZFs/0.jpg)](https://youtu.be/7kZtB71lZFs?t=0s)
 
-#### project
+#### project issue history
  : https://github.com/users/sc2bat/projects/3
+
+### beta download Link
+https://appdistribution.firebase.dev/i/c2936d4fc83e788b
  
 #### figma Link
  : https://www.figma.com/file/ZgYiqQP96drdGBBDSCToZG/ImageCraft?type=design&node-id=135%3A1065&mode=design&t=iEV3JigFZxxISPiu-1

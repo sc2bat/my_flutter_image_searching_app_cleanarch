@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/like/like_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/theme.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_state.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/search/search_view_model.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/widget/search_text_field_widget.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/widget/common/sign_elevated_button_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -81,9 +81,66 @@ class _SearchScreenState extends State<SearchScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: SearchTextFieldWidget(
-              searchTextController: _searchTextController,
-              searchViewModel: searchViewModel,
+            child: TextField(
+              controller: _searchTextController,
+              onTap: () {},
+              onSubmitted: (value) {
+                if (searchViewModel.textFieldValid(value)) {
+                  searchViewModel.getPhotos(value);
+                }
+              },
+              decoration: InputDecoration(
+                hintText: 'Search image',
+                focusColor: baseColor,
+                suffixIconColor: weakBlack,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(
+                    color: weakBlack,
+                    width: 1.0,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: const BorderSide(
+                    color: baseColor,
+                    width: 2.0,
+                  ),
+                ),
+                suffixIcon: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Visibility(
+                      visible: _searchTextController.text.isNotEmpty,
+                      child: IconButton(
+                        onPressed: () {
+                          _searchTextController.clear();
+                        },
+                        icon: const Icon(
+                          Icons.clear,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        if (searchViewModel
+                            .textFieldValid(_searchTextController.text)) {
+                          searchViewModel
+                              .addSearchHistories(_searchTextController.text);
+
+                          searchViewModel.getPhotos(_searchTextController.text);
+                        }
+                      },
+                      icon: const Icon(
+                        Icons.search,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 16.0,
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
           searchState.isLoading

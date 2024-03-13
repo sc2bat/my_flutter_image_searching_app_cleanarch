@@ -11,6 +11,8 @@ class CommentModel with _$CommentModel {
     @JsonKey(name: 'comment_id') required int commentId,
     @JsonKey(name: 'user_id') required int userId,
     @JsonKey(name: 'user_name') required String userName,
+    @JsonKey(name: 'user_picture') required String userPicture,
+    @JsonKey(name: 'user_bio') required String userBio,
     @JsonKey(name: 'comment_image_id') required int imageId,
     @JsonKey(name: 'comment_content') String? content,
     @JsonKey(name: 'comment_created_at') DateTime? createdAt,

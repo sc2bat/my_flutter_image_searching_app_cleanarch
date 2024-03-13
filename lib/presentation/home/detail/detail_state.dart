@@ -11,6 +11,8 @@ class DetailState with _$DetailState {
     @Default(true) bool isLoading,
     @Default(0) int userId,
     @Default('') String userName,
+    @Default('') String userPicture,
+    @Default('') String userBio,
     PhotoModel? photoModel,
     LikeModel? likeModel,
     @Default(0) int likeCount,

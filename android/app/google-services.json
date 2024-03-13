@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "538344693875",
+    "project_id": "flutteimagecraft",
+    "storage_bucket": "flutteimagecraft.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:538344693875:android:bfb5214aa84b72e86dca06",
+        "android_client_info": {
+          "package_name": "com.image.craft"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlkqFTnMMdocbQQuga6RGaOd6C_5plliI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

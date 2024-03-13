@@ -113,6 +113,8 @@ class DetailViewModel with ChangeNotifier {
         _detailState = detailState.copyWith(
           userId: data.userId,
           userName: data.userName,
+          userPicture: data.userPicture,
+          userBio: data.userBio,
         );
       },
       error: (message) {
