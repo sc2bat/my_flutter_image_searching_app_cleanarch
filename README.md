@@ -8,8 +8,11 @@ Simple Image Searching Mobile Application Built with Flutter
 #### video
 [![Video Label](http://img.youtube.com/vi/7kZtB71lZFs/0.jpg)](https://youtu.be/7kZtB71lZFs?t=0s)
 
-#### project history
+#### project issue history
  : https://github.com/users/sc2bat/projects/3
+
+### beta download Link
+https://appdistribution.firebase.dev/i/c2936d4fc83e788b
  
 #### figma Link
  : https://www.figma.com/file/ZgYiqQP96drdGBBDSCToZG/ImageCraft?type=design&node-id=135%3A1065&mode=design&t=iEV3JigFZxxISPiu-1
