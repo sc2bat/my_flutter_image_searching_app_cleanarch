@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/user_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/user_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/user_view_model.dart';
-
 import '../../common/theme.dart';
 
 class UserScreen extends StatefulWidget {
