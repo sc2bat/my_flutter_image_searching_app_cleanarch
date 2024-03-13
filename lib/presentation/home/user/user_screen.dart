@@ -84,7 +84,7 @@ class _UserScreenState extends State<UserScreen> {
                 onTap: () => context.push('/home/user/profile',
                     extra: {'user_uuid': _userViewModel.userUuid}),
                 leading: CircleAvatar(
-                  radius: 80,
+                  radius: 25.0,
                   backgroundImage: NetworkImage(
                       _userViewModel.userPicture),
                 ),
