@@ -14,8 +14,8 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/history/user_history_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/likes/user_likes_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/likes/user_likes_view_model.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_bio_screen.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_name_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/choose_user_picture_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/choose_user_picture_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_profile_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/shared/user_shared_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/user_screen.dart';
@@ -63,17 +63,17 @@ final router = GoRouter(
               },
               routes: [
                 GoRoute(
-                  path: 'username',
-                  builder: (_, __) => const UserNameScreen(
-                    currentUserName: '',
-                  ),
-                  routes: const [],
-                ),
-                GoRoute(
-                  path: 'userbio',
-                  builder: (_, __) => const UserBioScreen(),
-                  routes: const [],
-                ),
+                  path: 'choose',
+                  builder: (_, state) {
+                    final map = state.extra! as Map<String, dynamic>;
+                    return ChangeNotifierProvider(
+                      create: (_) => getIt<ChooseUserPictureViewModel>(),
+                      child: ChooseUserPictureScreen(
+                        userModel: map['user_model'],
+                      ),
+                    );
+                  },
+                )
               ],
             ),
             GoRoute(

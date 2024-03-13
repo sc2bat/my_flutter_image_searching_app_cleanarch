@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/user_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/user_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/user_view_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/widget/common/title_logo_widget.dart';
 
 import '../../common/theme.dart';
 
@@ -15,10 +16,6 @@ class UserScreen extends StatefulWidget {
 
 class _UserScreenState extends State<UserScreen> {
   late UserViewModel _userViewModel;
-  bool isSigned = false;
-  String _userName = '';
-  String _userEmail = '';
-  final int _userId = 0;
 
   @override
   void initState() {
@@ -63,21 +60,7 @@ class _UserScreenState extends State<UserScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
-          'ImageCraft',
-          style: TextStyle(
-            color: baseColor,
-            fontSize: 24.0,
-            fontWeight: FontWeight.bold,
-            shadows: [
-              Shadow(
-                offset: const Offset(2.0, 2.0),
-                blurRadius: 4.0,
-                color: Colors.grey.withOpacity(0.5),
-              ),
-            ],
-          ),
-        ),
+        title: const TitleLogoWidget(),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -87,10 +70,10 @@ class _UserScreenState extends State<UserScreen> {
               ListTile(
                 onTap: () => context.push('/home/user/profile',
                     extra: {'user_uuid': _userViewModel.userUuid}),
-                leading: const Icon(
-                  Icons.account_circle,
-                  size: 48.0,
-                  color: baseColor,
+                leading: CircleAvatar(
+                  radius: 80,
+                  backgroundImage: NetworkImage(
+                      _userViewModel.userPicture),
                 ),
                 title: Text(
                   _userViewModel.userName,
@@ -125,12 +108,12 @@ class _UserScreenState extends State<UserScreen> {
                               switch (activityItem.title) {
                                 case 'History':
                                   context.push('/home/user/history', extra: {
-                                    'userId': _userId,
+                                    'userId': _userViewModel.userId,
                                   });
                                   break;
                                 case 'Likes':
                                   context.push('/home/user/likes', extra: {
-                                    'userId': _userId,
+                                    'userId': _userViewModel.userId,
                                   });
                                   break;
                                 case 'Comments':
@@ -141,7 +124,7 @@ class _UserScreenState extends State<UserScreen> {
                                   break;
                                 case 'Shared':
                                   context.push('/home/user/shared', extra: {
-                                    'userId': _userId,
+                                    'userId': _userViewModel.userId,
                                   });
                                   break;
                               }
@@ -180,8 +163,8 @@ class _UserScreenState extends State<UserScreen> {
 
   void _updateUserInfo() {
     setState(() {
-      _userName = _userViewModel.userName;
-      _userEmail = _userViewModel.userEmail;
+      // _userName = _userViewModel.userName;
+      // _userEmail = _userViewModel.userEmail;
     });
   }
 }
