@@ -302,6 +302,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   context.push('/home/user/profile/choose', extra: {
                     'user_model': userModel,
                   });
+                  context.pop();
                 }
               },
             ),
