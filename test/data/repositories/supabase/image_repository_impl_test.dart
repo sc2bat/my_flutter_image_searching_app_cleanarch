@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/pixabay/pixabay_repository_impl.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/image_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/env/env.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
@@ -13,7 +12,6 @@ void main() {
     Env.supabaseApiKey,
   );
   final pixabayRepository = PixabayRepositoryImpl();
-  final imageRepositoryImpl = ImageRepositoryImpl();
 
   test('pixaApi => supabase test 001', () async {
     String query = 'beer';
@@ -89,5 +87,24 @@ void main() {
 
     logger.info(photoModel);
     expect(photoModel.imageId, 4670857);
+  });
+
+  test('getRandomPictures', () async {
+    final data = await supabase
+        .from(TB_IMAGE_INFO)
+        .select();
+    data.shuffle();
+    final limitData = data.take(20).toList();
+    // logger.info(limitData.length);
+    // expect(limitData.length, 21);
+
+    List<PhotoModel> randomPhotoModel = limitData.map((e) => PhotoModel.fromJson(e)).toList();
+
+    for (PhotoModel photoModel in randomPhotoModel) {
+      photoModel.previewUrl;
+    }
+    //PhotoModel photoModel = PhotoModel.fromJson(data as Map<String, dynamic>);
+
+   // logger.info(photoModel);
   });
 }

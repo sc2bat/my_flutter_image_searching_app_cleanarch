@@ -14,7 +14,8 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/history/user_history_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/likes/user_likes_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/likes/user_likes_view_model.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/choose_profile_from_likes_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/choose_user_picture_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/choose_user_picture_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_profile_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/shared/user_shared_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/user_screen.dart';
@@ -60,13 +61,18 @@ final router = GoRouter(
                   userUuid: map['user_uuid'],
                 );
               },
-              routes: [ // TODO: ChooseProfileFromLikesScreen
+              routes: [
                 GoRoute(
                   path: 'choose',
-                  // builder: (_, __) => const ChooseProfileFromLikesScreen(userUuid: '', userId: 2,),
-                  builder: (context, child) {
-                    return const ChooseProfileFromLikesScreen(userId: 2, userUuid: '');
-                  }
+                  builder: (_, state) {
+                    final map = state.extra! as Map<String, dynamic>;
+                    return ChangeNotifierProvider(
+                      create: (_) => getIt<ChooseUserPictureViewModel>(),
+                      child: ChooseUserPictureScreen(
+                        userModel: map['user_model'],
+                      ),
+                    );
+                  },
                 )
               ],
             ),

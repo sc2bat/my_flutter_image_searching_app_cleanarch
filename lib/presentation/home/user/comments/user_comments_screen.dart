@@ -85,14 +85,14 @@ class _UserCommentScreenState extends State<UserCommentsScreen> {
                       itemBuilder: (context, index) {
                         UserCommentModel comment =
                             userCommentsState.commentList[index];
-                        return Container(
-                          child: Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () => context.push('/detail', extra: {
-                                  'imageId': comment.imageId,
-                                }),
-                                child: Padding(
+                        return GestureDetector(
+                          onTap: () => context.push('/detail', extra: {
+                            'imageId': comment.imageId,
+                          }),
+                          child: Container(
+                            child: Row(
+                              children: [
+                                Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: SizedBox(
                                     width: imageSize,
@@ -105,37 +105,37 @@ class _UserCommentScreenState extends State<UserCommentsScreen> {
                                     ),
                                   ),
                                 ),
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    constraints: BoxConstraints(
-                                      maxWidth:
-                                          MediaQuery.of(context).size.width *
-                                              0.7,
-                                    ),
-                                    child: SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: Text(
-                                        comment.content,
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      constraints: BoxConstraints(
+                                        maxWidth:
+                                            MediaQuery.of(context).size.width *
+                                                0.7,
+                                      ),
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Text(
+                                          comment.content,
+                                          maxLines: 3,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Text(
-                                    getTimeDifference(
-                                        comment.createdAt.toString()),
-                                    style: TextStyle(
-                                      color: weakBlack,
+                                    Text(
+                                      getTimeDifference(
+                                          comment.createdAt.toString()),
+                                      style: TextStyle(
+                                        color: weakBlack,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       },

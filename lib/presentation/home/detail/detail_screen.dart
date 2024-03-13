@@ -95,7 +95,7 @@ class _DetailScreenState extends State<DetailScreen> {
         centerTitle: true,
         title: const TitleLogoWidget(),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back), // 변경하고자 하는 아이콘
+          icon: const Icon(Icons.arrow_back_ios), // 변경하고자 하는 아이콘
           onPressed: () {
             context.pop(detailState.likeModel);
           },

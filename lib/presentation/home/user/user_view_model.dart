@@ -13,6 +13,7 @@ class UserViewModel extends ChangeNotifier {
   String _userName = '';
   String _userUuid = '';
   String _userEmail = '';
+  String _userPicture = '';
   int _userId = 0;
 
   bool get isLoading => _isLoading;
@@ -20,6 +21,7 @@ class UserViewModel extends ChangeNotifier {
   String get userUuid => _userUuid;
   String get userEmail => _userEmail;
   int get userId => _userId;
+  String get userPicture => _userPicture;
 
   UserViewModel(this._userUseCase);
 
@@ -38,6 +40,7 @@ class UserViewModel extends ChangeNotifier {
         final userModel = await _userUseCase.getUserInfo(_userUuid);
         _userName = userModel.userName;
         _userId = userModel.userId;
+        _userPicture = userModel.userPicture;
       }
       _userEmail = user?.email ?? '';
     } catch (error) {

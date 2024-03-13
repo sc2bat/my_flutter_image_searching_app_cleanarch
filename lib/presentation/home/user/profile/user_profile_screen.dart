@@ -100,162 +100,159 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: <Widget>[
-              const SizedBox(height: 16.0),
-              GestureDetector(
-                onTap: () => _showPicturesOptionsBottomSheet(),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: userModel != null &&
-                          userModel!
-                              .userPicture.isNotEmpty // userPicture 고른 상태면,
-                      ? CircleAvatar(
-                          radius: 80,
-                          backgroundImage: NetworkImage(userModel!.userPicture),
-                        )
-                      : const CircleAvatar(
-                          radius: 80,
-                          backgroundColor: Colors.transparent,
-                          child: FittedBox(
-                            child: Icon(
-                              Icons.account_circle,
-                              size: 200,
-                              color: baseColor,
-                            ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: <Widget>[
+            const SizedBox(height: 16.0),
+            GestureDetector(
+              onTap: () => _showPicturesOptionsBottomSheet(),
+              child: Align(
+                alignment: Alignment.center,
+                child: userModel != null &&
+                        userModel!.userPicture.isNotEmpty // userPicture 고른 상태면,
+                    ? CircleAvatar(
+                        radius: 80,
+                        backgroundImage: NetworkImage(userModel!.userPicture),
+                      )
+                    : const CircleAvatar(
+                        radius: 80,
+                        backgroundColor: Colors.transparent,
+                        child: FittedBox(
+                          child: Icon(
+                            Icons.account_circle,
+                            size: 200,
+                            color: baseColor,
                           ),
                         ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 8.0,
-                  left: 32.0,
-                  right: 32.0,
-                ),
-                child: TextButton(
-                  onPressed: () {
-                    _showPicturesOptionsBottomSheet();
-                  },
-                  child: const Text(
-                    'Edit picture',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blueAccent,
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16.0),
-              const Divider(),
-              const SizedBox(height: 8.0),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  // userName
-                  children: <Widget>[
-                    const Text(
-                      'Username',
-                      style: TextStyle(
-                        color: Colors.black87,
-                        fontSize: 18,
                       ),
-                    ),
-                    const SizedBox(width: 32.0),
-                    Expanded(
-                      child: TextFormField(
-                        controller: _userNameTextController,
-                        maxLength: 30,
-                        maxLines: null,
-                        decoration: InputDecoration(
-                          hintText: _currentUserName,
-                          suffixIcon: IconButton(
-                            onPressed: _userNameTextController.clear,
-                            icon: const Icon(
-                              Icons.cancel,
-                              size: 20,
-                            ),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter username';
-                          }
-                          if (value.length > 30) {
-                            return 'Username can\'t exceed 30 characters';
-                          }
-                          return null;
-                        },
-                      ),
-                    )
-                  ],
-                ),
               ),
-              const SizedBox(height: 14.0),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  // userBio
-                  children: <Widget>[
-                    const Text(
-                      'Bio',
-                      style: TextStyle(
-                        color: Colors.black87,
-                        fontSize: 18,
-                      ),
-                    ),
-                    const SizedBox(width: 93.0),
-                    Expanded(
-                      child: TextFormField(
-                        maxLength: 150,
-                        maxLines: null,
-                        controller: _userBioTextController,
-                        decoration: InputDecoration(
-                          hintText: _currentUserBio,
-                          suffixIcon: IconButton(
-                            onPressed: _userBioTextController.clear,
-                            icon: const Icon(
-                              Icons.cancel,
-                              size: 20,
-                            ),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value!.length > 150) {
-                            return 'Bio cannot exceed 150 characters';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 8.0,
+                left: 32.0,
+                right: 32.0,
               ),
-              Container(height: 24.0),
-              ElevatedButton(
-                // Save
-                onPressed: _saveChanges,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: editColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                ),
+              child: TextButton(
+                onPressed: () {
+                  _showPicturesOptionsBottomSheet();
+                },
                 child: const Text(
-                  'Save changes',
+                  'Edit picture',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: Colors.blueAccent,
                     fontSize: 18,
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 16.0),
+            const Divider(),
+            const SizedBox(height: 8.0),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                // userName
+                children: <Widget>[
+                  const Text(
+                    'Username',
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 18,
+                    ),
+                  ),
+                  const SizedBox(width: 32.0),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _userNameTextController,
+                      maxLength: 30,
+                      maxLines: null,
+                      decoration: InputDecoration(
+                        hintText: _currentUserName,
+                        suffixIcon: IconButton(
+                          onPressed: _userNameTextController.clear,
+                          icon: const Icon(
+                            Icons.cancel,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter username';
+                        }
+                        if (value.length > 30) {
+                          return 'Username can\'t exceed 30 characters';
+                        }
+                        return null;
+                      },
+                    ),
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(height: 14.0),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                // userBio
+                children: <Widget>[
+                  const Text(
+                    'Bio',
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 18,
+                    ),
+                  ),
+                  const SizedBox(width: 93.0),
+                  Expanded(
+                    child: TextFormField(
+                      maxLength: 150,
+                      maxLines: null,
+                      controller: _userBioTextController,
+                      decoration: InputDecoration(
+                        hintText: _currentUserBio,
+                        suffixIcon: IconButton(
+                          onPressed: _userBioTextController.clear,
+                          icon: const Icon(
+                            Icons.cancel,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value!.length > 150) {
+                          return 'Bio cannot exceed 150 characters';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(height: 24.0),
+            ElevatedButton(
+              // Save
+              onPressed: _saveChanges,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: editColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+              child: const Text(
+                'Save changes',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -267,7 +264,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Discard changes?'),
-          content: Text('If you go back now, you will lose your changes.'),
+          content:
+              const Text('If you go back now, you will lose your changes.'),
           actions: <Widget>[
             TextButton(
               child: const Text('Discard changes'),
@@ -297,11 +295,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           child: Wrap(children: [
             ListTile(
               leading: const Icon(Icons.favorite),
-              title: const Text('Choose from Likes',
+              title: const Text('Choose profile picture',
                   style: TextStyle(color: Colors.black87)),
               onTap: () {
-                // TODO: Likes grid 보여주고 선택하는 페이지, extra를 써야 하나
-                context.push('/home/user/profile/choose');
+                if (userModel != null) {
+                  context.push('/home/user/profile/choose', extra: {
+                    'user_model': userModel,
+                  });
+                }
               },
             ),
             Padding(

@@ -42,6 +42,8 @@ import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/d
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/get_user_id_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/history/user_history_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/likes/user_likes_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/profile/random_photo_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/profile/save_user_picture_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/shared/user_shared_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/view/view_history_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/detail/detail_view_model.dart';
@@ -51,6 +53,7 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/downloads/user_downloads_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/history/user_history_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/likes/user_likes_view_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/choose_user_picture_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/shared/user_shared_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_view_model.dart';
 
@@ -219,7 +222,18 @@ void registerDependencies() {
       UserHistoryUseCase(
         viewHistoryRepository: getIt<ViewHistoryRepository>(),
       ),
-    );
+    )
+    ..registerSingleton<SaveUserPictureUseCase>(
+      SaveUserPictureUseCase(
+        userRepository: getIt<UserRepository>(),
+      ),
+    )
+    ..registerSingleton<RandomPhotoUseCase>(
+      RandomPhotoUseCase(
+        imageRepository: getIt<ImageRepository>(),
+      ),
+    )
+  ;
 
   // view models
   // home view model
@@ -298,6 +312,12 @@ void registerDependencies() {
     ..registerFactory<UserSharedViewModel>(
       () => UserSharedViewModel(
         userSharedUseCase: getIt<UserSharedUseCase>(),
+      ),
+    )
+    ..registerFactory<ChooseUserPictureViewModel>(
+      () => ChooseUserPictureViewModel(
+        randomPhotoUseCase: getIt<RandomPhotoUseCase>(),
+        saveUserPictureUseCase: getIt<SaveUserPictureUseCase>(),
       ),
     );
 }
