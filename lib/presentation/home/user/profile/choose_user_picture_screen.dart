@@ -40,7 +40,7 @@ class _ChooseUserPictureScreenState extends State<ChooseUserPictureScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () => context.pop(), // Go back to previous screen
+          onPressed: () => context.pop(),
         ),
         centerTitle: true,
         title: const Text(
@@ -72,7 +72,7 @@ class _ChooseUserPictureScreenState extends State<ChooseUserPictureScreen> {
       body: Column(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(24.0),
             child: chooseUserPictureState
                     .selectedUserPicture.isNotEmpty // userPicture 고른 상태면,
                 ? CircleAvatar(

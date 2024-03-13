@@ -79,7 +79,7 @@ class ImageRepositoryImpl implements ImageRepository {
           .from(TB_IMAGE_INFO)
           .select();
       data.shuffle();
-      final limitData = data.take(20).toList();
+      final limitData = data.take(60).toList();
 
       List<PhotoModel> randomPhotoModel = limitData.map((e) => PhotoModel.fromJson(e)).toList();
 
