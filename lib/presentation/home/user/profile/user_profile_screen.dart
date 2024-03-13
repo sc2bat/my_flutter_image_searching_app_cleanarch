@@ -314,10 +314,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
                 title: const Text('Remove current picture',
                     style: TextStyle(color: Colors.redAccent)),
-                onTap: () {
+                onTap: () async {
                   setState(() {
                     userModel!.userPicture = '';
                   });
+                  await UserRepositoryImpl()
+                      .updateUserField(widget.userUuid, 'user_picture', '');
                   context.pop();
                 },
               ),
