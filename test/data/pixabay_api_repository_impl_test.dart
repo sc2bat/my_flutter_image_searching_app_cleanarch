@@ -1,8 +1,22 @@
+import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/apis/pixabay_api.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/result.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 
 @GenerateMocks([http.Client])
 void main() {
+  test('test random', () async {
+    final result = await PixabayApi().getPixabayImageList('');
+
+    switch (result) {
+      case Success<List<PhotoModel>>():
+        logger.info(result.data);
+    }
+  });
+
 //   test('pixabay data test', () async {
 //     final pixabayApiRepositoryImpl = PixabayRepositoryImpl();
 

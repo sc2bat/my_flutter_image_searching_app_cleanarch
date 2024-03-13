@@ -5,7 +5,7 @@ import 'package:my_flutter_image_searching_app_cleanarch/domain/model/user/comme
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/comment_repository.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
 
-class CommentRepositoyImpl implements CommentRepositoy {
+class CommentRepositoryImpl implements CommentRepository {
   @override
   Future<Result<List<CommentModel>>> getCommentList(int imageId) async {
     try {

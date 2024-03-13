@@ -27,40 +27,13 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<Result<void>> updateUserName(String userId, String newUserName) async {
+  Future<Result<void>> updateUserField(String userUuid, String fieldName, String newValue) async {
     try {
+      final updateData = {fieldName: newValue};
       await supabase
           .from(TB_USER_PROFILE)
-          .update({'user_name': newUserName})
-          .eq('user_id', userId)
-          .single();
-      return const Result.success(null);
-    } catch (e) {
-      return Result.error('$e');
-    }
-  }
-
-
-  @override
-  Future<Result<void>> updateUserBio(String userId, String newUserBio) async {
-    try {
-      await supabase
-          .from(TB_USER_PROFILE)
-          .update({'user_bio': newUserBio})
-          .eq('user_id', userId)
-          .single();
-      return const Result.success(null);
-    } catch (e) {
-      return Result.error('$e');
-    }
-  }
-  @override
-  Future<Result<void>> updateUserPicture(String userId, String newUserPicture) async {
-    try {
-      await supabase
-          .from(TB_USER_PROFILE)
-          .update({'user_picture': newUserPicture})
-          .eq('user_id', userId)
+          .update(updateData)
+          .eq('user_uuid', userUuid)
           .single();
       return const Result.success(null);
     } catch (e) {

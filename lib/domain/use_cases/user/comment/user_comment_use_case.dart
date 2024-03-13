@@ -3,9 +3,9 @@ import 'package:my_flutter_image_searching_app_cleanarch/domain/model/user/comme
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/comment_repository.dart';
 
 class UserCommentUseCase {
-  final CommentRepositoy _commentRepositoy;
+  final CommentRepository _commentRepositoy;
   UserCommentUseCase({
-    required CommentRepositoy commentRepositoy,
+    required CommentRepository commentRepositoy,
   }) : _commentRepositoy = commentRepositoy;
 
   Future<Result<List<UserCommentModel>>> fetchAll(int userId) async {

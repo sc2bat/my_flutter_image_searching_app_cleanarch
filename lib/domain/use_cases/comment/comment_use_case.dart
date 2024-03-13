@@ -2,9 +2,9 @@ import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/resul
 import 'package:my_flutter_image_searching_app_cleanarch/domain/repositories/supabase/comment_repository.dart';
 
 class CommentUseCase {
-  final CommentRepositoy _commentRepositoy;
+  final CommentRepository _commentRepositoy;
   CommentUseCase({
-    required CommentRepositoy commentRepositoy,
+    required CommentRepository commentRepositoy,
   }) : _commentRepositoy = commentRepositoy;
 
   Future<Result<void>> insert({

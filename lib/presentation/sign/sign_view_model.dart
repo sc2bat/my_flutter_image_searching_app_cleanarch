@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/sign_in_use_case.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/sign/sign_out_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_in_ui_event.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_state.dart';
 
@@ -11,13 +10,10 @@ class SignViewModel extends ChangeNotifier {
   //todo
   // logout
   final SignInUseCase _signInUseCase;
-  final SignOutUseCase _signOutUseCase;
 
   SignViewModel({
     required SignInUseCase signInUseCase,
-    required SignOutUseCase signOutUseCase,
-  })  : _signInUseCase = signInUseCase,
-        _signOutUseCase = signOutUseCase;
+  }) : _signInUseCase = signInUseCase;
 
   SignState _signState = const SignState();
   SignState get signState => _signState;
