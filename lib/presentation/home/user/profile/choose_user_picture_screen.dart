@@ -102,7 +102,7 @@ class _ChooseUserPictureScreenState extends State<ChooseUserPictureScreen> {
               itemCount: chooseUserPictureState.photoList.length,
               itemBuilder: (context, index) {
                 PhotoModel photo = chooseUserPictureState.photoList[index];
-                return InkWell(
+                return GestureDetector(
                   onTap: () {
                     if (photo.previewUrl != null) {
                       chooseUserPictureViewModel
