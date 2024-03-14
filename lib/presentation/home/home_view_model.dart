@@ -23,8 +23,8 @@ class HomeViewModel with ChangeNotifier {
   final session = supabase.auth.currentSession;
 
   Future<void> init() async {
-    getPopulars();
-    getToptags();
+    await getPopulars();
+    await getToptags();
   }
 
   Future<void> getPopulars() async {
