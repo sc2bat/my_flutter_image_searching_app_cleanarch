@@ -69,8 +69,17 @@ class _UserScreenState extends State<UserScreen> {
           Column(
             children: [
               ListTile(
-                onTap: () => context.push('/home/user/profile',
-                    extra: {'user_uuid': _userViewModel.userUuid}),
+                onTap: () async {
+                  final result = await context.push(
+                    '/home/user/profile',
+                    extra: {
+                      'user_uuid': _userViewModel.userUuid,
+                    },
+                  );
+                  if (result is String) {
+                    _userViewModel.updateUserPicture(result);
+                  }
+                },
                 leading:
                     _userViewModel.userPicture.isNotEmpty // userPicture 고른 상태면,
                         ? CircleAvatar(
@@ -184,8 +193,7 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   void _updateUserInfo() {
-    setState(() {
-    });
+    setState(() {});
   }
 }
 

@@ -57,7 +57,7 @@ class _ChooseUserPictureScreenState extends State<ChooseUserPictureScreen> {
             onPressed: () async {
               await chooseUserPictureViewModel.saveUserPicture();
               if (mounted) {
-                context.pop();
+                context.pop(chooseUserPictureState.selectedUserPicture);
               }
             },
             child: const Text(

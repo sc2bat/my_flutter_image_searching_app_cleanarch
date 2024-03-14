@@ -167,7 +167,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         photo: searchState.photos[index],
                         likeModel: likeModel,
                         likeUpdateFunction: (likeModel) =>
-                            searchViewModel.updateLike(likeModel),
+                            searchViewModel.updateLikeState(likeModel),
                         // tapLike : ()=>searchViewModel.tapLike
                       );
                     },

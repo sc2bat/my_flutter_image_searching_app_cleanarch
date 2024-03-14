@@ -19,13 +19,17 @@ class SearchImageContainerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        context.push(
+      onTap: () async {
+        final result = await context.push(
           '/detail',
           extra: {
             'imageId': photo.imageId,
           },
         );
+
+        if (result is LikeModel) {
+          await likeUpdateFunction(result);
+        }
       },
       onDoubleTap: () {
         if (likeModel != null) {

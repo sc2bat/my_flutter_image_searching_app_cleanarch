@@ -471,7 +471,8 @@ class _DetailScreenState extends State<DetailScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                    padding: const EdgeInsets.fromLTRB(
+                                        8.0, 18.0, 8.0, 8.0),
                                     child: InkWell(
                                       onTap: () => showUserInfoDialog(
                                           detailState.commentList[index]),
@@ -497,6 +498,9 @@ class _DetailScreenState extends State<DetailScreen> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Container(
+                                              constraints: const BoxConstraints(
+                                                minHeight: 48.0,
+                                              ),
                                               child: Row(
                                                 children: [
                                                   Container(
@@ -563,6 +567,11 @@ class _DetailScreenState extends State<DetailScreen> {
                                                         },
                                                       );
                                                     },
+                                                    style: const ButtonStyle(
+                                                      fixedSize:
+                                                          MaterialStatePropertyAll(
+                                                              Size(16.0, 16.0)),
+                                                    ),
                                                     icon: const Icon(
                                                       Icons.more_horiz_outlined,
                                                     ),
