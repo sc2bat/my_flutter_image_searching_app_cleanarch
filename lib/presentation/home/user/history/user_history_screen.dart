@@ -122,6 +122,10 @@ class _UserHistoryScreenState extends State<UserHistoryScreen> {
                                 )
                               : const SizedBox(),
                         ),
+                        if (userHistoryState.selectedImageList.contains(history.viewId))
+                          Container(
+                            color: Colors.white.withOpacity(0.5),
+                          ),
                       ],
                     ),
                   );
