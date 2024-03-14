@@ -73,7 +73,7 @@ class _ChooseUserPictureScreenState extends State<ChooseUserPictureScreen> {
       body: Column(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(48.0),
             child: chooseUserPictureState
                     .selectedUserPicture.isNotEmpty // userPicture 고른 상태면,
                 ? CircleAvatar(
