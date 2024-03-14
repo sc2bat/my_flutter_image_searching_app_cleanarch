@@ -86,7 +86,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             if (_isUserDataChanged()) {
               _showBackDialog();
             } else {
-              context.pop();
+              context.pop(userModel != null && userModel!.userPicture.isNotEmpty
+                  ? userModel!.userPicture
+                  : '');
             }
           },
         ),
@@ -297,12 +299,24 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               leading: const Icon(Icons.favorite),
               title: const Text('Choose profile picture',
                   style: TextStyle(color: Colors.black87)),
-              onTap: () {
+              onTap: () async {
                 if (userModel != null) {
-                  context.push('/home/user/profile/choose', extra: {
-                    'user_model': userModel,
-                  });
-                  context.pop();
+                  final result = await context.push(
+                    '/home/user/profile/choose',
+                    extra: {
+                      'user_model': userModel,
+                    },
+                  );
+
+                  if (result is String) {
+                    setState(() {
+                      userModel!.userPicture = result;
+                    });
+                  }
+
+                  if (mounted) {
+                    context.pop();
+                  }
                 }
               },
             ),
@@ -321,7 +335,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   });
                   await UserRepositoryImpl()
                       .updateUserField(widget.userUuid, 'user_picture', '');
-                  context.pop();
+                  if (mounted) {
+                    context.pop();
+                  }
                 },
               ),
             ),
