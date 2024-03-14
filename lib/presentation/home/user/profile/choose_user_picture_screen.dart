@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
@@ -114,23 +113,17 @@ class _ChooseUserPictureScreenState extends State<ChooseUserPictureScreen> {
                   },
                   child: Stack(
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          border:
-                              Border.all(color: CupertinoColors.systemGrey4),
-                        ),
-                        child: Image.network(
-                          photo.previewUrl!,
-                          fit: BoxFit.cover,
-                          height: (MediaQuery.of(context).size.width >
-                                  MediaQuery.of(context).size.height)
-                              ? MediaQuery.of(context).size.width * 0.5
-                              : MediaQuery.of(context).size.width,
-                          width: (MediaQuery.of(context).size.height >
-                                  MediaQuery.of(context).size.width)
-                              ? MediaQuery.of(context).size.height * 0.5
-                              : MediaQuery.of(context).size.height,
-                        ),
+                      Image.network(
+                        photo.previewUrl!,
+                        fit: BoxFit.cover,
+                        height: (MediaQuery.of(context).size.width >
+                                MediaQuery.of(context).size.height)
+                            ? MediaQuery.of(context).size.width * 0.5
+                            : MediaQuery.of(context).size.width,
+                        width: (MediaQuery.of(context).size.height >
+                                MediaQuery.of(context).size.width)
+                            ? MediaQuery.of(context).size.height * 0.5
+                            : MediaQuery.of(context).size.height,
                       ),
                       if (chooseUserPictureState.selectedUserPicture ==
                           photo.previewUrl)
