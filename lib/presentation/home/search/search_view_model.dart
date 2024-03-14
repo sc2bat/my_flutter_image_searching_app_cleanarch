@@ -43,17 +43,17 @@ class SearchViewModel with ChangeNotifier {
     _searchState = searchState.copyWith(isLoading: true);
     notifyListeners();
 
-    // await Future.delayed(const Duration(seconds: 2));
     final executeResult = await _photoUseCase.execute(query);
     executeResult.when(
       success: (photoList) async {
-        _searchState = searchState.copyWith(photos: photoList);
+        _searchState =
+            searchState.copyWith(photos: photoList, isLoading: false);
+        notifyListeners();
 
         final saveResult =
             await _photoUseCase.save(photoList.map((e) => e.toJson()).toList());
         saveResult.when(
           success: (_) async {
-            // 세션 여부 판단
             if (session != null) {
               await getUserId(session!.user.id);
 
@@ -61,9 +61,6 @@ class SearchViewModel with ChangeNotifier {
                 await getPhotoLikeList(
                     searchState.userModel!.userId, photoList);
               }
-              _searchState = searchState.copyWith(isLoading: false);
-
-              notifyListeners();
             }
             _searchUiEventStreamController.add(SearchUiEvent.showSnackBar(
                 photoList.isNotEmpty
@@ -100,8 +97,8 @@ class SearchViewModel with ChangeNotifier {
   Future<void> addSearchHistories(String keyword) async {
     final result = await _searchUseCase.addSearchKeyword(keyword);
     result.when(
-      success: (_) {
-        getSearchHistories();
+      success: (_) async {
+        logger.info('addSearchHistories success');
       },
       error: (message) {
         _searchUiEventStreamController.add(SearchUiEvent.showSnackBar(message));
@@ -114,7 +111,6 @@ class SearchViewModel with ChangeNotifier {
     notifyListeners();
     result.when(
       success: (_) {
-        getSearchHistories();
         _searchUiEventStreamController
             .add(SearchUiEvent.showSnackBar('remove $keyword'));
       },
@@ -128,7 +124,8 @@ class SearchViewModel with ChangeNotifier {
     final result = await _searchUseCase.dropAllSearchKeyword();
     result.when(
       success: (_) {
-        getSearchHistories();
+        _searchUiEventStreamController.add(
+            const SearchUiEvent.showSnackBar('remove all keyword history'));
       },
       error: (message) {
         _searchUiEventStreamController.add(SearchUiEvent.showSnackBar(message));

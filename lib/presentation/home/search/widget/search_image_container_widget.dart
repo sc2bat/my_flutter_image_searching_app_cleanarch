@@ -3,33 +3,41 @@ import 'package:go_router/go_router.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/like/like_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/theme.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 
 class SearchImageContainerWidget extends StatelessWidget {
   final PhotoModel photo;
   final LikeModel? likeModel;
-  final Function(LikeModel likeModel) likeUpdateFunction;
+  final Function(LikeModel likeModel) updateLikeStateFunction;
+  final Function(LikeModel likeModel) updateLikeFunction;
 
   const SearchImageContainerWidget({
     super.key,
     required this.photo,
     this.likeModel,
-    required this.likeUpdateFunction,
+    required this.updateLikeStateFunction,
+    required this.updateLikeFunction,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        context.push(
+      onTap: () async {
+        final result = await context.push(
           '/detail',
           extra: {
             'imageId': photo.imageId,
           },
         );
+
+        if (result is LikeModel) {
+          await updateLikeStateFunction(result);
+        }
       },
       onDoubleTap: () {
         if (likeModel != null) {
-          likeUpdateFunction(likeModel!);
+          logger.info('double tap');
+          updateLikeFunction(likeModel!);
         }
       },
       child: Stack(

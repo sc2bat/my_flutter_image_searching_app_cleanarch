@@ -166,7 +166,9 @@ class _SearchScreenState extends State<SearchScreen> {
                       return SearchImageContainerWidget(
                         photo: searchState.photos[index],
                         likeModel: likeModel,
-                        likeUpdateFunction: (likeModel) =>
+                        updateLikeStateFunction: (likeModel) =>
+                            searchViewModel.updateLikeState(likeModel),
+                        updateLikeFunction: (likeModel) =>
                             searchViewModel.updateLike(likeModel),
                         // tapLike : ()=>searchViewModel.tapLike
                       );

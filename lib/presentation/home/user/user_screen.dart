@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/user_repository_impl.dart';
@@ -68,9 +69,19 @@ class _UserScreenState extends State<UserScreen> {
           Column(
             children: [
               ListTile(
-                onTap: () => context.push('/home/user/profile',
-                    extra: {'user_uuid': _userViewModel.userUuid}),
-                leading: _userViewModel.userPicture.isNotEmpty // userPicture 고른 상태면,
+                onTap: () async {
+                  final result = await context.push(
+                    '/home/user/profile',
+                    extra: {
+                      'user_uuid': _userViewModel.userUuid,
+                    },
+                  );
+                  if (result is String) {
+                    _userViewModel.updateUserPicture(result);
+                  }
+                },
+                leading:
+                    _userViewModel.userPicture.isNotEmpty // userPicture 고른 상태면,
                         ? CircleAvatar(
                             radius: 25.0,
                             backgroundImage:
@@ -114,7 +125,16 @@ class _UserScreenState extends State<UserScreen> {
                             title: Text(activityItem.title),
                             trailing: activityItem.count != null
                                 ? Text(activityItem.count.toString())
-                                : const Icon(Icons.arrow_forward_ios),
+                                : const Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: baseColor,
+                                    shadows: [
+                                      Shadow(
+                                          offset: Offset(2.0, 2.0),
+                                          blurRadius: 4.0,
+                                          color: CupertinoColors.systemGrey5),
+                                    ],
+                                  ),
                             onTap: () {
                               switch (activityItem.title) {
                                 case 'History':
@@ -173,10 +193,7 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   void _updateUserInfo() {
-    setState(() {
-      // _userName = _userViewModel.userName;
-      // _userEmail = _userViewModel.userEmail;
-    });
+    setState(() {});
   }
 }
 

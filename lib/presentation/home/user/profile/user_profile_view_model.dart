@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/get_user_id_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
 
-class UserProfileViewModel with ChangeNotifier{
+class UserProfileViewModel with ChangeNotifier {
   final GetUserIdUseCase _getUserIdUseCase;
 
   UserProfileViewModel({
@@ -22,7 +22,8 @@ class UserProfileViewModel with ChangeNotifier{
     final result = await _getUserIdUseCase.getUserInfo(userUuid);
 
     result.when(
-      success: (data) {/*
+      success: (data) {
+        /*
         _userProfileState = userProfileState.copyWith(
           userId: data.userId,
           userName: data.userName,
@@ -37,4 +38,5 @@ class UserProfileViewModel with ChangeNotifier{
     );
   }
 
+  void updateUserPicture(String userPicture) {}
 }

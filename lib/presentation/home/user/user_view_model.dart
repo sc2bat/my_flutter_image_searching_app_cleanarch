@@ -63,4 +63,8 @@ class UserViewModel extends ChangeNotifier {
     context.push('/home');
   }
 
+  void updateUserPicture(String userPicture) {
+    _userPicture = userPicture;
+    notifyListeners();
+  }
 }

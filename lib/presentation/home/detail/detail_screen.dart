@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/constants.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/model/comment/comment_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/functions.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/theme.dart';
@@ -117,10 +118,7 @@ class _DetailScreenState extends State<DetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    constraints: const BoxConstraints(
-                      minHeight: 240.0,
-                    ),
+                  Center(
                     child: Image.network(
                       photoModel.webformatUrl != null
                           ? photoModel.webformatUrl!
@@ -322,9 +320,32 @@ class _DetailScreenState extends State<DetailScreen> {
                         ),
                         const SizedBox(width: 8.0),
                         Expanded(
-                          child: Text(
-                            '${photoModel.tags}',
-                            softWrap: true,
+                          child: Row(
+                            children: List.generate(
+                              photoModel.tags!.split(',').length,
+                              (index) => InkWell(
+                                onTap: () => context.push(
+                                  '/search',
+                                  extra: {
+                                    'searchKeyword':
+                                        photoModel.tags!.split(',')[index],
+                                  },
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: Text(
+                                    photoModel.tags!.split(',')[index] +
+                                        (index + 1 !=
+                                                photoModel.tags!
+                                                    .split(',')
+                                                    .length
+                                            ? ','
+                                            : ''),
+                                    softWrap: true,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ],
@@ -353,14 +374,12 @@ class _DetailScreenState extends State<DetailScreen> {
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8.0),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(50.0),
-                                        child: Image.network(
-                                          '$userProfileUrlWithFirstCharacter${detailState.userName[0].toUpperCase()}',
-                                          width: 48.0,
-                                          height: 48.0,
-                                        ),
+                                      child: CircleAvatar(
+                                        radius: 25.0,
+                                        backgroundImage: NetworkImage(detailState
+                                                .userPicture.isNotEmpty
+                                            ? detailState.userPicture
+                                            : '$userProfileUrlWithFirstCharacter${detailState.userName[0].toUpperCase()}'),
                                       ),
                                     ),
                                     Expanded(
@@ -388,7 +407,6 @@ class _DetailScreenState extends State<DetailScreen> {
                                           } else {
                                             _showErrorDialog(context);
                                           }
-                                          // logger.info('press add comment done');
                                           double imageHeight = detailViewModel
                                               .calcImageHeightMoveToComment(
                                                   MediaQuery.of(context)
@@ -450,13 +468,20 @@ class _DetailScreenState extends State<DetailScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(50.0),
-                                      child: Image.network(
-                                        '$userProfileUrlWithFirstCharacter${detailState.commentList[index].userName[0].toUpperCase()}',
-                                        width: 48.0,
-                                        height: 48.0,
+                                    padding: const EdgeInsets.fromLTRB(
+                                        8.0, 18.0, 8.0, 8.0),
+                                    child: InkWell(
+                                      onTap: () => showUserInfoDialog(
+                                          detailState.commentList[index]),
+                                      child: CircleAvatar(
+                                        radius: 25.0,
+                                        backgroundImage: NetworkImage(detailState
+                                                .commentList[index]
+                                                .userPicture
+                                                .isNotEmpty
+                                            ? detailState
+                                                .commentList[index].userPicture
+                                            : '$userProfileUrlWithFirstCharacter${detailState.commentList[index].userName[0].toUpperCase()}'),
                                       ),
                                     ),
                                   ),
@@ -470,6 +495,9 @@ class _DetailScreenState extends State<DetailScreen> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Container(
+                                              constraints: const BoxConstraints(
+                                                minHeight: 48.0,
+                                              ),
                                               child: Row(
                                                 children: [
                                                   Container(
@@ -536,6 +564,11 @@ class _DetailScreenState extends State<DetailScreen> {
                                                         },
                                                       );
                                                     },
+                                                    style: const ButtonStyle(
+                                                      fixedSize:
+                                                          MaterialStatePropertyAll(
+                                                              Size(16.0, 16.0)),
+                                                    ),
                                                     icon: const Icon(
                                                       Icons.more_horiz_outlined,
                                                     ),
@@ -618,6 +651,74 @@ class _DetailScreenState extends State<DetailScreen> {
               },
             ),
           ],
+        );
+      },
+    );
+  }
+
+  showUserInfoDialog(CommentModel commentList) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.6,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24.0),
+                    child: Center(
+                      child: commentList.userPicture.isNotEmpty
+                          ? CircleAvatar(
+                              radius: 100.0,
+                              backgroundImage:
+                                  NetworkImage(commentList.userPicture),
+                            )
+                          : const CircleAvatar(
+                              radius: 100.0,
+                              backgroundColor: Colors.transparent,
+                              child: FittedBox(
+                                child: Icon(
+                                  Icons.account_circle,
+                                  size: 200,
+                                  color: baseColor,
+                                ),
+                              ),
+                            ),
+                    ),
+                  ),
+                  const Divider(),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      commentList.userName,
+                      style: const TextStyle(
+                        fontSize: 32.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      commentList.userBio.isNotEmpty
+                          ? commentList.userBio
+                          : 'No status message.',
+                      style: const TextStyle(
+                        fontSize: 20.0,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         );
       },
     );

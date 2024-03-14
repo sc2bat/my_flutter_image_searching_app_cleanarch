@@ -56,7 +56,7 @@ class _ChooseUserPictureScreenState extends State<ChooseUserPictureScreen> {
             onPressed: () async {
               await chooseUserPictureViewModel.saveUserPicture();
               if (mounted) {
-                context.pop();
+                context.pop(chooseUserPictureState.selectedUserPicture);
               }
             },
             child: const Text(
@@ -72,7 +72,7 @@ class _ChooseUserPictureScreenState extends State<ChooseUserPictureScreen> {
       body: Column(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(48.0),
             child: chooseUserPictureState
                     .selectedUserPicture.isNotEmpty // userPicture 고른 상태면,
                 ? CircleAvatar(
@@ -94,7 +94,6 @@ class _ChooseUserPictureScreenState extends State<ChooseUserPictureScreen> {
           ),
           Expanded(
             child: GridView.builder(
-              padding: const EdgeInsets.all(8.0),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 crossAxisSpacing: 2.0,
@@ -103,7 +102,6 @@ class _ChooseUserPictureScreenState extends State<ChooseUserPictureScreen> {
               itemCount: chooseUserPictureState.photoList.length,
               itemBuilder: (context, index) {
                 PhotoModel photo = chooseUserPictureState.photoList[index];
-                logger.info('$index번째 previewUrl: ${photo.previewUrl}');
                 return GestureDetector(
                   onTap: () {
                     if (photo.previewUrl != null) {
@@ -113,7 +111,27 @@ class _ChooseUserPictureScreenState extends State<ChooseUserPictureScreen> {
                       logger.info('previewUrl is null');
                     }
                   },
-                  child: Image.network(photo.previewUrl!),
+                  child: Stack(
+                    children: [
+                      Image.network(
+                        photo.previewUrl!,
+                        fit: BoxFit.cover,
+                        height: (MediaQuery.of(context).size.width >
+                                MediaQuery.of(context).size.height)
+                            ? MediaQuery.of(context).size.width * 0.5
+                            : MediaQuery.of(context).size.width,
+                        width: (MediaQuery.of(context).size.height >
+                                MediaQuery.of(context).size.width)
+                            ? MediaQuery.of(context).size.height * 0.5
+                            : MediaQuery.of(context).size.height,
+                      ),
+                      if (chooseUserPictureState.selectedUserPicture ==
+                          photo.previewUrl)
+                        Container(
+                          color: Colors.white.withOpacity(0.5),
+                        ),
+                    ],
+                  ),
                 );
               },
             ),

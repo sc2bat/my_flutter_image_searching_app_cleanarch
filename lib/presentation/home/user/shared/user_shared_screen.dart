@@ -60,103 +60,109 @@ class _UserSharedScreenState extends State<UserSharedScreen> {
       ),
       body: userSharedState.isLoading
           ? const Center(
-        child: CircularProgressIndicator(),
-      )
+              child: CircularProgressIndicator(),
+            )
           : Stack(children: [
-        GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            crossAxisSpacing: 2.0,
-            mainAxisSpacing: 2.0,
-          ),
-          itemCount: userSharedState.userSharedList.length,
-          itemBuilder: (context, index) {
-            UserSharedModel Shared =
-            userSharedState.userSharedList[index];
-            logger.info('$index번째 previewUrl: ${Shared.previewUrl}');
-            return GestureDetector(
-              onTap: () {
-                if (userSharedState.isSelectMode) {
-                  userSharedViewModel.selectToDelete(Shared.shareId);
-                } else {
-                  context.push('/detail', extra: {
-                    'imageId': Shared.imageId,
-                  });
-                }
-              },
-              onLongPress: () {
-                if (!userSharedState.isSelectMode) {
-                  userSharedViewModel.updateIsSelectMode();
-                  userSharedViewModel.selectToDelete(Shared.shareId);
-                }
-              },
-              child: Stack(
-                children: [
-                  Image.network(
-                    Shared.previewUrl,
-                    fit: BoxFit.cover,
-                    height: (MediaQuery.of(context).size.width > MediaQuery.of(context).size.height)
-                        ? MediaQuery.of(context).size.width * 0.5
-                        : MediaQuery.of(context).size.width,
-                    width: (MediaQuery.of(context).size.height > MediaQuery.of(context).size.width)
-                        ? MediaQuery.of(context).size.height * 0.5
-                        : MediaQuery.of(context).size.height,
-                  ),
-                  Positioned(
-                    bottom: 4.0,
-                    right: 4.0,
-                    child: userSharedState.isSelectMode
-                        ? Container(
-                      margin: const EdgeInsets.all(4.0),
-                      child: userSharedState.selectedImageList
-                          .contains(Shared.shareId)
-                          ? const Icon(
-                        Icons.check_circle,
-                        color: Colors.blueAccent,
-                        size: 24.0,
-                      )
-                          : const Icon(
-                        Icons.circle_outlined,
-                        color: Colors.grey,
-                        size: 24.0,
-                      ),
-                    )
-                        : const SizedBox(),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-        if (userSharedState.selectedImageList.isNotEmpty)
-          Positioned(
-            bottom: 32.0,
-            left: 0.0,
-            right: 0.0,
-            child: Container(
-              height: 50.0,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border(
-                    top: BorderSide(
-                        color: Colors.grey.shade300, width: 1.0),
-                  )),
-              child: Center(
-                  child: TextButton(
-                      child: Text(
-                        'Delete(${userSharedState.selectedImageList.length})',
-                        style: const TextStyle(
-                          color: Colors.redAccent,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
+              GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 2.0,
+                  mainAxisSpacing: 2.0,
+                ),
+                itemCount: userSharedState.userSharedList.length,
+                itemBuilder: (context, index) {
+                  UserSharedModel Shared =
+                      userSharedState.userSharedList[index];
+                  logger.info('$index번째 previewUrl: ${Shared.previewUrl}');
+                  return GestureDetector(
+                    onTap: () {
+                      if (userSharedState.isSelectMode) {
+                        userSharedViewModel.selectToDelete(Shared.shareId);
+                      } else {
+                        context.push('/detail', extra: {
+                          'imageId': Shared.imageId,
+                        });
+                      }
+                    },
+                    onLongPress: () {
+                      if (!userSharedState.isSelectMode) {
+                        userSharedViewModel.updateIsSelectMode();
+                        userSharedViewModel.selectToDelete(Shared.shareId);
+                      }
+                    },
+                    child: Stack(
+                      children: [
+                        Image.network(
+                          Shared.previewUrl,
+                          fit: BoxFit.cover,
+                          height: (MediaQuery.of(context).size.width >
+                                  MediaQuery.of(context).size.height)
+                              ? MediaQuery.of(context).size.width * 0.5
+                              : MediaQuery.of(context).size.width,
+                          width: (MediaQuery.of(context).size.height >
+                                  MediaQuery.of(context).size.width)
+                              ? MediaQuery.of(context).size.height * 0.5
+                              : MediaQuery.of(context).size.height,
                         ),
-                      ),
-                      onPressed: () {
-                        userSharedViewModel.deleteSelectedImages();
-                      })),
-            ),
-          )
-      ]),
+                        Positioned(
+                          bottom: 4.0,
+                          right: 4.0,
+                          child: userSharedState.isSelectMode
+                              ? Container(
+                                  margin: const EdgeInsets.all(4.0),
+                                  child: userSharedState.selectedImageList
+                                          .contains(Shared.shareId)
+                                      ? const Icon(
+                                          Icons.check_circle,
+                                          color: Colors.blueAccent,
+                                          size: 24.0,
+                                        )
+                                      : const Icon(
+                                          Icons.circle_outlined,
+                                          color: Colors.grey,
+                                          size: 24.0,
+                                        ),
+                                )
+                              : const SizedBox(),
+                        ),
+                        if (userSharedState.selectedImageList.contains(Shared.shareId))
+                          Container(
+                            color: Colors.white.withOpacity(0.5),
+                          ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+              if (userSharedState.selectedImageList.isNotEmpty)
+                Positioned(
+                  bottom: 32.0,
+                  left: 0.0,
+                  right: 0.0,
+                  child: Container(
+                    height: 50.0,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border(
+                          top: BorderSide(
+                              color: Colors.grey.shade300, width: 1.0),
+                        )),
+                    child: Center(
+                        child: TextButton(
+                            child: Text(
+                              'Delete(${userSharedState.selectedImageList.length})',
+                              style: const TextStyle(
+                                color: Colors.redAccent,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            onPressed: () {
+                              userSharedViewModel.deleteSelectedImages();
+                            })),
+                  ),
+                )
+            ]),
     );
   }
 }
