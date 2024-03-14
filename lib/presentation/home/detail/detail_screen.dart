@@ -118,10 +118,7 @@ class _DetailScreenState extends State<DetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    constraints: const BoxConstraints(
-                      minHeight: 240.0,
-                    ),
+                  Center(
                     child: Image.network(
                       photoModel.webformatUrl != null
                           ? photoModel.webformatUrl!
