@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
@@ -23,7 +24,7 @@ class _ChooseUserPictureScreenState extends State<ChooseUserPictureScreen> {
   void initState() {
     Future.microtask(() {
       final chooseUserPictureViewModel =
-          context.read<ChooseUserPictureViewModel>();
+      context.read<ChooseUserPictureViewModel>();
       chooseUserPictureViewModel.init(widget.userModel.userUuid);
     });
     super.initState();
@@ -32,7 +33,7 @@ class _ChooseUserPictureScreenState extends State<ChooseUserPictureScreen> {
   @override
   Widget build(BuildContext context) {
     final ChooseUserPictureViewModel chooseUserPictureViewModel =
-        context.watch();
+    context.watch();
     final ChooseUserPictureState chooseUserPictureState =
         chooseUserPictureViewModel.chooseUserPictureState;
 
@@ -72,29 +73,28 @@ class _ChooseUserPictureScreenState extends State<ChooseUserPictureScreen> {
       body: Column(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(48.0),
             child: chooseUserPictureState
-                    .selectedUserPicture.isNotEmpty // userPicture 고른 상태면,
+                .selectedUserPicture.isNotEmpty // userPicture 고른 상태면,
                 ? CircleAvatar(
-                    radius: 80,
-                    backgroundImage: NetworkImage(
-                        chooseUserPictureState.selectedUserPicture),
-                  )
+              radius: 80,
+              backgroundImage: NetworkImage(
+                  chooseUserPictureState.selectedUserPicture),
+            )
                 : const CircleAvatar(
-                    radius: 80,
-                    backgroundColor: Colors.transparent,
-                    child: FittedBox(
-                      child: Icon(
-                        Icons.account_circle,
-                        size: 200,
-                        color: baseColor,
-                      ),
-                    ),
-                  ),
+              radius: 80,
+              backgroundColor: Colors.transparent,
+              child: FittedBox(
+                child: Icon(
+                  Icons.account_circle,
+                  size: 200,
+                  color: baseColor,
+                ),
+              ),
+            ),
           ),
           Expanded(
             child: GridView.builder(
-              padding: const EdgeInsets.all(8.0),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 crossAxisSpacing: 2.0,
@@ -103,8 +103,7 @@ class _ChooseUserPictureScreenState extends State<ChooseUserPictureScreen> {
               itemCount: chooseUserPictureState.photoList.length,
               itemBuilder: (context, index) {
                 PhotoModel photo = chooseUserPictureState.photoList[index];
-                logger.info('$index번째 previewUrl: ${photo.previewUrl}');
-                return GestureDetector(
+                return InkWell(
                   onTap: () {
                     if (photo.previewUrl != null) {
                       chooseUserPictureViewModel
@@ -113,7 +112,33 @@ class _ChooseUserPictureScreenState extends State<ChooseUserPictureScreen> {
                       logger.info('previewUrl is null');
                     }
                   },
-                  child: Image.network(photo.previewUrl!),
+                  child: Stack(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          border:
+                          Border.all(color: CupertinoColors.systemGrey4),
+                        ),
+                        child: Image.network(
+                          photo.previewUrl!,
+                          fit: BoxFit.cover,
+                          height: (MediaQuery.of(context).size.width >
+                              MediaQuery.of(context).size.height)
+                              ? MediaQuery.of(context).size.width * 0.5
+                              : MediaQuery.of(context).size.width,
+                          width: (MediaQuery.of(context).size.height >
+                              MediaQuery.of(context).size.width)
+                              ? MediaQuery.of(context).size.height * 0.5
+                              : MediaQuery.of(context).size.height,
+                        ),
+                      ),
+                      if (chooseUserPictureState.selectedUserPicture ==
+                          photo.previewUrl)
+                        Container(
+                          color: Colors.white.withOpacity(0.5),
+                        ),
+                    ],
+                  ),
                 );
               },
             ),
