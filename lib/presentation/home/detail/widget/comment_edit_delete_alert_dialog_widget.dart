@@ -41,14 +41,16 @@ class _CommentEditDeleteAlertDialogWidgetState
   Widget build(BuildContext context) {
     _commentEditingController.text = widget.commentInfo.content ?? '';
     return AlertDialog(
+      scrollable: true,
       title: Row(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(50.0),
-            child: Image.network(
-              '$userProfileUrlWithFirstCharacter${widget.commentInfo.userName[0].toUpperCase()}',
-              width: 48.0,
-              height: 48.0,
+          CircleAvatar(
+            radius: 25.0,
+            backgroundImage: NetworkImage(
+              widget.commentInfo.userPicture.isNotEmpty
+                  ? widget.commentInfo.userPicture
+                  : '$userProfileUrlWithFirstCharacter${widget.commentInfo.userName[0].toUpperCase()}',
+              scale: 48.0,
             ),
           ),
           Padding(
@@ -61,11 +63,13 @@ class _CommentEditDeleteAlertDialogWidgetState
       ),
       content: SizedBox(
         width: MediaQuery.of(context).size.width * 0.8,
-        height: MediaQuery.of(context).size.height * 0.25,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
+            const SizedBox(
+              height: 8.0,
+            ),
             SizedBox(
               height: 128.0,
               child: TextField(
@@ -75,6 +79,8 @@ class _CommentEditDeleteAlertDialogWidgetState
                 maxLength: 140,
                 // readOnly: true,
                 decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
                   hintText: 'Write Comment',
                   focusColor: baseColor,
                   suffixIconColor: weakBlack,
@@ -96,7 +102,7 @@ class _CommentEditDeleteAlertDialogWidgetState
               ),
             ),
             const SizedBox(
-              height: 16.0,
+              height: 28.0,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
