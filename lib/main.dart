@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/di/dependency_injection.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/env/env.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/common/theme.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
       routerConfig: router,
       title: 'ImageCraft',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: baseColor),
         useMaterial3: true,
       ),
     );
