@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/photo/photo_model.dart';
@@ -24,7 +23,7 @@ class _ChooseUserPictureScreenState extends State<ChooseUserPictureScreen> {
   void initState() {
     Future.microtask(() {
       final chooseUserPictureViewModel =
-      context.read<ChooseUserPictureViewModel>();
+          context.read<ChooseUserPictureViewModel>();
       chooseUserPictureViewModel.init(widget.userModel.userUuid);
     });
     super.initState();
@@ -33,7 +32,7 @@ class _ChooseUserPictureScreenState extends State<ChooseUserPictureScreen> {
   @override
   Widget build(BuildContext context) {
     final ChooseUserPictureViewModel chooseUserPictureViewModel =
-    context.watch();
+        context.watch();
     final ChooseUserPictureState chooseUserPictureState =
         chooseUserPictureViewModel.chooseUserPictureState;
 
@@ -73,25 +72,25 @@ class _ChooseUserPictureScreenState extends State<ChooseUserPictureScreen> {
       body: Column(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(48.0),
+            padding: const EdgeInsets.all(24.0),
             child: chooseUserPictureState
-                .selectedUserPicture.isNotEmpty // userPicture 고른 상태면,
+                    .selectedUserPicture.isNotEmpty // userPicture 고른 상태면,
                 ? CircleAvatar(
-              radius: 80,
-              backgroundImage: NetworkImage(
-                  chooseUserPictureState.selectedUserPicture),
-            )
+                    radius: 80,
+                    backgroundImage: NetworkImage(
+                        chooseUserPictureState.selectedUserPicture),
+                  )
                 : const CircleAvatar(
-              radius: 80,
-              backgroundColor: Colors.transparent,
-              child: FittedBox(
-                child: Icon(
-                  Icons.account_circle,
-                  size: 200,
-                  color: baseColor,
-                ),
-              ),
-            ),
+                    radius: 80,
+                    backgroundColor: Colors.transparent,
+                    child: FittedBox(
+                      child: Icon(
+                        Icons.account_circle,
+                        size: 200,
+                        color: baseColor,
+                      ),
+                    ),
+                  ),
           ),
           Expanded(
             child: GridView.builder(
