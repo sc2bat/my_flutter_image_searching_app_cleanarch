@@ -101,6 +101,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        actions: [
+          ElevatedButton(
+            onPressed: () async {
+              // TODO : delete user issue #127
+              // await
+            },
+            child: const Text('Withdraw'),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -111,8 +120,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               onTap: () => _showPicturesOptionsBottomSheet(),
               child: Align(
                 alignment: Alignment.center,
-                child: userModel != null &&
-                        userModel!.userPicture.isNotEmpty // userPicture 고른 상태면,
+                child: userModel != null && userModel!.userPicture.isNotEmpty
                     ? CircleAvatar(
                         radius: 80,
                         backgroundImage: NetworkImage(userModel!.userPicture),

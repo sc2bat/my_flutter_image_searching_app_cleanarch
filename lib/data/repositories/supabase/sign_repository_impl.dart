@@ -33,4 +33,21 @@ class SignRepositoryImpl implements SignRepository {
       return Result.error('signOut error => ${e.toString()}');
     }
   }
+
+  @override
+  Future<Result<void>> deleteUser() async {
+    try {
+      final currentUser = supabase.auth.currentUser;
+      if (currentUser != null) {
+        String userUuid = currentUser.id;
+        await supabase.auth.admin.deleteUser(userUuid);
+
+        return const Result.success(null);
+      } else {
+        return const Result.error('currentUser is null');
+      }
+    } catch (e) {
+      return Result.error('deleteUser Error => $e');
+    }
+  }
 }
