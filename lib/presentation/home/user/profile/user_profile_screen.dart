@@ -1,9 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/data/data_sources/result.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/data/repositories/supabase/user_repository_impl.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/user/user_model.dart';
-import 'package:my_flutter_image_searching_app_cleanarch/utils/simple_logger.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_profile_view_model.dart';
+import 'package:provider/provider.dart';
 
 import '../../../common/theme.dart';
 
@@ -19,65 +21,50 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileScreenState extends State<UserProfileScreen> {
   final String _currentUserName = '사용자 이름 입력';
   final String _currentUserBio = '상태 메세지 입력';
-  UserModel? userModel;
+  late UserModel userModel;
 
   late TextEditingController _userNameTextController;
   late TextEditingController _userBioTextController;
 
+  StreamSubscription? _streamSubscription;
+
   @override
   void initState() {
+    Future.microtask(() async {
+      final viewModel = context.read<UserProfileViewModel>();
+
+      _streamSubscription =
+          viewModel.userProfileUiEventStreamController.listen((event) {
+        event.when(showSnackBar: (message) {
+          final snackBar = SnackBar(
+            content: Text(message),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        });
+      });
+
+      userModel = await viewModel.init(widget.userUuid);
+    });
+
     _userNameTextController = TextEditingController();
     _userBioTextController = TextEditingController();
+
+    _userNameTextController.text = userModel.userName;
+    _userBioTextController.text = userModel.userBio;
     super.initState();
-    loadUserData();
   }
 
   @override
   void dispose() {
+    _streamSubscription?.cancel();
     _userNameTextController.dispose();
     _userBioTextController.dispose();
     super.dispose();
   }
 
-  Future<void> loadUserData() async {
-    try {
-      final Result<UserModel> result =
-          await UserRepositoryImpl().getUserInfo(widget.userUuid);
-      result.when(
-        success: (data) {
-          userModel = data;
-          _userNameTextController.text = data.userName;
-          _userBioTextController.text = data.userBio;
-          setState(() {});
-        },
-        error: (error) {
-          logger.info('getUserInfo 에러: $error');
-          throw Exception(error);
-        },
-      );
-    } catch (e) {
-      logger.info('loadUserData 에러: $e');
-      throw Exception(e);
-    }
-  }
-
-  Future<void> updateUserInfo(
-    String newUserName,
-    String newUserBio,
-  ) async {
-    try {
-      await UserRepositoryImpl()
-          .updateUserField(widget.userUuid, 'user_name', newUserName);
-      await UserRepositoryImpl()
-          .updateUserField(widget.userUuid, 'user_bio', newUserBio);
-      await loadUserData();
-    } catch (e) {
-      logger.info('updateUserInfo 에러: $e');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final UserProfileViewModel viewModel = context.watch();
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -86,8 +73,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             if (_isUserDataChanged()) {
               _showBackDialog();
             } else {
-              context.pop(userModel != null && userModel!.userPicture.isNotEmpty
-                  ? userModel!.userPicture
+              context.pop(userModel.userPicture.isNotEmpty
+                  ? userModel.userPicture
                   : '');
             }
           },
@@ -120,10 +107,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               onTap: () => _showPicturesOptionsBottomSheet(),
               child: Align(
                 alignment: Alignment.center,
-                child: userModel != null && userModel!.userPicture.isNotEmpty
+                child: userModel.userPicture.isNotEmpty
                     ? CircleAvatar(
                         radius: 80,
-                        backgroundImage: NetworkImage(userModel!.userPicture),
+                        backgroundImage: NetworkImage(userModel.userPicture),
                       )
                     : const CircleAvatar(
                         radius: 80,
@@ -246,7 +233,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             Container(height: 24.0),
             ElevatedButton(
               // Save
-              onPressed: _saveChanges,
+              onPressed: () {
+                if (_isUserDataChanged()) {
+                  viewModel.updateUserInfo(
+                      widget.userUuid,
+                      _userNameTextController.text,
+                      _userBioTextController.text);
+                } else {
+                  viewModel.showSnackBar('No changes were detected.');
+                }
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: editColor,
                 shape: RoundedRectangleBorder(
@@ -308,23 +304,21 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               title: const Text('Choose profile picture',
                   style: TextStyle(color: Colors.black87)),
               onTap: () async {
-                if (userModel != null) {
-                  final result = await context.push(
-                    '/home/user/profile/choose',
-                    extra: {
-                      'user_model': userModel,
-                    },
-                  );
+                final result = await context.push(
+                  '/home/user/profile/choose',
+                  extra: {
+                    'user_model': userModel,
+                  },
+                );
 
-                  if (result is String) {
-                    setState(() {
-                      userModel!.userPicture = result;
-                    });
-                  }
+                if (result is String) {
+                  setState(() {
+                    userModel.userPicture = result;
+                  });
+                }
 
-                  if (mounted) {
-                    context.pop();
-                  }
+                if (mounted) {
+                  context.pop();
                 }
               },
             ),
@@ -339,7 +333,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     style: TextStyle(color: Colors.redAccent)),
                 onTap: () async {
                   setState(() {
-                    userModel!.userPicture = '';
+                    userModel.userPicture = '';
                   });
                   await UserRepositoryImpl()
                       .updateUserField(widget.userUuid, 'user_picture', '');
@@ -355,33 +349,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     );
   }
 
-  void _saveChanges() {
-    final newUserName = _userNameTextController.text;
-    final newUserBio = _userBioTextController.text;
-
-    if (newUserName != userModel?.userName ||
-        newUserBio != userModel?.userBio) {
-      updateUserInfo(newUserName, newUserBio);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Changes saved successfully'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-    }
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('No changes were detected.'),
-        duration: Duration(seconds: 2),
-      ),
-    );
-  }
-
   bool _isUserDataChanged() {
     final newUserName = _userNameTextController.text;
     final newUserBio = _userBioTextController.text;
 
-    return newUserName != userModel?.userName ||
-        newUserBio != userModel?.userBio;
+    return newUserName != userModel.userName || newUserBio != userModel.userBio;
   }
 }
