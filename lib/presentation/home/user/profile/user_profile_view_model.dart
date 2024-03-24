@@ -24,7 +24,7 @@ class UserProfileViewModel with ChangeNotifier {
         _deleteUserUseCase = deleteUserUseCase;
 
   // state
-  final UserProfileState _userProfileState = UserProfileState();
+  UserProfileState _userProfileState = UserProfileState();
   UserProfileState get userProfileState => _userProfileState;
 
   final _userProfileUiEventStreamController =
@@ -32,19 +32,22 @@ class UserProfileViewModel with ChangeNotifier {
   Stream<UserProfileUiEvent> get userProfileUiEventStreamController =>
       _userProfileUiEventStreamController.stream;
 
-  Future<UserModel> init(String userUuid) async {
+  Future<void> loadUserInfo(String userUuid) async {
     final result = await _loadUserDataUseCase.execute(userUuid);
-    return result.when(
-      success: (data) => data,
+    result.when(
+      success: (data) {
+        _userProfileState = userProfileState.copyWith(userModel: data);
+        notifyListeners();
+      },
       error: (error) => throw Exception(error),
     );
   }
 
-  Future<void> updateUserInfo(
-      String userUuid, String userName, String userBio) async {
-    await _updateUserInfoUseCase.execute(userUuid, userName, userBio);
-
-    showSnackBar('Changes saved successfully');
+  Future<void> updateUserInfo() async {
+    if (userProfileState.userModel != null) {
+      await _updateUserInfoUseCase.execute(userProfileState.userModel!);
+      showSnackBar('Changes saved successfully');
+    }
   }
 
   void showSnackBar(String message) {
@@ -54,5 +57,38 @@ class UserProfileViewModel with ChangeNotifier {
 
   Future<void> deleteUser() async {
     await _deleteUserUseCase.execute();
+  }
+
+  void modifyPicture(String userPicture) {
+    if (userProfileState.userModel != null) {
+      UserModel userModel = userProfileState.userModel!;
+      userModel.userPicture = userPicture;
+      _userProfileState = userProfileState.copyWith(userModel: userModel);
+      notifyListeners();
+    } else {
+      showSnackBar('updatePicture error');
+    }
+  }
+
+  void modifyUserName(String userName) {
+    if (userProfileState.userModel != null) {
+      UserModel userModel = userProfileState.userModel!;
+      userModel.userName = userName;
+      _userProfileState = userProfileState.copyWith(userModel: userModel);
+      notifyListeners();
+    } else {
+      showSnackBar('modifyUserName error');
+    }
+  }
+
+  void modifyUserBio(String userBio) {
+    if (userProfileState.userModel != null) {
+      UserModel userModel = userProfileState.userModel!;
+      userModel.userBio = userBio;
+      _userProfileState = userProfileState.copyWith(userModel: userModel);
+      notifyListeners();
+    } else {
+      showSnackBar('modifyUserBio error');
+    }
   }
 }
