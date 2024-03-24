@@ -91,8 +91,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         actions: [
           ElevatedButton(
             onPressed: () async {
-              // TODO : delete user issue #127
-              // await
+              await viewModel.deleteUser();
+              if (mounted) {
+                context.go('/splash');
+              }
             },
             child: const Text('Withdraw'),
           ),

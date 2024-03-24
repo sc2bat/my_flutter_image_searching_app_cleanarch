@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/user/user_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/profile/delete_user_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/profile/load_user_data_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/profile/update_user_info_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_profile_state.dart';
@@ -12,12 +13,15 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/
 class UserProfileViewModel with ChangeNotifier {
   final LoadUserDataUseCase _loadUserDataUseCase;
   final UpdateUserInfoUseCase _updateUserInfoUseCase;
+  final DeleteUserUseCase _deleteUserUseCase;
 
   UserProfileViewModel({
     required LoadUserDataUseCase loadUserDataUseCase,
     required UpdateUserInfoUseCase updateUserInfoUseCase,
+    required DeleteUserUseCase deleteUserUseCase,
   })  : _updateUserInfoUseCase = updateUserInfoUseCase,
-        _loadUserDataUseCase = loadUserDataUseCase;
+        _loadUserDataUseCase = loadUserDataUseCase,
+        _deleteUserUseCase = deleteUserUseCase;
 
   // state
   final UserProfileState _userProfileState = UserProfileState();
@@ -46,5 +50,9 @@ class UserProfileViewModel with ChangeNotifier {
   void showSnackBar(String message) {
     _userProfileUiEventStreamController
         .add(UserProfileUiEvent.showSnackBar(message));
+  }
+
+  Future<void> deleteUser() async {
+    await _deleteUserUseCase.execute();
   }
 }

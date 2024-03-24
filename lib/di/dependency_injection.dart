@@ -42,6 +42,7 @@ import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/d
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/get_user_id_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/history/user_history_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/likes/user_likes_use_case.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/profile/delete_user_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/profile/load_user_data_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/profile/random_photo_use_case.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/use_cases/user/profile/save_user_picture_use_case.dart';
@@ -244,6 +245,11 @@ void registerDependencies() {
       UpdateUserInfoUseCase(
         userRepository: getIt<UserRepository>(),
       ),
+    )
+    ..registerSingleton<DeleteUserUseCase>(
+      DeleteUserUseCase(
+        signRepository: getIt<SignRepository>(),
+      ),
     );
 
   // view models
@@ -290,6 +296,7 @@ void registerDependencies() {
       () => UserProfileViewModel(
         loadUserDataUseCase: getIt<LoadUserDataUseCase>(),
         updateUserInfoUseCase: getIt<UpdateUserInfoUseCase>(),
+        deleteUserUseCase: getIt<DeleteUserUseCase>(),
       ),
     )
     // comments
