@@ -31,7 +31,9 @@ class _SplashScreenState extends State<SplashScreen> {
       // get recent search keyword from guest shared preference
       await supabase.auth.signOut();
     }
-    context.go('/home');
+    if (mounted) {
+      context.go('/home');
+    }
   }
 
   @override
