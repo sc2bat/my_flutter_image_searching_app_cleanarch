@@ -75,7 +75,7 @@ class _UserDownloadscreenState extends State<UserDownloadsScreen> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : Container(
+          : SizedBox(
               child: Column(
                 children: [
                   Expanded(
@@ -105,7 +105,7 @@ class _UserDownloadscreenState extends State<UserDownloadsScreen> {
                               ),
                             ),
                           ),
-                          child: Container(
+                          child: SizedBox(
                             child: Row(
                               children: [
                                 GestureDetector(

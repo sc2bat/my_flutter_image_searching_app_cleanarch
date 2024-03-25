@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/domain/model/user/user_model.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/main.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_profile_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -31,9 +32,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     _userNameTextController = TextEditingController();
     _userBioTextController = TextEditingController();
 
-    Future.microtask(() async {
+    Future.microtask(() {
       final viewModel = context.read<UserProfileViewModel>();
-      final state = viewModel.userProfileState;
+
+      viewModel.init(widget.userUuid);
 
       _streamSubscription =
           viewModel.userProfileUiEventStreamController.listen((event) {
@@ -44,11 +46,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         });
       });
-
-      if (state.userModel != null) {
-        _userNameTextController.text = state.userModel!.userName;
-        _userBioTextController.text = state.userModel!.userBio;
-      }
     });
 
     super.initState();
@@ -64,22 +61,20 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final UserProfileViewModel viewModel = context.watch();
+    final UserProfileViewModel viewModel =
+        context.watch<UserProfileViewModel>();
     final state = viewModel.userProfileState;
-    if (state.userModel == null) {
-      context.go('/splash');
-    }
+    _userNameTextController.text = state.userName;
+    _userBioTextController.text = state.userBio;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            if (_isUserDataChanged(state.userModel!)) {
-              _showBackDialog();
+          onPressed: () async {
+            if (_isUserDataChanged(state.userName, state.userBio)) {
+              await _showBackDialog();
             } else {
-              context.pop(state.userModel!.userPicture.isNotEmpty
-                  ? state.userModel!.userPicture
-                  : '');
+              context.pop(state.userPicture);
             }
           },
         ),
@@ -95,12 +90,22 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         actions: [
           ElevatedButton(
             onPressed: () async {
-              await viewModel.deleteUser();
+              await supabase.auth.signOut();
               if (mounted) {
                 context.go('/splash');
               }
             },
-            child: const Text('Withdraw'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: baseColor,
+            ),
+            child: const Text(
+              'Withdraw',
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                color: whiteColor,
+              ),
+            ),
           ),
         ],
       ),
@@ -111,16 +116,21 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             const SizedBox(height: 16.0),
             GestureDetector(
               onTap: () => _showPicturesOptionsBottomSheet(
-                state.userModel!,
+                UserModel(
+                    userId: 0,
+                    userUuid: state.userUuid,
+                    userName: state.userName,
+                    userPicture: state.userPicture,
+                    userBio: state.userBio),
                 (userPicture) => viewModel.modifyPicture(userPicture),
+                () => viewModel.updateUserInfo(),
               ),
               child: Align(
                 alignment: Alignment.center,
-                child: state.userModel!.userPicture.isNotEmpty
+                child: state.userPicture.isNotEmpty
                     ? CircleAvatar(
                         radius: 80,
-                        backgroundImage:
-                            NetworkImage(state.userModel!.userPicture),
+                        backgroundImage: NetworkImage(state.userPicture),
                       )
                     : const CircleAvatar(
                         radius: 80,
@@ -144,8 +154,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               child: TextButton(
                 onPressed: () {
                   _showPicturesOptionsBottomSheet(
-                    state.userModel!,
+                    UserModel(
+                        userId: 0,
+                        userUuid: state.userUuid,
+                        userName: state.userName,
+                        userPicture: state.userPicture,
+                        userBio: state.userBio),
                     (userPicture) => viewModel.modifyPicture(userPicture),
+                    () => viewModel.updateUserInfo(),
                   );
                 },
                 child: const Text(
@@ -177,7 +193,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   Expanded(
                     child: TextFormField(
                       controller: _userNameTextController,
-                      onChanged: viewModel.modifyUserName,
+                      // onChanged: viewModel.modifyUserName,
                       maxLength: 30,
                       maxLines: null,
                       decoration: InputDecoration(
@@ -221,9 +237,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   Expanded(
                     child: TextFormField(
                       controller: _userBioTextController,
+                      // onChanged: viewModel.modifyUserBio,
                       maxLength: 150,
                       maxLines: null,
-                      onChanged: viewModel.modifyUserBio,
                       decoration: InputDecoration(
                         hintText: _currentUserBio,
                         suffixIcon: IconButton(
@@ -249,7 +265,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             ElevatedButton(
               // Save
               onPressed: () {
-                if (_isUserDataChanged(state.userModel!)) {
+                if (_isUserDataChanged(state.userName, state.userBio)) {
+                  viewModel.modifyUserName(_userNameTextController.text);
+                  viewModel.modifyUserBio(_userBioTextController.text);
                   viewModel.updateUserInfo();
                 } else {
                   viewModel.showSnackBar('No changes were detected.');
@@ -305,7 +323,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   void _showPicturesOptionsBottomSheet(
-      UserModel userModel, Function(String userPicture) updatePictureState, Function(String userPicture) updateUserInfo) {
+      UserModel userModel,
+      Function(String userPicture) updatePictureState,
+      Function() updateUserInfo) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -344,7 +364,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     style: TextStyle(color: Colors.redAccent)),
                 onTap: () async {
                   updatePictureState('');
-                      .updateUserField(widget.userUuid, 'user_picture', '');
+                  updateUserInfo();
                   if (mounted) {
                     context.pop();
                   }
@@ -357,10 +377,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     );
   }
 
-  bool _isUserDataChanged(UserModel userModel) {
+  bool _isUserDataChanged(String userName, String userBio) {
     final newUserName = _userNameTextController.text;
     final newUserBio = _userBioTextController.text;
 
-    return newUserName != userModel.userName || newUserBio != userModel.userBio;
+    return newUserName != userName || newUserBio != userBio;
   }
 }
