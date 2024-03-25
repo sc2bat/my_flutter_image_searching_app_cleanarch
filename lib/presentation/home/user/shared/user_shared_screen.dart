@@ -71,29 +71,29 @@ class _UserSharedScreenState extends State<UserSharedScreen> {
                 ),
                 itemCount: userSharedState.userSharedList.length,
                 itemBuilder: (context, index) {
-                  UserSharedModel Shared =
+                  UserSharedModel shared =
                       userSharedState.userSharedList[index];
-                  logger.info('$index번째 previewUrl: ${Shared.previewUrl}');
+                  logger.info('$index번째 previewUrl: ${shared.previewUrl}');
                   return GestureDetector(
                     onTap: () {
                       if (userSharedState.isSelectMode) {
-                        userSharedViewModel.selectToDelete(Shared.shareId);
+                        userSharedViewModel.selectToDelete(shared.shareId);
                       } else {
                         context.push('/detail', extra: {
-                          'imageId': Shared.imageId,
+                          'imageId': shared.imageId,
                         });
                       }
                     },
                     onLongPress: () {
                       if (!userSharedState.isSelectMode) {
                         userSharedViewModel.updateIsSelectMode();
-                        userSharedViewModel.selectToDelete(Shared.shareId);
+                        userSharedViewModel.selectToDelete(shared.shareId);
                       }
                     },
                     child: Stack(
                       children: [
                         Image.network(
-                          Shared.previewUrl,
+                          shared.previewUrl,
                           fit: BoxFit.cover,
                           height: (MediaQuery.of(context).size.width >
                                   MediaQuery.of(context).size.height)
@@ -111,7 +111,7 @@ class _UserSharedScreenState extends State<UserSharedScreen> {
                               ? Container(
                                   margin: const EdgeInsets.all(4.0),
                                   child: userSharedState.selectedImageList
-                                          .contains(Shared.shareId)
+                                          .contains(shared.shareId)
                                       ? const Icon(
                                           Icons.check_circle,
                                           color: Colors.blueAccent,
@@ -125,7 +125,8 @@ class _UserSharedScreenState extends State<UserSharedScreen> {
                                 )
                               : const SizedBox(),
                         ),
-                        if (userSharedState.selectedImageList.contains(Shared.shareId))
+                        if (userSharedState.selectedImageList
+                            .contains(shared.shareId))
                           Container(
                             color: Colors.white.withOpacity(0.5),
                           ),

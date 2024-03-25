@@ -17,6 +17,7 @@ import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/choose_user_picture_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/choose_user_picture_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_profile_screen.dart';
+import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/profile/user_profile_view_model.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/shared/user_shared_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/home/user/user_screen.dart';
 import 'package:my_flutter_image_searching_app_cleanarch/presentation/sign/sign_in_screen.dart';
@@ -57,8 +58,11 @@ final router = GoRouter(
               path: 'profile',
               builder: (_, state) {
                 final map = state.extra! as Map<String, dynamic>;
-                return UserProfileScreen(
-                  userUuid: map['user_uuid'],
+                return ChangeNotifierProvider(
+                  create: (_) => getIt<UserProfileViewModel>(),
+                  child: UserProfileScreen(
+                    userUuid: map['user_uuid'],
+                  ),
                 );
               },
               routes: [

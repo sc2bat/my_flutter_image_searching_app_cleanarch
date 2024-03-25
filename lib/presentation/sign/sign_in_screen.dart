@@ -17,9 +17,6 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  // bool _isLoading = false;
-  // final bool _redirecting = false;
-  // String buttonString = 'SIGN IN';
   late final TextEditingController _emailTextFieldController;
   late final StreamSubscription<AuthState> _authStateSubscription;
 
@@ -47,22 +44,12 @@ class _SignInScreenState extends State<SignInScreen> {
         final session = data.session;
         if (session != null) {
           signViewModel.updateRedirecting();
-          // _redirecting = true;
           context.go('/index');
         }
       });
     });
 
-    // _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
-    //   if (_redirecting) return;
-    //   final session = data.session;
-    //   if (session != null) {
-    //     _redirecting = true;
-    //     context.go('/home');
-    //   }
-    // });
     _emailTextFieldController = TextEditingController();
-    // _emailTextFieldController.text = Env.testEmail;
     super.initState();
   }
 

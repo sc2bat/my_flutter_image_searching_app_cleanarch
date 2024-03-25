@@ -75,7 +75,7 @@ class _UserCommentScreenState extends State<UserCommentsScreen> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : Container(
+          : SizedBox(
               child: Column(
                 children: [
                   Expanded(
@@ -89,7 +89,7 @@ class _UserCommentScreenState extends State<UserCommentsScreen> {
                           onTap: () => context.push('/detail', extra: {
                             'imageId': comment.imageId,
                           }),
-                          child: Container(
+                          child: SizedBox(
                             child: Row(
                               children: [
                                 Padding(
